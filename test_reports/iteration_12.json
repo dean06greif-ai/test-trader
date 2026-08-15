@@ -1,0 +1,33 @@
+{
+  "summary": "Iteration 12 – neue Anforderungen (keine Warn-Popups, persistierter Gelesen-Status, 7-Tage-Auto-Purge, Tabs in der Glocke, Korrelations-Guard) vollständig verifiziert. Backend-Unit-Tests test_playbook_backups_notify.py: 14/14 grün (inkl. correlation_guard-Fälle). Neuer API-Test test_iter12_notifications_correlation.py: 7/7 grün. Frontend-Bell-Flow und Korrelations-Guard-Select mit Playwright E2E getestet – alle Assertions erfüllt.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "AI Trader Setup", "issues": ["React Hydration-Warnung: '<span> cannot be a child of <option>' – kosmetisch, blockiert nichts, sollte aber bereinigt werden (option-Text ohne span rendern)."]}
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_playbook_backups_notify.py",
+    "/app/backend/tests/test_iter12_notifications_correlation.py"
+  ],
+  "action_items": [
+    "Optional: React-Hydration-Warnung im ai-correlation-guard-select (bzw. anderen selects mit Span/Icons in <option>) beseitigen."
+  ],
+  "critical_code_review_comments": [
+    "toast.js pushToBell schickt POST /api/notifications ohne Auth-Header – OK, Endpoint ist bewusst offen für UI-Fehler-Sammlung.",
+    "notify.py _purge_old_read: 1h-Modul-Throttle geht bei Backend-Restart verloren (dokumentiert & getestet).",
+    "ai_playbook.diversification_check: Korrelations-Guard-Logik sauber (BTC/ETH/SOL kollabieren zu 1 Risiko, abschaltbar via correlation_guard=False)."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_iter12_notifications_correlation.py (neu)"
+  ],
+  "success_rate": {"backend": "100%", "frontend": "100%"},
+  "test_credentials": "Admin / KryptoAdmin!2026",
+  "seed_data_creation": "Nur Test-Notifications mit Prefix TEST_ – am Ende wieder gelöscht (mongosh deleteMany). AI-Config correlation_guard nach Test wieder auf True gesetzt.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Neuer Regressionstest /app/backend/tests/test_iter12_notifications_correlation.py deckt Filter unread/read/all, Rückwärtskompatibilität ohne filter-Param, /read mit + ohne ids (setzt read_at), 7-Tage-Purge (mit Backend-Restart zur Reset des _last_purge-Throttles), und POST /api/ai/config correlation_guard ab. Frontend-Bell hat data-testid header-notifications-btn / -dropdown / -tab-unread / -tab-read / -mark-read / -retention-hint / -empty. AI-Panel select: [data-testid=ai-correlation-guard-select] mit Werten 'on'/'off'. Kein KI-Trader aktivieren (LLM-Rate-Limits).",
+  "rca of the issue": "N/A – keine Bugs gefunden."
+}

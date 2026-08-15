@@ -1,0 +1,127 @@
+/* Governance & Strategie-Labor des KI Traders (MasterPrompt, Validierung, Kandidaten) */
+.gov-panel {
+  margin: 0 16px 10px;
+  padding: 12px 14px;
+  background: rgba(255, 214, 10, 0.05);
+  border: 1px solid rgba(255, 214, 10, 0.22);
+  border-radius: 10px;
+  font-size: 12.5px;
+  color: #d5d9e8;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 214, 10, 0.45) transparent;
+}
+.gov-panel::-webkit-scrollbar { width: 8px; }
+.gov-panel::-webkit-scrollbar-thumb { background: rgba(255, 214, 10, 0.35); border-radius: 999px; }
+
+.gov-head {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  margin-bottom: 6px;
+}
+.gov-head-sub { margin-top: 16px; border-top: 1px solid rgba(255, 214, 10, 0.18); padding-top: 12px; }
+.gov-title { display: flex; align-items: center; gap: 6px; font-weight: 700; color: #FFD60A; letter-spacing: 0.3px; }
+.gov-meta { font-size: 11px; color: #8b91a8; }
+.gov-hint { margin: 0 0 8px; font-size: 11.5px; line-height: 1.5; color: #9aa1ba; }
+
+.gov-textarea {
+  width: 100%;
+  background: #0d1017;
+  border: 1px solid #2a3049;
+  border-radius: 8px;
+  color: #e8eaf2;
+  padding: 10px;
+  font-size: 12.5px;
+  line-height: 1.55;
+  font-family: inherit;
+  resize: vertical;
+}
+.gov-textarea:focus { outline: none; border-color: rgba(255, 214, 10, 0.55); }
+
+.gov-rules {
+  display: flex; flex-wrap: wrap; gap: 12px; margin: 10px 0;
+}
+.gov-rules label { display: flex; flex-direction: column; gap: 4px; font-size: 10.5px; color: #8b91a8; }
+.gov-rules input[type="text"], .gov-rules input[type="number"], .gov-rules select {
+  background: #1a1f30; color: #e8eaf2; border: 1px solid #2a3049;
+  border-radius: 6px; padding: 5px 8px; font-size: 12px; min-width: 130px;
+}
+.gov-rules .gov-check { flex-direction: row; align-items: center; gap: 6px; font-size: 11.5px; color: #c8cde0; }
+.gov-sides { display: flex; flex-direction: column; gap: 4px; font-size: 10.5px; color: #8b91a8; }
+.gov-side-btns { display: flex; gap: 6px; }
+.gov-chip {
+  background: #1a1f30; border: 1px solid #2a3049; color: #8b91a8;
+  border-radius: 999px; padding: 4px 12px; font-size: 11px; cursor: pointer;
+  transition: color 0.2s, border-color 0.2s, background-color 0.2s;
+}
+.gov-chip.on { color: #00e5a0; border-color: rgba(0, 229, 160, 0.5); background: rgba(0, 229, 160, 0.1); }
+
+.gov-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.gov-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: #1a1f30; border: 1px solid #2a3049; color: #c8cde0;
+  border-radius: 7px; padding: 6px 11px; font-size: 11.5px; cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, background-color 0.2s;
+}
+.gov-btn:hover { border-color: rgba(255, 214, 10, 0.5); color: #fff; }
+.gov-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.gov-btn.primary { background: rgba(0, 229, 160, 0.12); border-color: rgba(0, 229, 160, 0.45); color: #00e5a0; }
+.gov-btn.danger { background: rgba(255, 69, 88, 0.1); border-color: rgba(255, 69, 88, 0.4); color: #ff6b7d; }
+
+/* Kandidaten */
+.gov-cands { display: grid; gap: 10px; margin: 10px 0; }
+.gov-empty { font-size: 11.5px; color: #8b91a8; line-height: 1.5; }
+.gov-card {
+  padding: 10px 12px; border-radius: 9px;
+  background: #0d1017; border: 1px solid #262b3d;
+}
+.gov-card.stage-live_pending { border-color: rgba(255, 214, 10, 0.5); }
+.gov-card.stage-live { border-color: rgba(0, 229, 160, 0.45); }
+.gov-card.stage-rejected { opacity: 0.6; }
+.gov-card-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.gov-card-head b { color: #e8eaf2; }
+.gov-stage { font-size: 10.5px; padding: 2px 8px; border-radius: 999px; background: #1a1f30; color: #8b91a8; }
+.gov-stage.stage-ghost { color: #9d8cff; }
+.gov-stage.stage-live_pending { color: #FFD60A; }
+.gov-stage.stage-paper { color: #4fc3f7; }
+.gov-stage.stage-live { color: #00e5a0; }
+.gov-card-text { margin-top: 5px; font-size: 12px; line-height: 1.45; color: #b9bfd4; }
+.gov-card-rules, .gov-card-src { margin-top: 4px; font-size: 11px; color: #8b91a8; }
+.gov-card-stats { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 7px; font-size: 11px; color: #9aa1ba; }
+.gov-card-stats b { color: #e8eaf2; }
+.gov-card-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 9px; }
+.gov-ghost-list { margin: 8px 0 0 16px; padding: 0; font-size: 11px; color: #9aa1ba; display: grid; gap: 3px; }
+
+/* Lektionen: Trader-Bearbeitung */
+.ai-lesson-row { display: flex; align-items: flex-start; gap: 6px; }
+.ai-lesson-row .ai-lesson-body { flex: 1; }
+.ai-lesson-locked {
+  font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.5px;
+  color: #00e5a0; border: 1px solid rgba(0, 229, 160, 0.4);
+  border-radius: 999px; padding: 1px 6px; margin-left: 6px;
+}
+.ai-lesson-btn {
+  background: transparent; border: none; color: #7c839c; cursor: pointer; padding: 2px;
+}
+.ai-lesson-btn:hover { color: #FFD60A; }
+.ai-lesson-btn.danger:hover { color: #ff6b7d; }
+.ai-lesson-edit { display: grid; gap: 5px; margin: 4px 0; }
+.ai-lesson-edit input, .ai-lesson-edit textarea {
+  background: #0d1017; border: 1px solid #2a3049; border-radius: 6px;
+  color: #e8eaf2; padding: 6px 8px; font-size: 12px; font-family: inherit;
+}
+
+/* Zeitplan-Editor */
+.gov-sched-row {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 6px;
+  padding: 7px 9px; margin-bottom: 6px;
+  background: #0d1017; border: 1px solid #262b3d; border-radius: 8px;
+}
+.gov-sched-row input[type="time"], .gov-sched-row input[type="number"], .gov-sched-row input[type="text"] {
+  background: #1a1f30; border: 1px solid #2a3049; color: #e8eaf2;
+  border-radius: 6px; padding: 4px 7px; font-size: 12px;
+}
+.gov-sched-row input[type="number"] { width: 64px; }
+.gov-sched-row input[type="text"] { flex: 1; min-width: 110px; }
+.gov-sched-sep { font-size: 11px; color: #8b91a8; }

@@ -1,0 +1,403 @@
+diff --git a/backend/server.py b/backend/server.py
+index 431a586..755027c 100644
+--- a/backend/server.py
++++ b/backend/server.py
+@@ -59,6 +59,13 @@ async def lifespan(app: FastAPI):
+     app.mongodb_client = AsyncIOMotorClient(os.getenv("MONGO_URL"))
+     app.mongodb = app.mongodb_client[os.getenv("DB_NAME", "crypto_scanner")]
+     autotrader.set_db(app.mongodb)
++    autotrader.set_telegram(telegram)
++    # Load Bitunix contract catalogue so the symbol mapping is validated
++    # against the real contract list and qty/price step sizes are known.
++    try:
++        await trade_client.load_trading_pairs()
++    except Exception as e:
++        logger.error(f"Bitunix trading_pairs load failed: {e}")
+     logger.info("Connected to MongoDB")
+ 
+     saved = await app.mongodb.settings.find_one({"_id": "scanner_settings"})
+diff --git a/backend/services/bitunix_trade.py b/backend/services/bitunix_trade.py
+index d5ad30f..e9fd286 100644
+--- a/backend/services/bitunix_trade.py
++++ b/backend/services/bitunix_trade.py
+@@ -2,6 +2,26 @@
+ Bitunix futures trading: request signer, live REST client, paper broker,
+ and an AutoTradeManager that opens/manages auto-trades with dynamic SL/TP,
+ partial TP1 and break-even logic.
++
++Fix summary (Bitunix Live-Trading):
++- Root cause: The app used the internal short names GOLD / SILVER / OIL as
++  order symbols. Bitunix does not know these symbols and rejected the order
++  with code 300105 "System error".
++  The real Bitunix USDT-M futures contracts are:
++      GOLD   -> XAUUSDT
++      SILVER -> XAGUSDT
++      OIL    -> CLUSDT
++  Crypto symbols like BTCUSDT / XRPUSDT already match.
++- Every private call to Bitunix (place_order, flash_close, set_leverage,
++  get_positions) now translates the internal symbol via `to_bitunix_symbol()`.
++- The mapping is validated at startup against
++  GET /api/v1/futures/market/trading_pairs so future contract-name changes
++  on Bitunix don't break us silently.
++- Second fix: `on_signal` no longer stores the trade locally when the live
++  order was rejected. Instead a Telegram alert is emitted and the trade is
++  dropped. That prevents "ghost positions" that never existed on Bitunix.
++- qty/price are sent as strings, rounded to the contract's step/tick size
++  when the metadata is available.
+ """
+ import os
+ import time
+@@ -9,6 +29,7 @@ import json
+ import hashlib
+ import logging
+ import aiohttp
++from decimal import Decimal, ROUND_DOWN
+ from datetime import datetime, timezone
+ from typing import Dict, List, Optional
+ from services.technical_indicators import TechnicalIndicators
+@@ -16,6 +37,18 @@ from services.technical_indicators import TechnicalIndicators
+ logger = logging.getLogger(__name__)
+ 
+ 
++# ---------------------------------------------------------------------------
++# Symbol mapping: internal display name -> real Bitunix contract symbol.
++# Crypto symbols already match (e.g. BTCUSDT, XRPUSDT) and pass through
++# unchanged. Only commodities need a translation.
++# ---------------------------------------------------------------------------
++SYMBOL_MAP: Dict[str, str] = {
++    "GOLD": "XAUUSDT",
++    "SILVER": "XAGUSDT",
++    "OIL": "CLUSDT",
++}
++
++
+ def _sha256(s: str) -> str:
+     return hashlib.sha256(s.encode("utf-8")).hexdigest()
+ 
+@@ -37,8 +70,26 @@ def sign_request(api_key: str, secret: str, query: Optional[Dict], body_str: str
+     return _sha256(digest + secret)
+ 
+ 
++def _round_step(value: float, step: float) -> str:
++    """Round `value` DOWN to a multiple of `step` and return a plain string
++    (no scientific notation, no trailing zeros beyond the step precision)."""
++    if step <= 0:
++        return f"{value}"
++    d_val = Decimal(str(value))
++    d_step = Decimal(str(step))
++    quant = (d_val / d_step).to_integral_value(rounding=ROUND_DOWN) * d_step
++    # normalize: drop useless trailing zeros but keep required precision
++    s = format(quant.normalize(), "f")
++    return s if s else "0"
++
++
+ class BitunixTradeClient:
+-    """Live Bitunix USDT-M futures client (signed private endpoints)."""
++    """Live Bitunix USDT-M futures client (signed private endpoints).
++
++    Owns the symbol translation layer + a cache of contract metadata
++    (step size, tick size, min qty) loaded from the public
++    /api/v1/futures/market/trading_pairs endpoint.
++    """
+ 
+     def __init__(self):
+         # Support both naming conventions (Render uses BITUNIX_SECRET_KEY)
+@@ -48,9 +99,79 @@ class BitunixTradeClient:
+                        or os.getenv("BITUNIX_SECRET", ""))
+         self.base = os.getenv("BITUNIX_BASE_URL", "https://fapi.bitunix.com").rstrip("/")
+ 
++        # contract metadata: bitunix_symbol -> {"qty_step", "price_tick", "min_qty"}
++        self._pairs_meta: Dict[str, Dict[str, float]] = {}
++        self._valid_bitunix_symbols: set = set()
++
+     def configured(self) -> bool:
+         return bool(self.api_key and self.secret)
+ 
++    # --------------------- symbol translation ----------------------------
++    def to_bitunix_symbol(self, internal: str) -> str:
++        """Translate the app-internal symbol (e.g. GOLD) to the real Bitunix
++        contract symbol (e.g. XAUUSDT). Crypto symbols pass through unchanged."""
++        if not internal:
++            return internal
++        s = internal.upper()
++        mapped = SYMBOL_MAP.get(s, s)
++        # If we already know the pair catalogue and the mapped symbol isn't in
++        # it, log a warning so the mismatch shows up in the logs instead of
++        # silently ending up as code 300105 "System error".
++        if self._valid_bitunix_symbols and mapped not in self._valid_bitunix_symbols:
++            logger.warning(
++                f"Bitunix symbol '{mapped}' (from internal '{internal}') is not "
++                "listed in trading_pairs; order will likely be rejected."
++            )
++        return mapped
++
++    def contract_meta(self, bitunix_symbol: str) -> Dict[str, float]:
++        return self._pairs_meta.get(bitunix_symbol, {})
++
++    async def load_trading_pairs(self) -> None:
++        """Load the public trading-pair catalogue and cache step/tick/min-qty.
++        Called once at startup; safe to re-call. Never raises to the caller."""
++        url = f"{self.base}/api/v1/futures/market/trading_pairs"
++        try:
++            async with aiohttp.ClientSession() as s:
++                async with s.get(url, timeout=aiohttp.ClientTimeout(total=15)) as r:
++                    payload = await r.json()
++        except Exception as e:
++            logger.error(f"load_trading_pairs failed: {e}")
++            return
++
++        data = payload.get("data") if isinstance(payload, dict) else None
++        if not isinstance(data, list):
++            logger.warning(f"trading_pairs unexpected payload: {str(payload)[:200]}")
++            return
++
++        meta: Dict[str, Dict[str, float]] = {}
++        valid: set = set()
++        for row in data:
++            sym = row.get("symbol")
++            if not sym:
++                continue
++            valid.add(sym)
++            try:
++                meta[sym] = {
++                    "qty_step": float(row.get("basePrecision") or row.get("minTradeVolume") or 0) or 0.0,
++                    "price_tick": float(row.get("quotePrecision") or row.get("pricePrecision") or 0) or 0.0,
++                    "min_qty": float(row.get("minTradeVolume") or 0) or 0.0,
++                }
++            except (TypeError, ValueError):
++                meta[sym] = {}
++        self._pairs_meta = meta
++        self._valid_bitunix_symbols = valid
++        logger.info(f"Bitunix trading_pairs cached: {len(valid)} symbols")
++
++        # Sanity check the internal -> bitunix mapping now that we have data.
++        for internal, mapped in SYMBOL_MAP.items():
++            if mapped not in valid:
++                logger.error(
++                    f"Symbol mapping mismatch: internal '{internal}' -> '{mapped}' "
++                    "is NOT a valid Bitunix contract. Live orders will fail."
++                )
++
++    # --------------------- signed transport ------------------------------
+     async def _post(self, path: str, body: Dict) -> Dict:
+         body_str = json.dumps(body, separators=(",", ":"), ensure_ascii=False)
+         nonce, ts = _nonce(), _millis()
+@@ -81,36 +202,54 @@ class BitunixTradeClient:
+                 except Exception:
+                     return {"code": r.status, "msg": txt[:200]}
+ 
++    # --------------------- public API ------------------------------------
++    def _fmt_qty(self, bitunix_symbol: str, qty: float) -> str:
++        m = self._pairs_meta.get(bitunix_symbol) or {}
++        step = m.get("qty_step") or 0.0
++        if step > 0:
++            return _round_step(qty, step)
++        return f"{qty}"
++
++    def _fmt_price(self, bitunix_symbol: str, price: float) -> str:
++        m = self._pairs_meta.get(bitunix_symbol) or {}
++        tick = m.get("price_tick") or 0.0
++        if tick > 0:
++            return _round_step(price, tick)
++        return f"{price}"
++
+     async def place_order(self, symbol, side, qty, order_type="MARKET", price=None,
+                           tp_price=None, sl_price=None, reduce_only=False):
+-        body = {"symbol": symbol, "qty": str(qty), "side": side,
++        b_symbol = self.to_bitunix_symbol(symbol)
++        body = {"symbol": b_symbol, "qty": self._fmt_qty(b_symbol, qty), "side": side,
+                 "tradeSide": "OPEN", "orderType": order_type}
+         if order_type == "LIMIT" and price:
+-            body["price"] = str(price)
++            body["price"] = self._fmt_price(b_symbol, price)
+         if tp_price:
+-            body.update({"tpPrice": str(tp_price), "tpStopType": "MARK_PRICE",
+-                         "tpOrderType": "MARKET"})
++            body.update({"tpPrice": self._fmt_price(b_symbol, tp_price),
++                         "tpStopType": "MARK_PRICE", "tpOrderType": "MARKET"})
+         if sl_price:
+-            body.update({"slPrice": str(sl_price), "slStopType": "MARK_PRICE",
+-                         "slOrderType": "MARKET"})
++            body.update({"slPrice": self._fmt_price(b_symbol, sl_price),
++                         "slStopType": "MARK_PRICE", "slOrderType": "MARKET"})
+         if reduce_only:
+             body["reduceOnly"] = True
+         return await self._post("/api/v1/futures/trade/place_order", body)
+ 
+     async def flash_close(self, symbol, position_id, side, qty):
++        b_symbol = self.to_bitunix_symbol(symbol)
+         order_side = "SELL" if side == "LONG" else "BUY"
+-        body = {"symbol": symbol, "qty": str(qty), "side": order_side,
+-                "tradeSide": "CLOSE", "orderType": "MARKET",
++        body = {"symbol": b_symbol, "qty": self._fmt_qty(b_symbol, qty),
++                "side": order_side, "tradeSide": "CLOSE", "orderType": "MARKET",
+                 "positionId": position_id, "reduceOnly": True}
+         return await self._post("/api/v1/futures/trade/place_order", body)
+ 
+     async def set_leverage(self, symbol, leverage, margin_mode="ISOLATION"):
++        b_symbol = self.to_bitunix_symbol(symbol)
+         return await self._post("/api/v1/futures/account/change_leverage",
+-                                {"symbol": symbol, "leverage": int(leverage),
++                                {"symbol": b_symbol, "leverage": int(leverage),
+                                  "marginCoin": "USDT"})
+ 
+     async def get_positions(self, symbol=None):
+-        q = {"symbol": symbol} if symbol else {}
++        q = {"symbol": self.to_bitunix_symbol(symbol)} if symbol else {}
+         return await self._get("/api/v1/futures/position/get_pending_positions", q)
+ 
+     async def get_balance(self):
+@@ -149,11 +288,15 @@ class AutoTradeManager:
+     def __init__(self, client: BitunixTradeClient):
+         self.client = client
+         self.db = None
++        self.telegram = None  # optional TelegramNotifier for reject alerts
+         self.config = {"mode": "paper", "coins": {}}
+ 
+     def set_db(self, db):
+         self.db = db
+ 
++    def set_telegram(self, telegram):
++        self.telegram = telegram
++
+     def set_config(self, config: Dict):
+         self.config = {"mode": config.get("mode", "paper"),
+                        "coins": config.get("coins", {})}
+@@ -177,13 +320,11 @@ class AutoTradeManager:
+ 
+         mode = cfg.get("sl_mode", "structure")
+         if mode == "atr" and atr > 0:
+-            # pure ATR stop from entry
+             sl = entry - buffer if side == "LONG" else entry + buffer
+         elif mode == "structure" and candles:
+             lookback = int(cfg["sl_lookback"])
+             tick = entry * 0.0001
+             ticks = int(cfg["sl_ticks"])
+-            # structure level + ATR buffer beyond it (protects vs. liquidity sweeps)
+             struct_buffer = (buffer if buffer > 0 else ticks * tick)
+             if side == "LONG":
+                 low = min(c["low"] for c in candles[-lookback:])
+@@ -206,6 +347,14 @@ class AutoTradeManager:
+             tpf = entry - risk * cfg["tp_full_crv"]
+         return round(sl, 6), round(tp1, 6), round(tpf, 6), risk, round(atr, 6)
+ 
++    async def _notify_reject(self, symbol: str, side: str, reason: str) -> None:
++        if not self.telegram:
++            return
++        try:
++            await self.telegram.send_rejection(symbol, side, reason)
++        except Exception as e:
++            logger.error(f"telegram reject notify failed: {e}")
++
+     async def on_signal(self, signal: Dict, candles: List[Dict]) -> Optional[Dict]:
+         symbol = signal["symbol"]
+         cfg = self.coin_cfg(symbol)
+@@ -225,9 +374,40 @@ class AutoTradeManager:
+         sl, tp1, tpf, risk, atr = self._levels(cfg, side, entry, candles, signal)
+         qty = round((float(cfg["max_capital"]) * float(cfg["leverage"])) / entry, 6)
+ 
++        mode = self.config.get("mode", "paper")
++
++        # ---- LIVE MODE: hit the exchange FIRST; only persist on success ----
++        if mode == "live" and self.client.configured():
++            try:
++                await self.client.set_leverage(symbol, cfg["leverage"], cfg["margin_mode"])
++                side_order = "BUY" if side == "LONG" else "SELL"
++                res = await self.client.place_order(symbol, side_order, qty,
++                                                    order_type=cfg["order_type"],
++                                                    tp_price=tpf, sl_price=sl)
++            except Exception as e:
++                reason = f"exception: {str(e)[:160]}"
++                logger.error(f"Live order EXCEPTION {symbol}: {e}")
++                await self._notify_reject(symbol, side, reason)
++                return None
++
++            ok = isinstance(res, dict) and res.get("code") == 0
++            order_id = (res.get("data") or {}).get("orderId") if isinstance(res, dict) else None
++            if not ok or not order_id:
++                reason = (isinstance(res, dict) and (res.get("msg") or str(res))) or "unknown error"
++                code = isinstance(res, dict) and res.get("code")
++                logger.error(f"Live order REJECTED {symbol} side={side} qty={qty} "
++                             f"code={code} msg={reason}")
++                await self._notify_reject(symbol, side, f"code {code}: {reason}")
++                # No local persistence -> no ghost position.
++                return None
++
++            trade_extra = {"bitunix_order_id": order_id, "bitunix_response": res}
++        else:
++            trade_extra = {"bitunix_order_id": None}
++
+         trade = {
+             "id": f"{symbol}-{int(time.time()*1000)}",
+-            "symbol": symbol, "side": side, "mode": self.config.get("mode", "paper"),
++            "symbol": symbol, "side": side, "mode": mode,
+             "entry": entry, "sl": sl, "tp1": tp1, "tpf": tpf, "initial_sl": sl,
+             "atr": atr,
+             "qty": qty, "qty_remaining": qty, "risk": round(risk, 6),
+@@ -240,27 +420,12 @@ class AutoTradeManager:
+             "strategy_name": signal.get("strategy_name"),
+             "opened_at": datetime.now(timezone.utc).isoformat(),
+             "trade_date": signal.get("trade_date"),
+-            "bitunix_order_id": None, "events": [f"OPEN {side} @ {entry}"],
++            "events": [f"OPEN {side} @ {entry}"],
++            **trade_extra,
+         }
+ 
+-        if self.config.get("mode") == "live" and self.client.configured():
+-            try:
+-                await self.client.set_leverage(symbol, cfg["leverage"], cfg["margin_mode"])
+-                side_order = "BUY" if side == "LONG" else "SELL"
+-                res = await self.client.place_order(symbol, side_order, qty,
+-                                                    order_type=cfg["order_type"],
+-                                                    tp_price=tpf, sl_price=sl)
+-                trade["bitunix_response"] = res
+-                if isinstance(res, dict) and res.get("code") == 0:
+-                    trade["bitunix_order_id"] = (res.get("data") or {}).get("orderId")
+-                else:
+-                    trade["events"].append(f"LIVE ERROR: {str(res)[:120]}")
+-            except Exception as e:
+-                trade["events"].append(f"LIVE EXCEPTION: {str(e)[:120]}")
+-                logger.error(f"Live order failed {symbol}: {e}")
+-
+         await self.db.auto_trades.insert_one(dict(trade))
+-        logger.info(f"AutoTrade OPEN {side} {symbol} qty={qty} entry={entry} mode={trade['mode']}")
++        logger.info(f"AutoTrade OPEN {side} {symbol} qty={qty} entry={entry} mode={mode}")
+         trade.pop("_id", None)
+         return trade
+ 
+diff --git a/backend/services/telegram_bot.py b/backend/services/telegram_bot.py
+index 8ced009..4807e1e 100644
+--- a/backend/services/telegram_bot.py
++++ b/backend/services/telegram_bot.py
+@@ -90,6 +90,31 @@ class TelegramNotifier:
+             logger.error(f"Failed to send Telegram notification: {e}")
+             return False
+     
++    async def send_rejection(self, symbol: str, side: str, reason: str) -> bool:
++        """Notify that a live order was rejected by Bitunix and the trade
++        was NOT opened locally (no ghost position)."""
++        if not self.bot or not self.chat_id:
++            logger.warning("Telegram not configured, skipping rejection alert")
++            return False
++        try:
++            message = (
++                f"⛔ *ORDER ABGEBROCHEN*\n\n"
++                f"💰 *{symbol}* · {side}\n"
++                f"❌ Bitunix hat die Order abgelehnt:\n"
++                f"`{reason}`\n\n"
++                f"⚠️ Es wurde *kein* Trade lokal geöffnet."
++            )
++            await self.bot.send_message(
++                chat_id=self.chat_id,
++                text=message,
++                parse_mode=ParseMode.MARKDOWN,
++                disable_web_page_preview=True,
++            )
++            return True
++        except Exception as e:
++            logger.error(f"Failed to send rejection notification: {e}")
++            return False
++
+     async def send_test_message(self) -> bool:
+         """Send test message to verify bot setup"""
+         if not self.bot or not self.chat_id:

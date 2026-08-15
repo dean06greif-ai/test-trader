@@ -1,0 +1,288 @@
+fetched BTCUSDT: 525601
+fetched ETHUSDT: 525601
+fetched SOLUSDT: 525601
+
+========== TF 30m ==========
+-- BTCUSDT Buy&Hold -47.0% / 365d --
+[don24 atr2.0 tpf3.0 be=tp1 30m]
+  BTCUSDT train: n= 108 win= 39.8% pnl=   -86.06 fees=  64.78 pf= 0.82 dd= 135.0 dur=677m
+  BTCUSDT test : n=  26 win= 30.8% pnl=   -49.32 fees=  15.61 pf= 0.60 dd=  60.7 dur=891m
+[don24 atr2.0 tpf3.0 be=off 30m]
+  BTCUSDT train: n= 106 win= 40.6% pnl=   -72.56 fees=  63.57 pf= 0.84 dd= 138.7 dur=699m
+  BTCUSDT test : n=  26 win= 30.8% pnl=   -40.70 fees=  15.60 pf= 0.67 dd=  62.2 dur=891m
+[don24 atr2.0 tpf5.0 be=tp1 30m]
+  BTCUSDT train: n= 101 win= 38.6% pnl=   -83.79 fees=  60.60 pf= 0.82 dd= 159.6 dur=706m
+  BTCUSDT test : n=  23 win= 30.4% pnl=   -42.29 fees=  13.80 pf= 0.61 dd=  62.7 dur=986m
+[don24 atr2.0 tpf5.0 be=off 30m]
+  BTCUSDT train: n= 100 win= 39.0% pnl=   -76.35 fees=  59.99 pf= 0.83 dd= 161.2 dur=718m
+  BTCUSDT test : n=  23 win= 30.4% pnl=   -43.84 fees=  13.80 pf= 0.60 dd=  62.7 dur=986m
+[don24 atr3.0 tpf3.0 be=tp1 30m]
+  BTCUSDT train: n= 141 win= 41.1% pnl=  -128.07 fees=  84.58 pf= 0.83 dd= 163.5 dur=1040m
+  BTCUSDT test : n=  48 win= 33.3% pnl=   -56.57 fees=  28.75 pf= 0.76 dd= 117.9 dur=1537m
+[don24 atr3.0 tpf3.0 be=off 30m]
+  BTCUSDT train: n= 141 win= 41.1% pnl=  -130.02 fees=  84.58 pf= 0.83 dd= 165.5 dur=1040m
+  BTCUSDT test : n=  48 win= 33.3% pnl=   -56.57 fees=  28.75 pf= 0.76 dd= 117.9 dur=1537m
+[don24 atr3.0 tpf5.0 be=tp1 30m]
+  BTCUSDT train: n= 135 win= 42.2% pnl=   -74.88 fees=  80.92 pf= 0.89 dd= 132.5 dur=1036m
+  BTCUSDT test : n=  46 win= 32.6% pnl=   -72.73 fees=  27.57 pf= 0.68 dd= 115.2 dur=1610m
+[don24 atr3.0 tpf5.0 be=off 30m]
+  BTCUSDT train: n= 135 win= 42.2% pnl=   -76.83 fees=  80.92 pf= 0.89 dd= 134.4 dur=1036m
+  BTCUSDT test : n=  46 win= 32.6% pnl=   -72.73 fees=  27.57 pf= 0.68 dd= 115.2 dur=1610m
+[don24 LONG-ONLY atr3 tpf5 30m]
+  BTCUSDT train: n=  53 win= 35.8% pnl=   -93.55 fees=  31.76 pf= 0.66 dd= 120.4 dur=1214m
+  BTCUSDT test : n=  18 win= 22.2% pnl=   -61.41 fees=  10.77 pf= 0.39 dd=  65.9 dur=2232m
+[don48 atr3 tpf5 beoff 30m]
+  BTCUSDT train: n= 100 win= 45.0% pnl=    -9.52 fees=  59.93 pf= 0.98 dd= 104.5 dur=1222m
+  BTCUSDT test : n=  40 win= 32.5% pnl=   -77.21 fees=  23.99 pf= 0.63 dd= 113.5 dur=1705m
+-- ETHUSDT Buy&Hold -56.6% / 365d --
+[don24 atr2.0 tpf3.0 be=tp1 30m]
+  ETHUSDT train: n= 171 win= 42.1% pnl=  -102.13 fees= 102.56 pf= 0.89 dd= 190.8 dur=603m
+  ETHUSDT test : n=  52 win= 36.5% pnl=   -90.92 fees=  31.25 pf= 0.64 dd= 104.2 dur=566m
+[don24 atr2.0 tpf3.0 be=off 30m]
+  ETHUSDT train: n= 171 win= 40.9% pnl=  -122.55 fees= 102.57 pf= 0.87 dd= 199.4 dur=618m
+  ETHUSDT test : n=  53 win= 35.8% pnl=  -101.40 fees=  31.85 pf= 0.62 dd= 112.3 dur=558m
+[don24 atr2.0 tpf5.0 be=tp1 30m]
+  ETHUSDT train: n= 157 win= 42.0% pnl=  -120.32 fees=  94.21 pf= 0.85 dd= 157.6 dur=633m
+  ETHUSDT test : n=  49 win= 34.7% pnl=   -94.57 fees=  29.43 pf= 0.61 dd= 105.1 dur=612m
+[don24 atr2.0 tpf5.0 be=off 30m]
+  ETHUSDT train: n= 156 win= 41.7% pnl=  -125.28 fees=  93.61 pf= 0.84 dd= 160.3 dur=658m
+  ETHUSDT test : n=  49 win= 34.7% pnl=   -93.06 fees=  29.43 pf= 0.61 dd= 102.9 dur=607m
+[don24 atr3.0 tpf3.0 be=tp1 30m]
+  ETHUSDT train: n= 142 win= 44.4% pnl=   -38.15 fees=  85.12 pf= 0.96 dd= 150.1 dur=1237m
+  ETHUSDT test : n=  54 win= 33.3% pnl=   -93.06 fees=  32.40 pf= 0.73 dd= 133.5 dur=1282m
+[don24 atr3.0 tpf3.0 be=off 30m]
+  ETHUSDT train: n= 141 win= 44.7% pnl=   -29.26 fees=  84.52 pf= 0.97 dd= 139.4 dur=1248m
+  ETHUSDT test : n=  54 win= 33.3% pnl=   -93.39 fees=  32.40 pf= 0.73 dd= 133.8 dur=1282m
+[don24 atr3.0 tpf5.0 be=tp1 30m]
+  ETHUSDT train: n= 134 win= 46.3% pnl=    +9.92 fees=  80.31 pf= 1.01 dd= 121.1 dur=1257m
+  ETHUSDT test : n=  55 win= 29.1% pnl=  -146.71 fees=  33.01 pf= 0.60 dd= 152.6 dur=1211m
+[don24 atr3.0 tpf5.0 be=off 30m]
+  ETHUSDT train: n= 134 win= 46.3% pnl=    +2.90 fees=  80.32 pf= 1.00 dd= 121.1 dur=1259m
+  ETHUSDT test : n=  55 win= 29.1% pnl=  -147.03 fees=  33.01 pf= 0.60 dd= 152.9 dur=1212m
+[don24 LONG-ONLY atr3 tpf5 30m]
+  ETHUSDT train: n=  57 win= 42.1% pnl=   -61.94 fees=  34.18 pf= 0.83 dd= 101.8 dur=1095m
+  ETHUSDT test : n=  24 win= 29.2% pnl=   -65.86 fees=  14.37 pf= 0.56 dd=  71.7 dur=1096m
+[don48 atr3 tpf5 beoff 30m]
+  ETHUSDT train: n= 102 win= 47.1% pnl=   +40.92 fees=  61.17 pf= 1.06 dd=  88.5 dur=1254m
+  ETHUSDT test : n=  43 win= 32.6% pnl=   -85.44 fees=  25.80 pf= 0.70 dd= 115.6 dur=1406m
+-- SOLUSDT Buy&Hold -57.8% / 365d --
+[don24 atr2.0 tpf3.0 be=tp1 30m]
+  SOLUSDT train: n= 199 win= 40.2% pnl=  -137.81 fees= 119.19 pf= 0.87 dd= 177.2 dur=574m
+  SOLUSDT test : n=  70 win= 34.3% pnl=  -126.45 fees=  42.00 pf= 0.65 dd= 139.7 dur=657m
+[don24 atr2.0 tpf3.0 be=off 30m]
+  SOLUSDT train: n= 197 win= 40.6% pnl=   -83.91 fees= 117.96 pf= 0.92 dd= 166.8 dur=592m
+  SOLUSDT test : n=  70 win= 34.3% pnl=  -128.30 fees=  42.00 pf= 0.64 dd= 141.1 dur=658m
+[don24 atr2.0 tpf5.0 be=tp1 30m]
+  SOLUSDT train: n= 188 win= 38.8% pnl=  -237.79 fees= 112.64 pf= 0.78 dd= 238.5 dur=605m
+  SOLUSDT test : n=  66 win= 31.8% pnl=  -128.73 fees=  39.61 pf= 0.63 dd= 139.8 dur=737m
+[don24 atr2.0 tpf5.0 be=off 30m]
+  SOLUSDT train: n= 186 win= 39.2% pnl=  -200.74 fees= 111.43 pf= 0.81 dd= 201.1 dur=622m
+  SOLUSDT test : n=  66 win= 31.8% pnl=  -130.58 fees=  39.61 pf= 0.63 dd= 141.7 dur=739m
+[don24 atr3.0 tpf3.0 be=tp1 30m]
+  SOLUSDT train: n= 165 win= 37.6% pnl=  -276.90 fees=  98.80 pf= 0.79 dd= 292.5 dur=1043m
+  SOLUSDT test : n=  69 win= 37.7% pnl=  -103.23 fees=  41.38 pf= 0.76 dd= 124.5 dur=1140m
+[don24 atr3.0 tpf3.0 be=off 30m]
+  SOLUSDT train: n= 165 win= 37.6% pnl=  -269.36 fees=  98.80 pf= 0.80 dd= 288.3 dur=1043m
+  SOLUSDT test : n=  69 win= 37.7% pnl=  -103.23 fees=  41.38 pf= 0.76 dd= 124.5 dur=1140m
+[don24 atr3.0 tpf5.0 be=tp1 30m]
+  SOLUSDT train: n= 160 win= 38.8% pnl=  -222.00 fees=  95.82 pf= 0.82 dd= 285.0 dur=1037m
+  SOLUSDT test : n=  67 win= 34.3% pnl=  -132.02 fees=  40.15 pf= 0.70 dd= 140.6 dur=1146m
+[don24 atr3.0 tpf5.0 be=off 30m]
+  SOLUSDT train: n= 160 win= 38.8% pnl=  -214.45 fees=  95.81 pf= 0.83 dd= 277.3 dur=1038m
+  SOLUSDT test : n=  67 win= 34.3% pnl=  -132.02 fees=  40.15 pf= 0.70 dd= 140.6 dur=1146m
+[don24 LONG-ONLY atr3 tpf5 30m]
+  SOLUSDT train: n=  73 win= 34.2% pnl=  -258.36 fees=  43.67 pf= 0.56 dd= 283.3 dur=1033m
+  SOLUSDT test : n=  34 win= 23.5% pnl=  -110.93 fees=  20.35 pf= 0.54 dd= 113.7 dur=957m
+[don48 atr3 tpf5 beoff 30m]
+  SOLUSDT train: n= 133 win= 35.3% pnl=  -281.31 fees=  79.63 pf= 0.75 dd= 289.5 dur=1026m
+  SOLUSDT test : n=  51 win= 33.3% pnl=  -106.33 fees=  30.60 pf= 0.69 dd= 125.2 dur=1388m
+
+========== TF 1h ==========
+-- BTCUSDT Buy&Hold -46.9% / 365d --
+[don24 atr2.0 tpf3.0 be=tp1 1h]
+  BTCUSDT train: n=  85 win= 43.5% pnl=   +61.71 fees=  50.98 pf= 1.16 dd=  93.2 dur=1275m
+  BTCUSDT test : n=  27 win= 55.6% pnl=   +30.07 fees=  16.16 pf= 1.36 dd=  44.4 dur=1342m
+[don24 atr2.0 tpf3.0 be=off 1h]
+  BTCUSDT train: n=  85 win= 43.5% pnl=   +69.12 fees=  50.98 pf= 1.17 dd=  94.5 dur=1273m
+  BTCUSDT test : n=  27 win= 55.6% pnl=   +30.17 fees=  16.16 pf= 1.36 dd=  44.4 dur=1380m
+[don24 atr2.0 tpf5.0 be=tp1 1h]
+  BTCUSDT train: n=  82 win= 39.0% pnl=   -49.23 fees=  49.23 pf= 0.89 dd= 131.0 dur=1182m
+  BTCUSDT test : n=  25 win= 56.0% pnl=   +25.79 fees=  14.97 pf= 1.33 dd=  44.4 dur=1543m
+[don24 atr2.0 tpf5.0 be=off 1h]
+  BTCUSDT train: n=  81 win= 39.5% pnl=   -37.29 fees=  48.62 pf= 0.91 dd= 131.0 dur=1195m
+  BTCUSDT test : n=  25 win= 56.0% pnl=   +25.90 fees=  14.97 pf= 1.33 dd=  44.4 dur=1584m
+[don24 atr3.0 tpf3.0 be=tp1 1h]
+  BTCUSDT train: n=  87 win= 40.2% pnl=   -65.79 fees=  52.20 pf= 0.89 dd= 149.2 dur=1627m
+  BTCUSDT test : n=  29 win= 34.5% pnl=   -57.03 fees=  17.38 pf= 0.70 dd=  85.5 dur=2619m
+[don24 atr3.0 tpf3.0 be=off 1h]
+  BTCUSDT train: n=  87 win= 40.2% pnl=   -66.34 fees=  52.20 pf= 0.89 dd= 149.2 dur=1627m
+  BTCUSDT test : n=  29 win= 34.5% pnl=   -57.03 fees=  17.38 pf= 0.70 dd=  85.5 dur=2619m
+[don24 atr3.0 tpf5.0 be=tp1 1h]
+  BTCUSDT train: n=  84 win= 41.7% pnl=   -89.36 fees=  50.42 pf= 0.83 dd= 149.2 dur=1651m
+  BTCUSDT test : n=  28 win= 35.7% pnl=   -53.17 fees=  16.78 pf= 0.70 dd=  72.0 dur=2670m
+[don24 atr3.0 tpf5.0 be=off 1h]
+  BTCUSDT train: n=  84 win= 41.7% pnl=   -85.26 fees=  50.42 pf= 0.84 dd= 149.2 dur=1679m
+  BTCUSDT test : n=  28 win= 35.7% pnl=   -53.17 fees=  16.78 pf= 0.70 dd=  72.0 dur=2670m
+[don24 LONG-ONLY atr3 tpf5 1h]
+  BTCUSDT train: n=  33 win= 42.4% pnl=   -23.32 fees=  19.80 pf= 0.86 dd=  79.8 dur=1738m
+  BTCUSDT test : n=   9 win= 22.2% pnl=   -42.38 fees=   5.38 pf= 0.34 dd=  42.4 dur=3553m
+[don48 atr3 tpf5 beoff 1h]
+  BTCUSDT train: n=  62 win= 46.8% pnl=   +13.52 fees=  37.16 pf= 1.04 dd=  94.9 dur=2068m
+  BTCUSDT test : n=  26 win= 30.8% pnl=   -94.85 fees=  15.56 pf= 0.52 dd= 125.8 dur=2416m
+-- ETHUSDT Buy&Hold -56.6% / 365d --
+[don24 atr2.0 tpf3.0 be=tp1 1h]
+  ETHUSDT train: n= 103 win= 35.0% pnl=  -192.05 fees=  61.79 pf= 0.74 dd= 213.9 dur=1001m
+  ETHUSDT test : n=  40 win= 35.0% pnl=   -56.61 fees=  24.03 pf= 0.78 dd=  79.8 dur=1107m
+[don24 atr2.0 tpf3.0 be=off 1h]
+  ETHUSDT train: n= 101 win= 35.6% pnl=  -158.23 fees=  60.57 pf= 0.78 dd= 199.9 dur=1032m
+  ETHUSDT test : n=  40 win= 35.0% pnl=   -56.61 fees=  24.03 pf= 0.78 dd=  79.8 dur=1107m
+[don24 atr2.0 tpf5.0 be=tp1 1h]
+  ETHUSDT train: n=  94 win= 36.2% pnl=  -187.88 fees=  56.39 pf= 0.71 dd= 187.9 dur=1043m
+  ETHUSDT test : n=  35 win= 34.3% pnl=   -29.73 fees=  21.01 pf= 0.86 dd=  53.4 dur=1267m
+[don24 atr2.0 tpf5.0 be=off 1h]
+  ETHUSDT train: n=  92 win= 37.0% pnl=  -118.72 fees=  55.15 pf= 0.81 dd= 153.3 dur=1100m
+  ETHUSDT test : n=  35 win= 34.3% pnl=   -29.73 fees=  21.01 pf= 0.86 dd=  53.4 dur=1267m
+[don24 atr3.0 tpf3.0 be=tp1 1h]
+  ETHUSDT train: n=  73 win= 41.1% pnl=   -35.68 fees=  43.86 pf= 0.95 dd= 126.3 dur=2344m
+  ETHUSDT test : n=  34 win= 41.2% pnl=   -33.24 fees=  20.39 pf= 0.87 dd=  68.6 dur=2005m
+[don24 atr3.0 tpf3.0 be=off 1h]
+  ETHUSDT train: n=  73 win= 41.1% pnl=   -35.68 fees=  43.86 pf= 0.95 dd= 126.3 dur=2344m
+  ETHUSDT test : n=  34 win= 41.2% pnl=   -33.24 fees=  20.39 pf= 0.87 dd=  68.6 dur=2005m
+[don24 atr3.0 tpf5.0 be=tp1 1h]
+  ETHUSDT train: n=  67 win= 40.3% pnl=   -54.16 fees=  40.24 pf= 0.92 dd= 145.5 dur=2456m
+  ETHUSDT test : n=  31 win= 41.9% pnl=   -24.07 fees=  18.61 pf= 0.90 dd=  63.6 dur=2158m
+[don24 atr3.0 tpf5.0 be=off 1h]
+  ETHUSDT train: n=  67 win= 40.3% pnl=   -54.16 fees=  40.24 pf= 0.92 dd= 145.5 dur=2456m
+  ETHUSDT test : n=  31 win= 41.9% pnl=   -24.07 fees=  18.61 pf= 0.90 dd=  63.6 dur=2158m
+[don24 LONG-ONLY atr3 tpf5 1h]
+  ETHUSDT train: n=  26 win= 46.2% pnl=   +13.01 fees=  15.62 pf= 1.06 dd=  50.7 dur=2405m
+  ETHUSDT test : n=  14 win= 42.9% pnl=    -5.15 fees=   8.40 pf= 0.94 dd=  39.4 dur=1954m
+[don48 atr3 tpf5 beoff 1h]
+  ETHUSDT train: n=  57 win= 42.1% pnl=  -114.65 fees=  34.29 pf= 0.81 dd= 184.3 dur=2600m
+  ETHUSDT test : n=  25 win= 44.0% pnl=   +15.07 fees=  14.98 pf= 1.08 dd=  63.6 dur=2311m
+-- SOLUSDT Buy&Hold -57.8% / 365d --
+[don24 atr2.0 tpf3.0 be=tp1 1h]
+  SOLUSDT train: n= 111 win= 36.9% pnl=   -83.08 fees=  66.41 pf= 0.90 dd= 210.2 dur=1127m
+  SOLUSDT test : n=  38 win= 52.6% pnl=   +85.04 fees=  22.80 pf= 1.50 dd=  39.0 dur=1533m
+[don24 atr2.0 tpf3.0 be=off 1h]
+  SOLUSDT train: n= 111 win= 36.9% pnl=   -97.61 fees=  66.42 pf= 0.88 dd= 219.4 dur=1132m
+  SOLUSDT test : n=  38 win= 52.6% pnl=   +84.77 fees=  22.80 pf= 1.50 dd=  39.0 dur=1533m
+[don24 atr2.0 tpf5.0 be=tp1 1h]
+  SOLUSDT train: n= 102 win= 35.3% pnl=  -135.34 fees=  61.08 pf= 0.83 dd= 200.7 dur=1232m
+  SOLUSDT test : n=  34 win= 50.0% pnl=   +83.24 fees=  20.38 pf= 1.56 dd=  35.2 dur=1682m
+[don24 atr2.0 tpf5.0 be=off 1h]
+  SOLUSDT train: n= 102 win= 35.3% pnl=  -139.11 fees=  61.09 pf= 0.82 dd= 200.7 dur=1258m
+  SOLUSDT test : n=  34 win= 50.0% pnl=   +83.24 fees=  20.38 pf= 1.56 dd=  35.2 dur=1682m
+[don24 atr3.0 tpf3.0 be=tp1 1h]
+  SOLUSDT train: n=  75 win= 45.3% pnl=   +91.09 fees=  44.82 pf= 1.12 dd= 181.6 dur=2462m
+  SOLUSDT test : n=  32 win= 43.8% pnl=   +21.28 fees=  19.24 pf= 1.08 dd= 101.6 dur=2258m
+[don24 atr3.0 tpf3.0 be=off 1h]
+  SOLUSDT train: n=  74 win= 44.6% pnl=  +104.48 fees=  44.21 pf= 1.14 dd= 181.6 dur=2545m
+  SOLUSDT test : n=  32 win= 43.8% pnl=   +21.28 fees=  19.24 pf= 1.08 dd= 101.6 dur=2258m
+[don24 atr3.0 tpf5.0 be=tp1 1h]
+  SOLUSDT train: n=  74 win= 43.2% pnl=   -17.43 fees=  44.28 pf= 0.98 dd= 181.6 dur=2385m
+  SOLUSDT test : n=  30 win= 46.7% pnl=   +38.03 fees=  18.02 pf= 1.17 dd=  57.8 dur=2246m
+[don24 atr3.0 tpf5.0 be=off 1h]
+  SOLUSDT train: n=  73 win= 42.5% pnl=   -24.65 fees=  43.68 pf= 0.97 dd= 181.6 dur=2439m
+  SOLUSDT test : n=  30 win= 46.7% pnl=   +38.03 fees=  18.02 pf= 1.17 dd=  57.8 dur=2246m
+[don24 LONG-ONLY atr3 tpf5 1h]
+  SOLUSDT train: n=  29 win= 37.9% pnl=  -106.67 fees=  17.35 pf= 0.66 dd= 148.8 dur=3050m
+  SOLUSDT test : n=  10 win= 50.0% pnl=   +42.65 fees=   6.03 pf= 1.57 dd=  29.5 dur=2424m
+[don48 atr3 tpf5 beoff 1h]
+  SOLUSDT train: n=  59 win= 33.9% pnl=  -232.22 fees=  35.34 pf= 0.71 dd= 302.0 dur=2529m
+  SOLUSDT test : n=  26 win= 42.3% pnl=    -5.46 fees=  15.64 pf= 0.97 dd=  83.0 dur=2370m
+
+========== TF 2h ==========
+-- BTCUSDT Buy&Hold -46.6% / 365d --
+[don24 atr2.0 tpf3.0 be=tp1 2h]
+  BTCUSDT train: n=  48 win= 47.9% pnl=   -25.04 fees=  28.83 pf= 0.91 dd= 150.7 dur=2370m
+  BTCUSDT test : n=  25 win= 32.0% pnl=   -62.72 fees=  14.96 pf= 0.63 dd= 120.1 dur=2760m
+[don24 atr2.0 tpf3.0 be=off 2h]
+  BTCUSDT train: n=  48 win= 47.9% pnl=   -26.89 fees=  28.83 pf= 0.91 dd= 150.7 dur=2375m
+  BTCUSDT test : n=  25 win= 32.0% pnl=   -63.81 fees=  14.96 pf= 0.63 dd= 120.1 dur=2760m
+[don24 atr2.0 tpf5.0 be=tp1 2h]
+  BTCUSDT train: n=  45 win= 44.4% pnl=   -23.08 fees=  27.02 pf= 0.92 dd= 121.8 dur=2512m
+  BTCUSDT test : n=  22 win= 31.8% pnl=   -60.74 fees=  13.16 pf= 0.60 dd= 112.5 dur=3164m
+[don24 atr2.0 tpf5.0 be=off 2h]
+  BTCUSDT train: n=  45 win= 44.4% pnl=   -23.85 fees=  27.02 pf= 0.91 dd= 121.8 dur=2515m
+  BTCUSDT test : n=  22 win= 31.8% pnl=   -61.83 fees=  13.16 pf= 0.59 dd= 112.5 dur=3164m
+[don24 atr3.0 tpf3.0 be=tp1 2h]
+  BTCUSDT train: n=  36 win= 47.2% pnl=   +31.03 fees=  21.65 pf= 1.09 dd= 103.0 dur=4773m
+  BTCUSDT test : n=  22 win= 36.4% pnl=   -56.79 fees=  13.12 pf= 0.68 dd= 139.3 dur=3627m
+[don24 atr3.0 tpf3.0 be=off 2h]
+  BTCUSDT train: n=  36 win= 47.2% pnl=   +31.03 fees=  21.65 pf= 1.09 dd= 103.0 dur=4773m
+  BTCUSDT test : n=  22 win= 36.4% pnl=   -56.79 fees=  13.12 pf= 0.68 dd= 139.3 dur=3627m
+[don24 atr3.0 tpf5.0 be=tp1 2h]
+  BTCUSDT train: n=  32 win= 50.0% pnl=   +67.47 fees=  19.24 pf= 1.26 dd=  64.1 dur=5029m
+  BTCUSDT test : n=  21 win= 33.3% pnl=   -52.31 fees=  12.52 pf= 0.71 dd= 139.3 dur=3846m
+[don24 atr3.0 tpf5.0 be=off 2h]
+  BTCUSDT train: n=  32 win= 50.0% pnl=   +67.47 fees=  19.24 pf= 1.26 dd=  64.1 dur=5029m
+  BTCUSDT test : n=  21 win= 33.3% pnl=   -52.31 fees=  12.52 pf= 0.71 dd= 139.3 dur=3846m
+[don24 LONG-ONLY atr3 tpf5 2h]
+  BTCUSDT train: n=  10 win= 70.0% pnl=   +66.95 fees=   6.04 pf= 2.35 dd=  39.8 dur=6876m
+  BTCUSDT test : n=  11 win=  9.1% pnl=   -95.40 fees=   6.55 pf= 0.14 dd= 110.3 dur=3676m
+[don48 atr3 tpf5 beoff 2h]
+  BTCUSDT train: n=  29 win= 41.4% pnl=   -35.22 fees=  17.50 pf= 0.88 dd= 130.1 dur=4585m
+  BTCUSDT test : n=  13 win= 38.5% pnl=   +10.46 fees=   7.73 pf= 1.10 dd=  75.4 dur=4523m
+-- ETHUSDT Buy&Hold -56.2% / 365d --
+[don24 atr2.0 tpf3.0 be=tp1 2h]
+  ETHUSDT train: n=  50 win= 40.0% pnl=   -99.01 fees=  30.02 pf= 0.80 dd= 148.9 dur=2527m
+  ETHUSDT test : n=  19 win= 57.9% pnl=   +83.20 fees=  11.35 pf= 1.86 dd=  40.0 dur=3436m
+[don24 atr2.0 tpf3.0 be=off 2h]
+  ETHUSDT train: n=  50 win= 38.0% pnl=  -120.79 fees=  30.03 pf= 0.76 dd= 148.9 dur=2623m
+  ETHUSDT test : n=  19 win= 57.9% pnl=   +77.15 fees=  11.34 pf= 1.79 dd=  46.0 dur=3474m
+[don24 atr2.0 tpf5.0 be=tp1 2h]
+  ETHUSDT train: n=  48 win= 39.6% pnl=  -139.85 fees=  28.83 pf= 0.71 dd= 157.7 dur=2560m
+  ETHUSDT test : n=  16 win= 62.5% pnl=  +101.73 fees=   9.54 pf= 2.45 dd=  22.8 dur=3908m
+[don24 atr2.0 tpf5.0 be=off 2h]
+  ETHUSDT train: n=  47 win= 38.3% pnl=  -138.91 fees=  28.23 pf= 0.71 dd= 162.1 dur=2717m
+  ETHUSDT test : n=  16 win= 62.5% pnl=   +95.68 fees=   9.53 pf= 2.37 dd=  28.8 dur=3952m
+[don24 atr3.0 tpf3.0 be=tp1 2h]
+  ETHUSDT train: n=  33 win= 45.5% pnl=   +71.58 fees=  19.82 pf= 1.17 dd= 109.8 dur=5586m
+  ETHUSDT test : n=  12 win= 58.3% pnl=  +112.30 fees=   7.15 pf= 2.35 dd=  41.3 dur=6530m
+[don24 atr3.0 tpf3.0 be=off 2h]
+  ETHUSDT train: n=  33 win= 45.5% pnl=   +71.58 fees=  19.82 pf= 1.17 dd= 109.8 dur=5586m
+  ETHUSDT test : n=  12 win= 58.3% pnl=  +112.30 fees=   7.15 pf= 2.35 dd=  41.3 dur=6530m
+[don24 atr3.0 tpf5.0 be=tp1 2h]
+  ETHUSDT train: n=  31 win= 48.4% pnl=  +117.40 fees=  18.59 pf= 1.36 dd=  79.7 dur=5683m
+  ETHUSDT test : n=  12 win= 58.3% pnl=   +97.04 fees=   7.15 pf= 2.17 dd=  41.3 dur=6670m
+[don24 atr3.0 tpf5.0 be=off 2h]
+  ETHUSDT train: n=  31 win= 48.4% pnl=  +117.40 fees=  18.59 pf= 1.36 dd=  79.7 dur=5683m
+  ETHUSDT test : n=  12 win= 58.3% pnl=   +97.04 fees=   7.15 pf= 2.17 dd=  41.3 dur=6670m
+[don24 LONG-ONLY atr3 tpf5 2h]
+  ETHUSDT train: n=  14 win= 57.1% pnl=   +53.00 fees=   8.44 pf= 1.49 dd=  41.8 dur=3909m
+  ETHUSDT test : n=   6 win= 50.0% pnl=   +10.84 fees=   3.61 pf= 1.28 dd=  26.2 dur=5940m
+[don48 atr3 tpf5 beoff 2h]
+  ETHUSDT train: n=  24 win= 50.0% pnl=   +64.53 fees=  14.41 pf= 1.23 dd= 125.4 dur=6290m
+  ETHUSDT test : n=  11 win= 45.5% pnl=   +43.04 fees=   6.54 pf= 1.41 dd=  57.2 dur=6709m
+-- SOLUSDT Buy&Hold -57.4% / 365d --
+[don24 atr2.0 tpf3.0 be=tp1 2h]
+  SOLUSDT train: n=  56 win= 35.7% pnl=  -112.25 fees=  33.47 pf= 0.82 dd= 231.1 dur=2329m
+  SOLUSDT test : n=  21 win= 42.9% pnl=    +7.10 fees=  12.59 pf= 1.04 dd=  78.2 dur=2389m
+[don24 atr2.0 tpf3.0 be=off 2h]
+  SOLUSDT train: n=  56 win= 35.7% pnl=  -116.55 fees=  33.47 pf= 0.82 dd= 235.1 dur=2344m
+  SOLUSDT test : n=  21 win= 42.9% pnl=    +7.10 fees=  12.59 pf= 1.04 dd=  78.2 dur=2389m
+[don24 atr2.0 tpf5.0 be=tp1 2h]
+  SOLUSDT train: n=  51 win= 33.3% pnl=  -120.30 fees=  30.45 pf= 0.80 dd= 207.4 dur=2424m
+  SOLUSDT test : n=  20 win= 40.0% pnl=   -14.36 fees=  12.02 pf= 0.92 dd=  66.5 dur=2544m
+[don24 atr2.0 tpf5.0 be=off 2h]
+  SOLUSDT train: n=  51 win= 33.3% pnl=  -124.30 fees=  30.46 pf= 0.79 dd= 211.4 dur=2440m
+  SOLUSDT test : n=  20 win= 40.0% pnl=   -14.36 fees=  12.02 pf= 0.92 dd=  66.5 dur=2544m
+[don24 atr3.0 tpf3.0 be=tp1 2h]
+  SOLUSDT train: n=  36 win= 38.9% pnl=   -59.97 fees=  21.51 pf= 0.90 dd= 189.3 dur=5523m
+  SOLUSDT test : n=  14 win= 50.0% pnl=   +87.10 fees=   8.41 pf= 1.66 dd=  77.5 dur=4689m
+[don24 atr3.0 tpf3.0 be=off 2h]
+  SOLUSDT train: n=  36 win= 38.9% pnl=   -59.97 fees=  21.51 pf= 0.90 dd= 189.3 dur=5523m
+  SOLUSDT test : n=  14 win= 50.0% pnl=   +87.10 fees=   8.41 pf= 1.66 dd=  77.5 dur=4689m
+[don24 atr3.0 tpf5.0 be=tp1 2h]
+  SOLUSDT train: n=  33 win= 42.4% pnl=   -12.48 fees=  19.70 pf= 0.98 dd= 175.8 dur=5869m
+  SOLUSDT test : n=  14 win= 42.9% pnl=   +27.85 fees=   8.41 pf= 1.18 dd=  77.5 dur=4766m
+[don24 atr3.0 tpf5.0 be=off 2h]
+  SOLUSDT train: n=  33 win= 42.4% pnl=   -12.48 fees=  19.70 pf= 0.98 dd= 175.8 dur=5869m
+  SOLUSDT test : n=  14 win= 42.9% pnl=   +27.85 fees=   8.41 pf= 1.18 dd=  77.5 dur=4766m
+[don24 LONG-ONLY atr3 tpf5 2h]
+  SOLUSDT train: n=  11 win= 27.3% pnl=   -84.39 fees=   6.55 pf= 0.55 dd= 145.3 dur=5476m
+  SOLUSDT test : n=   5 win= 40.0% pnl=   +21.82 fees=   3.01 pf= 1.42 dd=  31.6 dur=3936m
+[don48 atr3 tpf5 beoff 2h]
+  SOLUSDT train: n=  29 win= 41.4% pnl=   -26.31 fees=  17.32 pf= 0.94 dd= 190.8 dur=5392m
+  SOLUSDT test : n=  10 win= 50.0% pnl=   +69.03 fees=   6.00 pf= 1.78 dd=  42.9 dur=6612m

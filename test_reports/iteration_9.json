@@ -1,0 +1,39 @@
+{
+  "summary": "Iteration 9 Nachfix (dunkle Number-Inputs im AI-Setup + Learner-Token-Sparen) unabhängig verifiziert. Backend: pytest tests/test_iter8_token_crv_lev.py -o addopts='' = 24/24 grün in 0.82s (inkl. der 2 neuen Learner-Tests test_learner_skips_daily_run_without_new_results und test_learner_prompt_lean_gates_research_and_ml). Backend-Regression: GET /api/health = 200 {status:alive}; GET /api/ai/status = 200 mit config.crv_min=1.2, crv_max=0, lev_mode='coin', lev_auto_max=25, lev_fixed=10 und providers_health.active_fallbacks als Liste. Frontend (Playwright, viewport 1920x1080, echte externe Preview-URL): KI-Trader-Tab -> Zahnrad -> Admin-Login (Passwort 'TestAdmin2026!') -> Zahnrad -> Setup. Alle 5 relevanten number-Inputs computed background rgb(26,31,48), color rgb(232,234,242), border rgb(42,48,73): ai-max-capital-per-trade, ai-crv-min-input, ai-crv-max-input, ai-lev-auto-max-input (lev_mode=auto), ai-lev-fixed-input (lev_mode=fixed). lev_mode ZWINGEND wieder auf 'coin' gestellt und Server-Config danach bestätigt (crv_min=1.2, crv_max=0, lev_mode=coin, lev_auto_max=25, lev_fixed=10). Setup rendert weiterhin KI-Modell-Select, CRV min/max, Hebel-Modus und Token-Verbrauchs-Dashboard [data-testid=ai-token-usage] ohne Layout-Bruch. POST /api/ai/learn wurde bewusst NICHT gerufen (Prod-Schutz).",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "AI Panel Setup (KI-Modell-Select)", "issues": ["Bekannte React-Hydration-Warnung aus Iter 8 weiterhin sichtbar: '<span> cannot be a child of <option>'. Kein Funktionsbruch, kein neuer Regress durch diesen Nachfix."]}
+    ]
+  },
+  "ai_feature_verdicts": [
+    "Dark input styling for AI Setup number fields (Bug 1) - pass - evidence: computed background rgb(26,31,48), color rgb(232,234,242), border rgb(42,48,73) für alle 5 Inputs (ai-max-capital-per-trade, ai-crv-min-input, ai-crv-max-input, ai-lev-auto-max-input, ai-lev-fixed-input). Playwright evaluate() gegen live Preview - skill: not-applicable (kein LLM-Call, nur UI-Styling)",
+    "Learner token savings gates (Bug 2, backend) - pass - evidence: pytest 24/24 grün in 0.82s inkl. test_learner_skips_daily_run_without_new_results (status='skipped' bei 0 neuen closed trades + Quelle enthält ('daily','daily_summary')) und test_learner_prompt_lean_gates_research_and_ml (Source enthält 'if not lean:' und '15 if lean else 25') - skill: not-applicable (Source-Inspection, kein LLM-Live-Call)",
+    "AI status/config regression - pass - evidence: GET /api/ai/status 200, config unverändert bei Defaults (crv_min=1.2, crv_max=0, lev_mode=coin, lev_auto_max=25, lev_fixed=10), providers_health.active_fallbacks present als Liste; GET /api/health 200 status=alive - skill: ai-testing-core (nur Struktur, keine LLM-Qualität)",
+    "Live LLM output quality - not-in-scope-this-iteration - evidence: Preview-LLM-Keys maskiert, /api/ai/learn bewusst NICHT aufgerufen (echte Prod-DB dran) - skill: ai-testing-core"
+  ],
+  "test_report_links": [
+    "/app/backend/tests/test_iter8_token_crv_lev.py"
+  ],
+  "action_items": [
+    "Minor (Alt-Fund aus Iter 8): React-Hydration-Warnung '<span> cannot be a child of <option>' im KI-Modell-Select bereinigen (kein Blocker)."
+  ],
+  "critical_code_review_comments": [
+    "AITradingPanel.js weiterhin >1200 Zeilen – bei nächster Feature-Iteration in Sub-Komponenten (SetupPanel, HealthDropdown, ChatFeed) aufteilen.",
+    "Setup-Number-Inputs vererben Styling korrekt über .ai-setup label input[type=number] in AITradingPanel.css – konsistent mit den Selects (rgb(26,31,48) / rgb(232,234,242) / border rgb(42,48,73)).",
+    "ai_learning.run_learning: Der Frische-Check ('daily','daily_summary') + lean-Gating (research/ml-Blöcke + 15 statt 25 outcomes) sind quellenverifiziert. Empfehlung: Metrik/Log-Zeile 'skipped_due_to_no_new_trades' beibehalten, damit der Token-Spar-Effekt in Prod-Logs zählbar ist."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "100%", "frontend": "100%"},
+  "test_credentials": "Admin / TestAdmin2026! (aus /app/memory/test_credentials.md)",
+  "seed_data_creation": "Keine Seeds. Während UI-Test wurde ai-lev-mode-select temporär auf 'auto' und 'fixed' gestellt, aber die Änderung wird erst mit expliziter Speichern-Aktion an /api/ai/config gesendet; Server-Config nach dem Test unverändert (verifiziert per GET /api/ai/status: lev_mode=coin, lev_auto_max=25, lev_fixed=10). Zusätzlich Dropdown im UI final zurück auf 'coin' gesetzt.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Iter 9 Nachfix vollständig verifiziert. Preview-Backend-Kaltstart auf /api/ai/status war diesmal warm (<1s). Prod-Atlas hängt weiter dran – lev_mode nach jedem Toggle-Test explizit zurück auf 'coin' setzen. Preview-LLM-Keys maskiert (nur GROQ_API_KEY_BACKUP/CEREBRAS_API_KEY_BACKUP real) – KEINE LLM-Qualitätstests. POST /api/ai/learn, /api/ai/analyze, /api/ai/clear/reset/delete-Endpunkte NIEMALS in Preview aufrufen.",
+  "rca of the issue": "N/A – kein neuer Bug gefunden. Bug 1 (weiße Number-Felder) durch neuen CSS-Selektor .ai-setup label input[type=number]/[type=text] in AITradingPanel.css behoben (bg #1a1f30, color #e8eaf2, border #2a3049); Bug 2 (Learner-Token-Verbrauch) durch Frische-Gate ('daily','daily_summary' -> status='skipped' wenn 0 neue closed trades) und lean-Gating (research/ml raus + 15 statt 25 outcomes) in ai_learning.py behoben und durch 2 neue Unit-Tests abgesichert."
+}

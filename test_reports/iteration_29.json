@@ -1,0 +1,59 @@
+{
+  "summary": "Iteration 29: End-to-End Verifikation aller 8 Review-Punkte auf PROD-Vorschau (https://daytrader-refine-2.preview.emergentagent.com). ALLES GRÜN, KEINE BUGS. Testing-skills geladen: ai-testing-core. (1) PnL-Sync: GET /api/autotrade/trades?limit=200 liefert 140 Trades (11 offen). Alle 11 offenen Trades besitzen computed.upnl_pct_margin (Werte: SOL -1.59, POL 9.28, ETH 11.5, BNB -5.73, OIL -0.06, DOGE 4.39, BNB 20.36, SILVER 35.73, GOLD 5.87, XRP 10.75, QQQ 3.14). UI-Vergleich XRP-Trade: chart-open-badge-XRPUSDT-1786762673711 zeigt '+10.75%' UND trade-pnl-pct-<id> in Analyse>Trades zeigt '(+10.75%)' – EXAKT gleicher Wert (0.0% Abweichung, deutlich innerhalb der ±0.5% Toleranz). (2) Chart-Pin: Klick auf chart-open-badge (XRP-Trade) → CSS-Klasse wechselt von 'chart-open-badge short ' zu 'chart-open-badge short pinned' (gelber Rahmen). Zweiter Klick entfernt 'pinned' Klasse wieder. Screenshot bestätigt zusätzlich, dass ENTRY/SL/TP-Linien am rechten Chart-Rand als Preislinien erscheinen (aus vorheriger Iteration bereits per Main-Agent verifiziert). (3) Playbook TF: GET /api/ai/playbook liefert 200 mit tf_stats (Liste, 9 Einträge, Struktur setup/timeframe/trades/wins/pnl) + best_tf (Dict mit 5 Setups: mean_reversion/trend_follow/range_fade/pullback/liquidity_sweep). Beispiel-Zeile: {setup:'mean_reversion', timeframe:'1m', trades:8, wins:3, pnl:-44.71}. (4) Trade-Filter: trade-list-filter mit trade-filter-strategy (Dropdown enthält 'Manuell (Bitunix)' als Option value='external' + 11 weitere Strategien inkl. 'KI Trader', 'Scalping', 'PBD Model' etc.) und trade-filter-coin-toggle ('☐ Nur XRP') sichtbar. Filter 'Manuell (Bitunix)' aktiviert → nur 1 Karte sichtbar (trade-pnl-pct-QQQUSDT-ext-1786654962450 = external Trade). Coin-Toggle 'Nur XRP' aktiviert → 12 XRP-Karten sichtbar (1 offen + 11 geschlossen). Filter funktionieren korrekt und lassen sich zurücksetzen. (5) SettingsPanel Regel-TF: Admin-Login via UI-Modal erfolgreich ('Admin angemeldet' bestätigt). custom_f0551b80 (TEST_iter11) als aktive Strategie gewählt → edit-strategy-params-btn öffnet Settings-Panel mit Abschnitt 'REGELN & INDIKATOR-PERIODEN (Custom/Discovery - dauerhaft)'. Für 2 LONG- und 2 SHORT-Regeln jeweils ein TF-Dropdown vorhanden: def-rule-long-tf-0, def-rule-long-tf-1, def-rule-short-tf-0, def-rule-short-tf-1. Options exakt wie erwartet: [{v:'', t:'TF: Strategie'}, 1m, 3m, 5m, 15m, 30m, 1h, 2h, 4h, 8h, 12h, 1d] = 12 Options, keine deaktiviert (weil Basis-TF 1m ist alles gültig). Auswahl auf '5m' geändert → 'NICHT GESPEICHERT' Badge erscheint UND '@5m' Chip im Regel-Label. Danach zurück auf 'TF: Strategie' UND Panel via settings-close-button ohne Speichern geschlossen (Prod-Zustand unverändert). (6) Optimizer Dynamik-Modus: Optimizer-Modal via tools-menu-optimizer geöffnet → opt-mode-dynamic geklickt (Modus 'Dynamische Strategie' aktiv). Chip mit data-testid='opt-rule-tf-toggle' und Label '☐ Regel-Timeframes optimieren (Multi-Timeframe)' JETZT SICHTBAR. POST /api/optimizer/run mit {strategy_id:'custom_23a30b65', symbols:['BTCUSDT'], mode:'dynamic', days:7, iterations:5, rule_timeframes:{enabled:true,min:'1m',max:'1h'}, dynamic:{per_regime_strategies:true, max_rules_per_regime:2}} → HTTP 200 {status:'started', job_id:'e75e116946de'}. Job sofort per POST /api/optimizer/cancel/e75e116946de abgebrochen → {status:'cancelling'}, danach status='cancelled' bei 26% Fortschritt (nicht zu Ende gelaufen, keine echten Orders). (7) Exakte Bitunix-Verbuchung Unit-Tests: pytest tests/test_exchange_close_truth.py tests/test_playbook_tf.py → 11 passed in 0.59s (7 exchange_close_truth: exact_pnl_used, fallback_estimate_without_pid, mixed_position_keeps_estimate, paper_never_queries_exchange, parses_net_pnl, unknown_position_id, error_response, broken_numbers | 3 playbook_tf: best_tf_requires_min_trades, best_tf_empty, context_lines_sorted_by_pnl). Keine Live-Position wurde berührt. (8) Regression: 82 Trade-Karten in Analyse>Trades sichtbar, tdc-coin ohne Cut-off, tdc-caret & tdc-pnl innerhalb der Bounds. QQQUSDT SHORT (Manuell Bitunix, external) weiterhin in OFFENE TRADES als 11ter offener Trade sichtbar (Label 'Manuell (Bitunix)' + 'OPEN' Badge). Aktiv-Strategie wurde nach Test auf ursprüngliche 'Scalping' zurückgesetzt. Keine Watchdog-Änderung, keine Order-Calls, keine Trade-Closes, keine .env-Änderungen.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "tests_executed": {
+    "unit_tests": {
+      "tests/test_exchange_close_truth.py": "7/7 passed",
+      "tests/test_playbook_tf.py": "3/3 passed",
+      "combined": "11 passed in 0.59s"
+    },
+    "backend_curl": {
+      "GET /api/autotrade/trades?limit=200": "200 OK; 140 trades, 11 open, all with computed.upnl_pct_margin",
+      "GET /api/ai/playbook": "200 OK; tf_stats(9)+best_tf(5 setups) present",
+      "POST /api/auth/login (Admin)": "200 OK; token len 124",
+      "POST /api/optimizer/run mode=dynamic + rule_timeframes": "200 OK; job_id e75e116946de",
+      "POST /api/optimizer/cancel/<id>": "200 OK; status cancelling → cancelled at 26%",
+      "GET /api/optimizer/status/<id>": "200 OK; status cancelled, cancel:true"
+    },
+    "frontend_playwright": {
+      "XRP chart-open-badge-<id> text": "+10.75%",
+      "XRP trade-pnl-pct-<id> text (Analyse>Trades)": "(+10.75%)",
+      "match tolerance": "0.0% (exact)",
+      "badge click → pinned class": "true (chart-open-badge short pinned)",
+      "badge second click → pinned removed": "true",
+      "trade-filter-strategy options count": "12 (incl. 'Manuell (Bitunix)' value='external')",
+      "Manuell filter result": "1 card (QQQUSDT-ext-...)",
+      "coin toggle 'Nur XRP' result": "12 cards (1 open + 11 closed)",
+      "def-rule-long-tf-0 / short-tf-0 present (custom strategy)": "true",
+      "TF options in rule dropdown": "['','1m','3m','5m','15m','30m','1h','2h','4h','8h','12h','1d'] = 12 options, none disabled",
+      "'NICHT GESPEICHERT' badge after TF change": "true",
+      "panel closed without saving": "true (state restored)",
+      "opt-mode-dynamic click → opt-rule-tf-toggle visible": "true (text: '☐ Regel-Timeframes optimieren (Multi-Timeframe)')"
+    }
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_exchange_close_truth.py",
+    "/app/backend/tests/test_playbook_tf.py",
+    "/app/test_reports/settings_custom.png",
+    "/app/test_reports/optimizer_dynamic.png"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "frontend/src/components/MainChart.js: pnlPct = computed.upnl_pct_margin ?? … — korrekt priorisiert. Chart-Badge und Trade-Verlauf-Header ziehen jetzt EINE Quelle, XRP-Test bestätigt 0.0% Abweichung.",
+    "frontend/src/components/PerformanceAnalytics.js: TradeDetailCard.pnlPct nutzt computed.upnl_pct_margin für offene Trades — sauber.",
+    "frontend/src/components/Optimizer.js Zeile 731: Sichtbarkeitsbedingung ((mode==='params' && selIsCustom) || ['discovery','combo','explore','dynamic'].includes(mode)) — 'dynamic' korrekt drin, opt-rule-tf-toggle erscheint jetzt auch für Dynamik-Modus.",
+    "backend/services/optimizer.py _run_dynamic: rule_timeframes wird ins tf_options-Objekt gemappt und an discover/optimize_regime_rules → build_candidates durchgereicht — POST-Test bestätigt HTTP 200 (Job läuft an, keine 4xx).",
+    "backend/services/ai_playbook.py status(): liefert tf_stats + best_tf im API-Response — Struktur (setup/timeframe/trades/wins/pnl + dict pro Setup) exakt wie spezifiziert.",
+    "backend/services/bitunix_trade.py: parse_closed_position + _book_external_close deckt Exact/Fallback/Misch-Fälle und Paper-Sicherheit ab — 7 Unit-Tests alle grün, wichtige Sicherheitsgarantie 'paper_trade_never_queries_exchange' inklusive.",
+    "SettingsPanel Regel-TF Dropdown zeigt korrekt 'TF: Strategie' Default + 1m..1d — 'NICHT GESPEICHERT' Badge triggert bei Änderung; kein Auto-Save (gutes UX für Prod)."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "100% (6/6 relevante Endpoints + 11/11 Unit-Tests)", "frontend": "100% (PnL-Sync, Pin/Unpin, Filter, Coin-Toggle, Rule-TF-Selects, Unsaved-Badge, Optimizer-Dynamic-Chip)"},
+  "test_credentials": "Admin / Dean06Greif!/Admin (aus /app/memory/test_credentials.md) – erfolgreich per UI-Modal und POST /api/auth/login",
+  "seed_data_creation": "Keine. Nur temporärer Optimizer-Job gestartet+abgebrochen. TF im SettingsPanel geändert und ohne Speichern zurückgesetzt (Prod-Zustand unverändert). Aktive Strategie am Ende auf ursprünglich 'Scalping' zurückgestellt.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Der Test-Zielbadge chart-open-badge-<id> ist ein <span> mit Klasse 'chart-open-badge <side>[ pinned]'. Der Badge existiert nur wenn der ausgewählte Coin auch einen offenen Trade hat. Chart-Pin-Test: XRP-Trade wurde für Klick benutzt. Trade-Verlauf-PnL-testid = 'trade-pnl-pct-<full_trade_id>'. Optimizer opt-rule-tf-toggle Sichtbarkeitsbedingung: mode=params UND custom-Strategie ausgewählt, ODER mode ∈ {discovery, combo, explore, dynamic}. Admin-Login-Modal: 2 Inputs (Admin/Passwort), Submit-Button hat Text 'Anmelden'. edit-strategy-params-btn wird 2x geklickt: 1x öffnet Login-Modal, nach Login → 2. Klick öffnet Settings-Panel. def-rule-long-tf-* und def-rule-short-tf-* Selects erscheinen NUR wenn eine Custom-Strategie mit Regeln aktiv ist (Built-in Strategien haben keinen Rules-Editor).",
+  "rca of the issue": "Keine Bugs. Alle 6 Features/Fixes des Review-Requests + 2 Regressions-Checks verifiziert. Der ursprüngliche PnL-Sync-Bug (Trade-Verlauf-Wert vs. Chart-Badge) ist behoben: beide zeigen jetzt exakt denselben computed.upnl_pct_margin. Unit-Tests für die exakte Bitunix-Verbuchung (7 Cases) sind grün und decken auch die Paper-Sicherheit ab."
+}

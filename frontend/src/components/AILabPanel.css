@@ -1,0 +1,178 @@
+/* KI-Labor (Forschungs-Analyst, ML-Labor, Gedächtnis, Markt-Beobachter).
+   Stil bewusst am bestehenden KI-Panel ausgerichtet (dunkel, kompakt). */
+.ai-lab-panel {
+  margin: 0 16px 10px;
+  padding: 12px 14px;
+  background: rgba(0, 168, 255, 0.06);
+  border: 1px solid rgba(0, 168, 255, 0.22);
+  border-radius: 10px;
+  font-size: 12.5px;
+  color: #c8cde0;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.ai-lab-head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 10px; flex-wrap: wrap; margin-bottom: 8px;
+}
+.ai-lab-title { display: flex; align-items: center; gap: 6px; font-weight: 700; letter-spacing: 0.3px; color: #e8eaf2; }
+.ai-lab-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+
+.ai-lab-stats {
+  display: flex; gap: 14px; flex-wrap: wrap;
+  font-size: 11.5px; color: #7c839c;
+  padding: 7px 0; border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.ai-lab-stats b { color: #e8eaf2; }
+.ai-lab-stats span { display: inline-flex; align-items: center; gap: 4px; }
+
+.ai-lab-tabs { display: flex; gap: 6px; margin: 9px 0 8px; flex-wrap: wrap; }
+.ai-lab-tab {
+  background: transparent; border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #7c839c; border-radius: 999px; padding: 4px 12px;
+  font-size: 11.5px; cursor: pointer;
+  transition: color 0.15s, border-color 0.15s, background-color 0.15s;
+}
+.ai-lab-tab:hover { color: #c8cde0; border-color: rgba(0, 168, 255, 0.4); }
+.ai-lab-tab.active {
+  color: #00a8ff; border-color: rgba(0, 168, 255, 0.55);
+  background: rgba(0, 168, 255, 0.12);
+}
+
+.ai-lab-body {
+  flex: 1; min-height: 0; overflow-y: auto; padding-right: 4px;
+  scrollbar-width: thin; scrollbar-color: rgba(0, 168, 255, 0.45) transparent;
+}
+.ai-lab-body::-webkit-scrollbar { width: 8px; }
+.ai-lab-body::-webkit-scrollbar-thumb { background: rgba(0, 168, 255, 0.35); border-radius: 999px; }
+
+.ai-lab-meta { font-size: 11.5px; color: #7c839c; margin-bottom: 8px; }
+.ai-lab-meta b { color: #c8cde0; }
+.ai-lab-sub {
+  display: flex; align-items: center; gap: 5px;
+  margin: 12px 0 6px; font-size: 11.5px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.6px; color: #8b93ad;
+}
+.ai-lab-summary {
+  background: rgba(255, 255, 255, 0.03); border-left: 2px solid rgba(0, 168, 255, 0.5);
+  padding: 8px 10px; border-radius: 6px; line-height: 1.5; margin-bottom: 8px;
+}
+.ai-lab-list { margin: 0 0 8px; padding-left: 18px; line-height: 1.55; }
+.ai-lab-list li { margin-bottom: 6px; }
+.ai-lab-list b { color: #e8eaf2; }
+.ai-lab-empty { color: #7c839c; font-size: 12px; line-height: 1.5; padding: 8px 0; }
+.ai-lab-warn {
+  background: rgba(255, 159, 10, 0.1); border: 1px solid rgba(255, 159, 10, 0.35);
+  color: #ffb340; border-radius: 8px; padding: 7px 10px; font-size: 11.5px;
+  margin-bottom: 8px; line-height: 1.45;
+}
+.ai-lab-warn-hint { color: #b9a382; margin-top: 3px; }
+.ai-lab-warn code { color: #ffd60a; }
+
+.ai-lab-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+.ai-lab-chip {
+  font-size: 11px; padding: 3px 9px; border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12); color: #c8cde0;
+  background: rgba(255, 255, 255, 0.03);
+}
+.ai-lab-chip.verdict-stark { color: #00e5a0; border-color: rgba(0, 229, 160, 0.4); }
+.ai-lab-chip.verdict-schwach { color: #ff5b6a; border-color: rgba(255, 91, 106, 0.4); }
+
+.ai-lab-setup {
+  display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 10px;
+  padding-bottom: 8px; border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.ai-lab-setup label { display: flex; flex-direction: column; gap: 3px; font-size: 11px; color: #7c839c; }
+.ai-lab-setup select {
+  background: #171b28; color: #e8eaf2; border: 1px solid #2a3049;
+  border-radius: 6px; padding: 4px 7px; font-size: 11.5px;
+}
+.ai-lab-check { flex-direction: row !important; align-items: center; gap: 6px !important; }
+
+.ai-lab-bars { display: flex; flex-direction: column; gap: 4px; }
+.ai-lab-bar-row { display: grid; grid-template-columns: 108px 1fr 44px; align-items: center; gap: 8px; font-size: 11px; }
+.ai-lab-bar-label { color: #8b93ad; }
+.ai-lab-bar { height: 7px; background: rgba(255, 255, 255, 0.06); border-radius: 999px; overflow: hidden; }
+.ai-lab-bar > span {
+  display: block; height: 100%; border-radius: 999px;
+  background: linear-gradient(90deg, #00a8ff, #00e5a0);
+  transition: width 0.4s ease;
+}
+.ai-lab-bar-val { text-align: right; color: #c8cde0; }
+
+.ai-lab-code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 10.5px; color: #8b93ad; background: rgba(0, 0, 0, 0.25);
+  padding: 6px 8px; border-radius: 6px; margin-top: 8px; word-break: break-word;
+}
+.ai-lab-kind {
+  font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px;
+  color: #00a8ff; border: 1px solid rgba(0, 168, 255, 0.3);
+  border-radius: 4px; padding: 1px 5px; margin-right: 5px;
+}
+.ai-lab-ts { font-size: 10.5px; color: #6a7189; }
+.ai-lab-entry-text { color: #9aa2ba; font-size: 11.5px; line-height: 1.45; margin-top: 3px; }
+
+.ai-lab-table { width: 100%; border-collapse: collapse; font-size: 11.5px; }
+.ai-lab-table th {
+  text-align: left; color: #7c839c; font-weight: 600; font-size: 10.5px;
+  text-transform: uppercase; letter-spacing: 0.5px;
+  padding: 5px 6px; border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.ai-lab-table td { padding: 5px 6px; border-bottom: 1px solid rgba(255, 255, 255, 0.04); color: #c8cde0; }
+.ai-lab-table td.pos { color: #00e5a0; }
+.ai-lab-table td.neg { color: #ff5b6a; }
+
+/* Trade-Steuerung: kompakte Aktionsknöpfe in der Tabelle */
+.ai-lab-trade-actions { display: flex; gap: 4px; flex-wrap: wrap; }
+.ai-lab-trade-actions button {
+  background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #c8cde0; border-radius: 6px; padding: 2px 7px; font-size: 10.5px;
+  cursor: pointer; transition: color 0.15s, border-color 0.15s, background-color 0.15s;
+}
+.ai-lab-trade-actions button:hover { color: #00a8ff; border-color: rgba(0, 168, 255, 0.5); }
+.ai-lab-trade-actions button.danger { color: #ff8b96; border-color: rgba(255, 91, 106, 0.35); }
+.ai-lab-trade-actions button.danger:hover { color: #fff; background: rgba(255, 91, 106, 0.25); }
+
+/* ---- Gate v1 (Shadow) ---- */
+.gate-head-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+.gate-mode-badge {
+  display: inline-flex; align-items: center; gap: 5px; font-size: 10px;
+  text-transform: uppercase; letter-spacing: 0.6px; color: #ffc24b;
+  border: 1px solid rgba(255, 194, 75, 0.35); background: rgba(255, 194, 75, 0.08);
+  border-radius: 5px; padding: 3px 8px;
+}
+.gate-chip {
+  font-size: 10px; border-radius: 4px; padding: 1px 6px; margin-left: 6px;
+  text-transform: uppercase; letter-spacing: 0.4px;
+}
+.gate-chip.ok { color: #00e5a0; border: 1px solid rgba(0, 229, 160, 0.35); }
+.gate-chip.bad { color: #ff8b96; border: 1px solid rgba(255, 91, 106, 0.35); }
+.gate-criteria { display: flex; flex-direction: column; gap: 4px; margin: 6px 0; }
+.gate-crit { display: flex; align-items: center; gap: 6px; font-size: 11.5px; color: #c8cde0; }
+.gate-crit.ok svg { color: #00e5a0; }
+.gate-crit.bad svg { color: #ff5b6a; }
+.gate-activation-note {
+  font-size: 11px; color: #8a91a8; border-left: 2px solid rgba(255, 194, 75, 0.5);
+  padding: 4px 8px; margin: 4px 0 10px;
+}
+.gate-activation-note.ok { color: #00e5a0; border-left-color: #00e5a0; }
+.gate-sweep tr.active td { background: rgba(0, 168, 255, 0.08); }
+.gate-calibration { display: flex; flex-direction: column; gap: 4px; margin-top: 4px; }
+.gate-cal-row { display: flex; align-items: center; gap: 8px; }
+.gate-cal-label { width: 86px; font-size: 10.5px; color: #7c839c; }
+.gate-cal-label i { font-style: normal; color: #565d75; }
+.gate-cal-bars { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+.gate-cal-bar { display: block; height: 5px; border-radius: 3px; min-width: 2px; }
+.gate-cal-bar.pred { background: rgba(0, 168, 255, 0.75); }
+.gate-cal-bar.actual { background: rgba(0, 229, 160, 0.75); }
+.gate-cal-val { width: 92px; font-size: 10.5px; color: #9aa2ba; text-align: right; }
+.gate-cal-legend { display: flex; gap: 14px; font-size: 10.5px; color: #7c839c; margin-top: 4px; }
+.gate-cal-dot { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 4px; font-style: normal; }
+.gate-cal-dot.pred { background: rgba(0, 168, 255, 0.75); }
+.gate-cal-dot.actual { background: rgba(0, 229, 160, 0.75); }

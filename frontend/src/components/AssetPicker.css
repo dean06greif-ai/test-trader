@@ -1,0 +1,26 @@
+.asset-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.asset-picker-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.asset-picker-title {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted, #7a8290);
+  opacity: 0.8;
+}
+
+.asset-picker-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}

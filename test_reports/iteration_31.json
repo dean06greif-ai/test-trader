@@ -1,0 +1,65 @@
+{
+  "summary": "Iteration 31 – Regressions-/Bestätigungslauf für 6 UI/Backend-Änderungen. ALLE 12 Aufgaben GRÜN. Skills geladen: ai-testing-core. Preview-URL: https://crypto-ui-polish.preview.emergentagent.com. Verdicts: (1) GET /api/ai/status – PASS: HTTP 200, JSON mit vollständigem Modell-Katalog (has_key=true, provider_keys.gemini/groq/openrouter/mistral/cerebras alle true), Live-Config sichtbar. (2) Unit-Tests – PASS: `cd /app/backend && python -m pytest tests/test_exchange_close_truth.py tests/test_iter_reward_guard_models.py -q` → 25 passed in 0.96s. (3) Fee-Fix ETHUSDT-ext-1786813905554 – PASS: GET /api/autotrade/trades liefert Trade mit `realized_pnl=-8.593632`, `pnl_repair_note='Fee-Doppelzaehlung korrigiert: -12.578744 -> -8.593632'`, `pnl_exchange_exact=True`, fees_paid=3.985112, entry=1884.56, exit=1885.65, side=SHORT, manual_trade=True, strategy_name='Manuell (Bitunix)'. (4) Trade-Karten-Layout ETH-Trade – PASS: Zeile 1 (tdc-main) enthält in dieser Reihenfolge: mode-tag LIVE → badge-short SHORT → tdc-result 'V' (direkt neben LONG/SHORT-Badge) → tdc-coin 'ETH' → tdc-pnl $-Wert + Caret. Zeile 2 (tdc-sub) trägt %-PnL rechts unter $-PnL. (5) Kleine rahmenlose Buchstaben – PASS: 22 [data-testid^='trade-collection-badge-'] gefunden, Text='D' (klein). 0 [data-testid^='trade-swing-badge-'] (keine Swings unter aktuell 31 offenen Karten – erwartet, da Swing optional). (6) Trade-Karte aufklappen – PASS: Klick auf [data-testid='trade-card-toggle-QQQUSDT-ext-...'] öffnet Details (Entry/Aktueller Kurs/SL/UPNL sichtbar im Screenshot). 31 Toggle-Elemente vorhanden. (7) Chart-Subtitle – PASS: Subtitle enthält exakt '1MIN · LIVE', KEIN '· N bars' (contains-bars=False). (8) chart-trades-toggle – PASS: existiert, initial-Text 'ALLE TRADES' (ohne '· X offen'), class='chart-liq-toggle trades ' (nicht on), nach Klick Text='ALLE TRADES · 22', class='chart-liq-toggle trades on'. (9) chart-range-dropdown-btn – PASS: Text='Zeit ▾' in EINER Zeile (bounding-box height=23px, Dreieck neben Text), Klick öffnet [data-testid='chart-range-menu'] mit 1 Woche/1 Monat/1 Jahr Optionen. (10) KI-Panel & Chat-Toggle – PASS: Strategie-Tab 'ai_trader' geklickt, Zahnrad edit-strategy-params-btn geklickt → Admin-Login-Modal → User='Admin'/Passwort='Dean06Greif!/Admin' → Zahnrad erneut geklickt → KI-Panel offen. Neuer Button [data-testid='ai-chat-toggle'] mit Text 'Chat' in der Status-Row sichtbar. Klick öffnet [data-testid='ai-chat-area'] + [data-testid='ai-chat-input'] (beide is_visible=True). KEINE Nachricht gesendet, Chat-Leeren-Button NICHT geklickt. (11) Setup-Panel scrollbar – PASS: Klick auf [data-testid='ai-setup-toggle'] → schließt Chat (chat-area.is_visible=False) und öffnet [data-testid='ai-setup-panel']. Computed-Style: overflow-y='auto', scrollHeight=733, clientHeight=591, isScrollable=True. KEINE Werte geändert. (12) Neue Modell-Optionen – PASS: [data-testid='ai-model-select'] enthält 22 Optionen; im OpenRouter-Bereich 'openrouter|nvidia/nemotron-3.5-lightning:free' und 'openrouter|deepseek/deepseek-v4-flash' vorhanden (Provider-Prefix, Model-Teil matcht exakt Vorgabe). NICHT ausgewählt, NICHT gespeichert. (13) RAM-Guard-Logs – PASS: `tail -n 200 /var/log/supervisor/backend.err.log | grep RAM-Guard` liefert: 'RAM-Guard: malloc-Arenen auf 2 begrenzt (M_ARENA_MAX)' UND 'RAM-Guard: malloc_trim-Loop aktiv (alle 180s)'. KEINE Orders, KEINE Chat-Sends, KEINE Config-Änderungen, KEIN Löschen.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "tests_executed": {
+    "unit_tests": {
+      "tests/test_exchange_close_truth.py + tests/test_iter_reward_guard_models.py": "25 passed in 0.96s"
+    },
+    "backend_curl": {
+      "GET /api/ai/status (public URL)": "200 OK, ~0.27s, JSON mit config + provider_keys + decisions",
+      "GET /api/autotrade/trades (local)": "200 OK, 51 trades; ETHUSDT-ext-1786813905554 realized_pnl=-8.593632 (pnl_repair_note bestätigt Fee-Fix)"
+    },
+    "frontend_playwright": {
+      "view-trades tab + Trade-Card render": "31 trade-card-* gefunden",
+      "Layout Zeile 1 (tdc-main) ETH-Trade": "LIVE, SHORT, tdc-result 'V', ETH, tdc-pnl $-Wert + Caret in korrekter Reihenfolge",
+      "Layout Zeile 2 (tdc-sub)": "%-PnL rechts unter $-PnL",
+      "collection-badge Zählung + Text": "22 sichtbar, Text='D' (klein)",
+      "swing-badge": "0 (keine offenen Swings; Container erwartet, Content optional)",
+      "Trade-Toggle Klick": "OK, Karte expandiert (Details sichtbar)",
+      "Chart-Subtitle": "'1MIN · LIVE' (kein bars)",
+      "chart-trades-toggle Initial": "'ALLE TRADES', class='chart-liq-toggle trades '",
+      "chart-trades-toggle nach Klick": "'ALLE TRADES · 22', class='...trades on'",
+      "chart-range-dropdown-btn": "'Zeit ▾' height=23 (1 Zeile), Menü öffnet",
+      "ai-chat-toggle": "existiert, Text='Chat'",
+      "ai-chat-area + input nach Klick": "beide is_visible=True",
+      "ai-setup-toggle schließt Chat": "chat-area.is_visible=False",
+      "ai-setup-panel scrollbar": "overflow-y='auto', 733>591, isScrollable=True",
+      "ai-model-select neue Modelle": "'openrouter|nvidia/nemotron-3.5-lightning:free' + 'openrouter|deepseek/deepseek-v4-flash' beide vorhanden"
+    },
+    "logs_check": {
+      "backend.err.log RAM-Guard": "'malloc-Arenen auf 2 begrenzt (M_ARENA_MAX)' + 'malloc_trim-Loop aktiv (alle 180s)' vorhanden (mehrfach)"
+    }
+  },
+  "ai_features_verdict": [
+    "ki-chat-toggle-and-panel (UI-only) - pass - evidence: [data-testid='ai-chat-toggle'] öffnet ai-chat-area + ai-chat-input (visible); Klick auf ai-setup-toggle schließt Chat wieder (ai-chat-area.is_visible=False) - skill: ai-testing-core (Chat NICHT ausgeführt: kein Send, kein LLM-Call → paid-key not exercised per Anweisung)",
+    "ai-model-catalog-openrouter (config-only) - pass - evidence: ai-model-select enthält beide neuen OpenRouter-Optionen (nvidia/nemotron-3.5-lightning:free + deepseek/deepseek-v4-flash) und GET /api/ai/status.provider_keys.openrouter=true - skill: ai-testing-core (kein LLM-Call ausgelöst per Anweisung)",
+    "manual-bitunix-external-close-fee-fix (primary) - pass - evidence: Trade ETHUSDT-ext-1786813905554 in DB hat realized_pnl=-8.593632, pnl_repair_note='Fee-Doppelzaehlung korrigiert: -12.578744 -> -8.593632', pnl_exchange_exact=True; Unit-Tests test_exchange_close_truth.py + test_iter_reward_guard_models.py 25 passed in 0.96s - skill: ai-testing-core"
+  ],
+  "test_report_links": [
+    "/app/backend/tests/test_exchange_close_truth.py",
+    "/app/backend/tests/test_iter_reward_guard_models.py",
+    "/app/test_reports/iter31_trades.png",
+    "/app/test_reports/iter31_chat_open.png",
+    "/app/test_reports/iter31_setup_panel.png"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "Minor (nicht blockend): Playwright-Console-Warnung 'In HTML, <span> cannot be a child of <option>' beim ai-model-select. Der HTML-Standard erlaubt in <option> nur reine Textknoten. Wenn Option-Text mit Farb-/Icon-Span umschlossen wird, warnt React vor Hydration. Empfehlung: Modell-Namen ohne inner <span> rendern (z. B. Prefix per CSS oder ::before). Kein funktionaler Fehler.",
+    "backend/services/ram_guard.py: setup_malloc + trim_loop läuft laut Log wie erwartet – malloc-Arenen auf 2 begrenzt + 180s-Trim-Loop aktiv. Registrierung in server.py lifespan bestätigt (Log-Zeile erscheint beim Startup mehrfach = mehrere Worker/Reloads, konsistent).",
+    "backend/bitunix_trade.py parse_closed_position (~L553): Fee-Doppelzählungs-Fix greift korrekt (pnl_repair_note zeigt exakte Vorher/Nachher-Beträge). Feld fee_included_in_pnl im ETH-Trade dennoch None – vermutlich nur bei neuen Closes gesetzt, alter Repair-Fall behält None. Kein Bug, nur Info.",
+    "frontend/src/components/PerformanceAnalytics.js: TradeDetailCard-Head-Reihenfolge (mode → side-badge → tdc-result → coin → tdc-pnl-$ → caret) korrekt umgesetzt. tdc-result 'V' steht direkt neben SHORT-Badge wie gefordert.",
+    "frontend/src/components/PerformanceAnalytics.css: .tdc-mini-tag rendert 'D' als kleine rahmenlose Buchstaben – 22 Instanzen sichtbar.",
+    "frontend/src/components/MainChart.js (~L418/427/503): Subtitle ohne bars, ALLE-TRADES-Button ohne '· X offen' im Off-State, Zeit-Dropdown einzeilig – alle 3 Änderungen live verifiziert.",
+    "frontend/src/components/AITradingPanel.js: showChat-State toggelt korrekt (Chat schließt sich beim Öffnen von Setup und umgekehrt).",
+    "frontend/src/components/AITradingPanel.css: .ai-setup max-height 55vh + overflow-y auto führt zu scrollHeight 733 > clientHeight 591, wie im Ziel-Verhalten dokumentiert."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "100% (2/2 API-Checks + 25/25 unit tests + 1/1 log check)", "frontend": "100% (14/14 UI-Checks: Layout, Badges, Toggle, Chart-Subtitle, Chart-Buttons, Chat-Toggle, Setup-Scroll, Modell-Dropdown)"},
+  "test_credentials": "Admin / Dean06Greif!/Admin (Login nur zum Öffnen des KI-Setup-Panels verwendet; kein Save, kein Chat-Send, kein Trade)",
+  "seed_data_creation": "Keine. Reiner Read-/Sichtprüfungs-Lauf; keine Orders, keine Config-Änderungen, kein Löschen von Lektionen.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Alle 6 Änderungen der Iteration 31 (Trade-Karten-Kompakt-UI, Fee-Doppelzählungs-Fix, Chart-Polish, KI-Chat-Fenster, neue OpenRouter-Modelle, RAM-Guard) sind live und stabil. Prod-DB + echte Bitunix-Keys – strikt lesend testen. Selektoren: [data-testid='ai-chat-toggle'], [data-testid='ai-chat-area'], [data-testid='ai-chat-input'], [data-testid='ai-setup-toggle'], [data-testid='ai-setup-panel'], [data-testid='ai-model-select'] (values sind provider|model), [data-testid='chart-trades-toggle'], [data-testid='chart-range-dropdown-btn'], [data-testid='chart-range-menu']. Trade-Karten testids: trade-card-<id>, trade-card-toggle-<id>, trade-collection-badge-<id> ('D'), trade-swing-badge-<id> ('S'). KI-Panel-Öffnung: strategy-tab-ai_trader → edit-strategy-params-btn → Admin-Login (falls Modal) → Zahnrad nochmal. NICHT den 'Chat leeren'-Button und keinen Send auslösen (kostet echte OpenRouter-Credits).",
+  "rca of the issue": "Keine Bugs gefunden. Der Fee-Doppelzählungs-Bug ist behoben und der historische Trade wurde per pnl_repair_note nachträglich korrigiert (-12.578744 → -8.593632). Alle UI-Änderungen greifen wie vom Main-Agent beschrieben. Einzige Nebenbeobachtung: React-Hydration-Warnung wegen <span>-Kindern in <option>-Elementen des Modell-Dropdowns – kein funktionaler Fehler, aber optionaler Cleanup für saubere Konsole."
+}

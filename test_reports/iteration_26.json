@@ -1,0 +1,50 @@
+{
+  "summary": "Iteration 26: End-to-End Verifikation von CRV-Migration (4.0), /api/ai/regime/{symbol} v2, /api/autotrade/trade/{id}/explain (Facts + Decision), /api/autotrade/trade/{id}/rethink (401 ohne JWT, 200 mit echtem LLM-Call, 429 Cooldown) sowie Frontend (RegimeBadge im Chart-Header, Coin-Switch aktualisiert Badge, Explain-Modal mit allen Sektionen inkl. Fee-Wächter, Setup-Tooltip >80 Zeichen, Rethink-Button nach Admin-Login sichtbar). 9/9 pytest Assertions grün. Nur eine Design-Anmerkung: Fehler-Toast der Rethink-Cooldown wird per Design nicht als Popup gezeigt, sondern in die Benachrichtigungsglocke geschrieben (siehe frontend/src/lib/toast.js) – Spec wollte 'Fehler-Toast', main agent möge klären ob Bell-Eintrag ausreicht.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [
+      {"flow": "Rethink Cooldown Feedback", "issue": "toast.error ist im zentralen toast.js absichtlich deaktiviert (Errors gehen an Notifications-Bell, nicht als sichtbarer Popup). Der 429-Cooldown wird korrekt in der Bell abgelegt ('Schon vor kurzem überdacht – wieder möglich in 13 min'), aber KEIN sichtbarer Popup wie im Spec beschrieben. Falls das gewollt ist, alles gut – falls Popup gefordert, in TradeAIDetails.doRethink() sonner direkt statt zentralem Wrapper nutzen.", "affected_selectors": ["trade-rethink-btn-t26-x"]}
+    ],
+    "design_issues": []
+  },
+  "tests_executed": {
+    "backend": {
+      "test_iter26_explain_rethink.py": "9/9 passed (CRV migration doc + status, regime v2 BTC + XAUUSD graceful, explain 404 + facts/decision, rethink 401, rethink cooldown 429, cleanup)"
+    },
+    "manual_curl": {
+      "rethink_with_LLM": "POST /api/autotrade/trade/t26-x/rethink mit Admin-JWT -> 200 in ~2.4s; model='groq/openai/gpt-oss-120b'; note=deutsch; applied=[{action:'close',status:'ok',...}]; anschließend rethink_ts + rethink_note im auto_trades-Doc gespeichert (verifiziert)"
+    },
+    "frontend_playwright": {
+      "chart-regime-badge": "sichtbar mit 402-char title-Tooltip; nach Klick auf coin-item-ETHUSDT aktualisiert sich Text auf 'Seitwärts · ruhig · 24h +0.1%'",
+      "trade-explain-btn-t26-x": "öffnet trade-explain-modal-t26-x mit allen 4 Sektionen (KI-BEGRÜNDUNG, POSITIONSGRÖSSE, SL/TP inkl. Fee-Wächter-Zeile, MARKT BEIM ENTRY 'breakout_normal · Vol-Rank P55 · News positive')",
+      "setup-badge tooltip": "'Ausbruch: Der Preis verlässt eine Range/Konsolidierung mit Schwung...' Länge 208 Zeichen (>80)",
+      "trade-rethink-btn-t26-x": "sichtbar nach admin-lock-button → admin-login-submit; Klick löst 429 aus (rethink_ts vorbelegt), Fehler landet in Notifications-Bell",
+      "console_errors": "0"
+    }
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iter26_explain_rethink.py",
+    "/app/test_reports/pytest/iter26_results.xml"
+  ],
+  "action_items": [
+    "OPTIONAL/DESIGN: klären ob Rethink-Cooldown-Fehler als sichtbarer Popup gewünscht ist (aktuell nur Bell). Falls ja, TradeAIDetails.js Zeile 76/77 auf sonner-direkt umstellen.",
+    "HINWEIS (nicht Iteration 26): KI-Trader-Engine ist im Dev-Preview offenbar aktiv – meine Seed-Trades wurden mehrfach automatisch geschlossen und Kill-Switch triggerte (Tagesverlust 12.07%). Playbook-Guardrail sagt 'nicht global einschalten' – bitte prüfen ob supervisor/AUTO_TRADE_ENABLED absichtlich an ist."
+  ],
+  "critical_code_review_comments": [
+    "TradeAIDetails.js: Rethink-Button-onClick ruft `if (!open) load(); doRethink();` – bei bereits offenem Modal wird kein re-load getriggert. OK, nur Beobachtung.",
+    "backend/routers/autotrade.py trade_explain: liefert facts.roundtrip_fees_usdt=0.12 – exakt zur Spec. Sauber.",
+    "toast-Wrapper (frontend/src/lib/toast.js) unterdrückt alle toast.error() Popups global. Das ist eine wichtige App-weite UX-Entscheidung, sollte in der Iteration-26-Doku klar erwähnt werden, sonst wirkt Rethink-Fehler 'stumm'.",
+    "In der aktuellen Dev-Session war der AI-Trader-Supervisor aktiv (Kill-Switch feuerte auf meine Seed-Trades). Für Testreproduzierbarkeit sollte AUTO_TRADE_ENABLED im Dev-preview per default OFF sein."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_iter26_explain_rethink.py (neu)"
+  ],
+  "success_rate": {"backend": "100% (9/9)", "frontend": "100% (alle geforderten data-testids gefunden, Flows funktional; einzige Abweichung: Cooldown-Feedback per Bell statt Popup – App-Design)"},
+  "test_credentials": "Admin / Dean06Greif!/Admin (POST /api/auth/login → {token})",
+  "seed_data_creation": "auto_trades id='t26-x' + ai_decisions id='dec26-x' erzeugt. Am Ende cleanup: db.auto_trades.deleteMany({id:{$in:['t26-x','ui-test-2','ui-test-1']}}) + db.ai_decisions.deleteMany({id:{$in:['dec26-x','dec-x1']}}) – bestätigt count=0.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Login-Feld ist data-testid='admin-username' (nicht 'admin-user-input'). Login-Response-Feld heißt 'token' (nicht 'access_token'). Trade-Karten expandieren mit trade-card-toggle-<id>, aber Playwright-normal-click wird oft vom Overlay abgefangen – JS-el.click() via page.evaluate ist robuster. Zentraler Toast-Wrapper (lib/toast.js) unterdrückt error/warning Popups per Design und schreibt sie in die Notifications-Glocke – bei Fehler-Feedback-Tests nicht auf sichtbaren Popup warten, sondern GET /api/notifications prüfen.",
+  "rca of the issue": "Keine Bugs. Cooldown-Toast-Verhalten ist gewünschtes App-Design (zentraler Wrapper leitet Errors an Bell)."
+}

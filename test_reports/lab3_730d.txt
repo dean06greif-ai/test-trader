@@ -1,0 +1,172 @@
+fetched BTCUSDT: 1051202
+fetched ETHUSDT: 1051203
+fetched SOLUSDT: 1051202
+fetched BNBUSDT: 1051202
+fetched XRPUSDT: 1051203
+fetched DOGEUSDT: 1051202
+fetched ADAUSDT: 1051202
+fetched LINKUSDT: 1051203
+
+========== TF 2h ==========
+-- BTCUSDT Buy&Hold +6.7% --
+[don24 2h]
+  BTCUSDT   train: n=  74 win= 43.2% pnl=   -33.27 fees=  44.58 pf= 0.95 dd= 188.1 dur=4220m
+  BTCUSDT   test : n=  37 win= 43.2% pnl=   +16.45 fees=  22.11 pf= 1.05 dd= 139.3 dur=4265m
+[don48 2h]
+  BTCUSDT   train: n=  59 win= 44.1% pnl=   +25.35 fees=  35.56 pf= 1.05 dd= 100.9 dur=4210m
+  BTCUSDT   test : n=  28 win= 35.7% pnl=   -30.80 fees=  16.77 pf= 0.89 dd= 130.1 dur=4886m
+[pullback 2h]
+  BTCUSDT   train: n=  94 win= 41.5% pnl=   +17.43 fees=  56.47 pf= 1.02 dd= 123.2 dur=5681m
+  BTCUSDT   test : n=  46 win= 43.5% pnl=   +24.51 fees=  27.57 pf= 1.06 dd=  87.9 dur=5144m
+-- ETHUSDT Buy&Hold -28.3% --
+[don24 2h]
+  ETHUSDT   train: n=  68 win= 42.6% pnl=    -6.94 fees=  40.99 pf= 0.99 dd= 301.6 dur=5631m
+  ETHUSDT   test : n=  28 win= 46.4% pnl=  +125.96 fees=  16.73 pf= 1.47 dd= 122.5 dur=5529m
+[don48 2h]
+  ETHUSDT   train: n=  55 win= 41.8% pnl=   +98.73 fees=  33.07 pf= 1.13 dd= 222.8 dur=5649m
+  ETHUSDT   test : n=  24 win= 41.7% pnl=   +44.76 fees=  14.34 pf= 1.16 dd= 148.9 dur=5310m
+[pullback 2h]
+  ETHUSDT   train: n=  87 win= 41.4% pnl=  +201.10 fees=  52.20 pf= 1.18 dd= 194.6 dur=6321m
+  ETHUSDT   test : n=  35 win= 45.7% pnl=   +69.44 fees=  20.95 pf= 1.18 dd= 171.3 dur=6984m
+-- SOLUSDT Buy&Hold -48.4% --
+[don24 2h]
+  SOLUSDT   train: n=  68 win= 39.7% pnl=    +7.69 fees=  40.57 pf= 1.01 dd= 148.7 dur=6199m
+  SOLUSDT   test : n=  33 win= 39.4% pnl=   -48.12 fees=  19.69 pf= 0.89 dd= 200.2 dur=4793m
+[don48 2h]
+  SOLUSDT   train: n=  59 win= 45.8% pnl=  +105.40 fees=  35.39 pf= 1.11 dd= 117.2 dur=4928m
+  SOLUSDT   test : n=  27 win= 37.0% pnl=   -37.97 fees=  16.11 pf= 0.89 dd= 219.7 dur=4893m
+[pullback 2h]
+  SOLUSDT   train: n=  87 win= 41.4% pnl=   +54.02 fees=  52.19 pf= 1.04 dd= 334.7 dur=6394m
+  SOLUSDT   test : n=  47 win= 29.8% pnl=  -271.50 fees=  28.12 pf= 0.60 dd= 451.0 dur=4767m
+-- BNBUSDT Buy&Hold +19.2% --
+[don24 2h]
+  BNBUSDT   train: n=  78 win= 46.2% pnl=   -92.83 fees=  46.78 pf= 0.89 dd= 240.6 dur=3922m
+  BNBUSDT   test : n=  30 win= 43.3% pnl=   +57.71 fees=  17.94 pf= 1.28 dd=  87.2 dur=4968m
+[don48 2h]
+  BNBUSDT   train: n=  64 win= 46.9% pnl=    -3.59 fees=  38.44 pf= 0.99 dd= 165.3 dur=3711m
+  BNBUSDT   test : n=  27 win= 29.6% pnl=   -66.16 fees=  16.15 pf= 0.75 dd= 153.0 dur=4280m
+[pullback 2h]
+  BNBUSDT   train: n=  94 win= 42.6% pnl=   -34.19 fees=  56.43 pf= 0.97 dd= 246.0 dur=6126m
+  BNBUSDT   test : n=  39 win= 35.9% pnl=    -3.50 fees=  23.31 pf= 0.99 dd= 168.9 dur=5951m
+-- XRPUSDT Buy&Hold +81.4% --
+[don24 2h]
+  XRPUSDT   train: n=  71 win= 43.7% pnl=   +51.68 fees=  42.68 pf= 1.04 dd= 283.9 dur=3382m
+  XRPUSDT   test : n=  33 win= 45.5% pnl=   +27.54 fees=  19.72 pf= 1.09 dd= 121.2 dur=4134m
+[don48 2h]
+  XRPUSDT   train: n=  55 win= 43.6% pnl=  +191.33 fees=  33.09 pf= 1.23 dd= 223.1 dur=3249m
+  XRPUSDT   test : n=  27 win= 48.1% pnl=   +59.23 fees=  16.07 pf= 1.24 dd=  70.7 dur=3467m
+[pullback 2h]
+  XRPUSDT   train: n=  80 win= 42.5% pnl=  +532.13 fees=  48.34 pf= 1.41 dd= 275.3 dur=7236m
+  XRPUSDT   test : n=  41 win= 41.5% pnl=   -64.14 fees=  24.48 pf= 0.88 dd= 223.7 dur=5552m
+-- DOGEUSDT Buy&Hold -31.0% --
+[don24 2h]
+  DOGEUSDT  train: n=  63 win= 42.9% pnl=  +317.08 fees=  38.22 pf= 1.26 dd= 294.4 dur=4495m
+  DOGEUSDT  test : n=  31 win= 41.9% pnl=   -54.23 fees=  18.56 pf= 0.86 dd= 184.0 dur=5683m
+[don48 2h]
+  DOGEUSDT  train: n=  54 win= 40.7% pnl=   +64.07 fees=  32.77 pf= 1.06 dd= 277.1 dur=3771m
+  DOGEUSDT  test : n=  24 win= 33.3% pnl=   -94.86 fees=  14.34 pf= 0.72 dd= 196.7 dur=4715m
+[pullback 2h]
+  DOGEUSDT  train: n=  87 win= 39.1% pnl=  -136.44 fees=  52.12 pf= 0.93 dd= 558.3 dur=6480m
+  DOGEUSDT  test : n=  35 win= 62.9% pnl=  +276.71 fees=  20.95 pf= 1.84 dd=  74.8 dur=6549m
+-- ADAUSDT Buy&Hold -44.7% --
+[don24 2h]
+  ADAUSDT   train: n=  72 win= 40.3% pnl=  +199.96 fees=  43.49 pf= 1.15 dd= 279.1 dur=5180m
+  ADAUSDT   test : n=  37 win= 35.1% pnl=  -131.44 fees=  22.27 pf= 0.78 dd= 286.6 dur=3580m
+[don48 2h]
+  ADAUSDT   train: n=  56 win= 48.2% pnl=  +513.94 fees=  33.86 pf= 1.53 dd= 175.7 dur=5179m
+  ADAUSDT   test : n=  29 win= 31.0% pnl=  -183.85 fees=  17.42 pf= 0.63 dd= 241.1 dur=4055m
+[pullback 2h]
+  ADAUSDT   train: n=  85 win= 36.5% pnl=  -281.05 fees=  50.87 pf= 0.85 dd= 549.5 dur=6415m
+  ADAUSDT   test : n=  49 win= 32.7% pnl=  -244.53 fees=  29.33 pf= 0.70 dd= 396.4 dur=4660m
+-- LINKUSDT Buy&Hold -15.8% --
+[don24 2h]
+  LINKUSDT  train: n=  79 win= 38.0% pnl=  -213.71 fees=  47.13 pf= 0.87 dd= 478.5 dur=4631m
+  LINKUSDT  test : n=  31 win= 45.2% pnl=   +10.01 fees=  18.56 pf= 1.03 dd= 215.0 dur=4676m
+[don48 2h]
+  LINKUSDT  train: n=  68 win= 36.8% pnl=  -298.85 fees=  40.61 pf= 0.80 dd= 401.4 dur=4242m
+  LINKUSDT  test : n=  24 win= 41.7% pnl=   -33.30 fees=  14.40 pf= 0.89 dd= 203.8 dur=4220m
+[pullback 2h]
+  LINKUSDT  train: n=  89 win= 28.1% pnl=  -420.70 fees=  53.18 pf= 0.78 dd= 584.7 dur=6096m
+  LINKUSDT  test : n=  35 win= 37.1% pnl=   -78.26 fees=  21.06 pf= 0.85 dd= 219.1 dur=6837m
+
+========== TF 4h ==========
+-- BTCUSDT Buy&Hold +6.7% --
+[don24 4h]
+  BTCUSDT   train: n=  39 win= 35.9% pnl=  -107.89 fees=  23.63 pf= 0.79 dd= 218.7 dur=8942m
+  BTCUSDT   test : n=  18 win= 27.8% pnl=  -131.64 fees=  10.84 pf= 0.56 dd= 186.6 dur=8333m
+[don48 4h]
+  BTCUSDT   train: n=  34 win= 38.2% pnl=   -83.97 fees=  20.63 pf= 0.81 dd= 193.2 dur=8774m
+  BTCUSDT   test : n=  15 win= 26.7% pnl=   -78.46 fees=   8.99 pf= 0.66 dd= 133.4 dur=7760m
+[pullback 4h]
+  BTCUSDT   train: n=  44 win= 45.5% pnl=   +16.01 fees=  26.50 pf= 1.03 dd= 216.5 dur=12207m
+  BTCUSDT   test : n=  19 win= 26.3% pnl=  -111.33 fees=  11.43 pf= 0.62 dd= 144.3 dur=11570m
+-- ETHUSDT Buy&Hold -28.3% --
+[don24 4h]
+  ETHUSDT   train: n=  33 win= 42.4% pnl=  +230.56 fees=  19.87 pf= 1.40 dd= 143.9 dur=9353m
+  ETHUSDT   test : n=  15 win= 33.3% pnl=   -91.46 fees=   8.91 pf= 0.69 dd= 226.5 dur=10864m
+[don48 4h]
+  ETHUSDT   train: n=  26 win= 46.2% pnl=  +257.39 fees=  15.69 pf= 1.60 dd= 149.2 dur=11215m
+  ETHUSDT   test : n=  11 win= 36.4% pnl=   -63.64 fees=   6.51 pf= 0.73 dd= 211.9 dur=11826m
+[pullback 4h]
+  ETHUSDT   train: n=  40 win= 45.0% pnl=  +364.82 fees=  24.06 pf= 1.52 dd= 216.1 dur=12084m
+  ETHUSDT   test : n=  15 win= 40.0% pnl=   -67.81 fees=   9.02 pf= 0.78 dd= 169.9 dur=14352m
+-- SOLUSDT Buy&Hold -48.6% --
+[don24 4h]
+  SOLUSDT   train: n=  35 win= 45.7% pnl=   +64.94 fees=  21.08 pf= 1.09 dd= 256.1 dur=9257m
+  SOLUSDT   test : n=  18 win= 16.7% pnl=  -291.27 fees=  10.88 pf= 0.45 dd= 390.0 dur=8400m
+[don48 4h]
+  SOLUSDT   train: n=  30 win= 50.0% pnl=  +149.40 fees=  18.05 pf= 1.27 dd= 155.0 dur=8584m
+  SOLUSDT   test : n=  13 win= 23.1% pnl=  -134.44 fees=   7.87 pf= 0.63 dd= 233.2 dur=9286m
+[pullback 4h]
+  SOLUSDT   train: n=  40 win= 45.0% pnl=  +161.75 fees=  24.04 pf= 1.17 dd= 288.1 dur=14082m
+  SOLUSDT   test : n=  12 win= 41.7% pnl=   +46.91 fees=   7.05 pf= 1.26 dd= 160.9 dur=21500m
+-- BNBUSDT Buy&Hold +18.8% --
+[don24 4h]
+  BNBUSDT   train: n=  37 win= 51.4% pnl=  +139.26 fees=  22.23 pf= 1.29 dd= 122.3 dur=7382m
+  BNBUSDT   test : n=  16 win= 37.5% pnl=   -26.83 fees=   9.59 pf= 0.88 dd= 113.2 dur=8055m
+[don48 4h]
+  BNBUSDT   train: n=  32 win= 46.9% pnl=   +56.86 fees=  19.20 pf= 1.14 dd= 141.1 dur=6120m
+  BNBUSDT   test : n=  14 win= 28.6% pnl=   -88.53 fees=   8.40 pf= 0.59 dd= 158.4 dur=6257m
+[pullback 4h]
+  BNBUSDT   train: n=  48 win= 43.8% pnl=   -53.01 fees=  28.78 pf= 0.94 dd= 279.8 dur=11150m
+  BNBUSDT   test : n=  13 win= 30.8% pnl=   -74.54 fees=   7.80 pf= 0.64 dd= 117.3 dur=9785m
+-- XRPUSDT Buy&Hold +79.5% --
+[don24 4h]
+  XRPUSDT   train: n=  34 win= 47.1% pnl=  +398.88 fees=  20.64 pf= 1.56 dd= 249.9 dur=5499m
+  XRPUSDT   test : n=  14 win= 35.7% pnl=   -88.56 fees=   8.34 pf= 0.67 dd= 158.6 dur=10749m
+[don48 4h]
+  XRPUSDT   train: n=  27 win= 55.6% pnl=  +646.68 fees=  16.47 pf= 2.39 dd= 168.5 dur=4960m
+  XRPUSDT   test : n=  15 win= 26.7% pnl=  -157.43 fees=   8.98 pf= 0.49 dd= 251.6 dur=5872m
+[pullback 4h]
+  XRPUSDT   train: n=  43 win= 41.9% pnl=  +362.98 fees=  26.07 pf= 1.36 dd= 319.7 dur=12603m
+  XRPUSDT   test : n=  14 win= 42.9% pnl=   -23.98 fees=   8.37 pf= 0.92 dd= 196.1 dur=14091m
+-- DOGEUSDT Buy&Hold -31.4% --
+[don24 4h]
+  DOGEUSDT  train: n=  29 win= 51.7% pnl=  +706.39 fees=  17.41 pf= 2.16 dd= 143.2 dur=11652m
+  DOGEUSDT  test : n=  13 win= 38.5% pnl=   -49.74 fees=   7.79 pf= 0.81 dd= 211.4 dur=8622m
+[don48 4h]
+  DOGEUSDT  train: n=  27 win= 59.3% pnl=  +763.78 fees=  16.25 pf= 2.62 dd= 139.7 dur=7893m
+  DOGEUSDT  test : n=  13 win= 30.8% pnl=  -162.78 fees=   7.86 pf= 0.46 dd= 197.0 dur=4634m
+[pullback 4h]
+  DOGEUSDT  train: n=  38 win= 39.5% pnl=  +125.33 fees=  22.65 pf= 1.11 dd= 374.2 dur=14558m
+  DOGEUSDT  test : n=  15 win= 40.0% pnl=   -22.20 fees=   8.91 pf= 0.93 dd= 231.1 dur=16048m
+-- ADAUSDT Buy&Hold -44.7% --
+[don24 4h]
+  ADAUSDT   train: n=  33 win= 39.4% pnl=  +286.20 fees=  19.87 pf= 1.33 dd= 254.9 dur=6626m
+  ADAUSDT   test : n=  16 win= 37.5% pnl=   -19.44 fees=   9.62 pf= 0.94 dd= 300.0 dur=11505m
+[don48 4h]
+  ADAUSDT   train: n=  22 win= 59.1% pnl=  +612.05 fees=  13.24 pf= 2.55 dd= 212.3 dur=5814m
+  ADAUSDT   test : n=  15 win= 40.0% pnl=   +44.01 fees=   8.98 pf= 1.16 dd= 220.0 dur=9680m
+[pullback 4h]
+  ADAUSDT   train: n=  35 win= 34.3% pnl=    +4.56 fees=  21.13 pf= 1.00 dd= 436.6 dur=12535m
+  ADAUSDT   test : n=  18 win= 50.0% pnl=   +97.50 fees=  10.74 pf= 1.27 dd= 116.3 dur=13373m
+-- LINKUSDT Buy&Hold -16.0% --
+[don24 4h]
+  LINKUSDT  train: n=  37 win= 35.1% pnl=  -122.86 fees=  21.81 pf= 0.89 dd= 487.0 dur=7245m
+  LINKUSDT  test : n=  16 win= 25.0% pnl=  -160.28 fees=   9.58 pf= 0.55 dd= 266.5 dur=8670m
+[don48 4h]
+  LINKUSDT  train: n=  29 win= 37.9% pnl=    -4.60 fees=  17.16 pf= 0.99 dd= 326.2 dur=5768m
+  LINKUSDT  test : n=  12 win= 33.3% pnl=   -13.63 fees=   7.14 pf= 0.94 dd= 119.8 dur=8380m
+[pullback 4h]
+  LINKUSDT  train: n=  51 win= 35.3% pnl=  -164.47 fees=  30.68 pf= 0.89 dd= 459.2 dur=7915m
+  LINKUSDT  test : n=  17 win= 41.2% pnl=   -18.15 fees=  10.16 pf= 0.95 dd= 146.0 dur=13765m

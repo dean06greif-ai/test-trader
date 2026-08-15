@@ -1,0 +1,269 @@
+.signal-panel {
+  background: #121212;
+  border-top: 1px solid #2A2D3A;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  /* Auf kleinen Bildschirmen darf das Signal-Panel den Chart nicht
+     zusammendrücken: Höhe zusätzlich an die Viewport-Höhe gekoppelt. */
+  /* Kein eigener Scrollbereich mehr: Panel zeigt alle Regeln, gescrollt wird
+     mit dem normalen Seiten-Scroller (Wunsch des Traders). */
+}
+
+.panel-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid #2A2D3A;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.panel-header h3 {
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  color: #FFFFFF;
+  margin-bottom: 4px;
+}
+
+.strategy-active-indicator {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  background: rgba(0, 255, 102, 0.1);
+  border: 1px solid #00FF66;
+  color: #00FF66;
+  font-size: 10px;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.05em;
+}
+
+.panel-subtitle {
+  font-size: 11px;
+  color: #5C6070;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+}
+
+.rules-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: #2A2D3A;
+  border-bottom: 1px solid #2A2D3A;
+}
+
+.rule-item {
+  background: #121212;
+  padding: 16px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.rule-content {
+  flex: 1;
+}
+
+.rule-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #FFFFFF;
+  margin-bottom: 4px;
+}
+
+.rule-description {
+  font-size: 11px;
+  color: #5C6070;
+}
+
+.current-signal {
+  padding: 20px;
+  border: 2px solid;
+  margin: 16px;
+}
+
+.signal-long {
+  border-color: #00FF66;
+  background: rgba(0, 255, 102, 0.05);
+}
+
+.signal-short {
+  border-color: #FF3366;
+  background: rgba(255, 51, 102, 0.05);
+}
+
+.signal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.signal-prices {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.price-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.price-label {
+  font-size: 10px;
+  color: #5C6070;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+}
+
+.price-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #FFFFFF;
+}
+
+.signal-crv {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16px;
+  border-top: 1px solid #2A2D3A;
+}
+
+.crv-label {
+  font-size: 11px;
+  color: #A1A4B0;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+}
+
+.crv-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: #00FF66;
+}
+
+.no-signal {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 40px;
+}
+
+/* ---- PBD Model: Phase-Anzeige (P → B → D) ---- */
+.pbd-phase-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  border-bottom: 1px solid #2A2D3A;
+  background: #0E0E0E;
+}
+
+.pbd-phase-step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  padding-right: 10px;
+}
+
+.pbd-phase-step:not(:last-of-type)::after {
+  content: '';
+  width: 16px;
+  height: 2px;
+  background: #2A2D3A;
+  margin-left: 2px;
+  transition: background-color 0.25s ease;
+}
+
+.pbd-phase-step.done:not(:last-of-type)::after {
+  background: #00FF66;
+}
+
+.pbd-phase-dot {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid #2A2D3A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 800;
+  color: #5C6070;
+  transition: all 0.25s ease;
+}
+
+.pbd-phase-step.done .pbd-phase-dot {
+  border-color: #00FF66;
+  color: #00FF66;
+  background: rgba(0, 255, 102, 0.08);
+}
+
+.pbd-phase-step.now .pbd-phase-dot {
+  box-shadow: 0 0 0 3px rgba(0, 255, 102, 0.18);
+}
+
+.pbd-phase-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+  color: #5C6070;
+}
+
+.pbd-phase-step.done .pbd-phase-label {
+  color: #A1A4B0;
+}
+
+.pbd-confluence {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pbd-conf-label {
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  color: #5C6070;
+}
+
+.pbd-conf-value {
+  font-size: 15px;
+  font-weight: 800;
+  color: #A1A4B0;
+}
+
+.pbd-conf-value.good {
+  color: #00FF66;
+}
+
+/* Klickbares Signal (im Chart anzeigen) + Regel-TF-Badge */
+.current-signal.clickable { cursor: pointer; }
+.current-signal.clickable:hover { filter: brightness(1.15); }
+.rule-tf-badge {
+  margin-left: 6px;
+  font-family: monospace;
+  font-size: 10px;
+  padding: 0 5px;
+  border-radius: 3px;
+  background: rgba(0, 168, 255, 0.15);
+  color: #00A8FF;
+  font-weight: 700;
+}

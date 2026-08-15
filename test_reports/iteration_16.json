@@ -1,0 +1,35 @@
+{
+  "summary": "End-to-End-Test des Multi-Timeframe-pro-Regel Features. Backend: 9/9 API-Tests grün (Auth, builder-options.rule_timeframes, Custom-CRUD mit TF-Overrides, 422-Validierung für zu niedrige/ungültige TFs, MTF-Backtest, Regressions-Backtest 'scalping_4_rules', Optimizer mit rule_timeframes ergibt *_tf Keys in best.params, Optimizer ohne rule_timeframes bleibt rückwärtskompatibel). Frontend: StrategyBuilder-Edit von 'MTF Demo' zeigt rule-tf-long/short-0..2 mit erwarteten Werten (1h, 5m, ''); Optimizer-Panel über Tools-Menü (Flask-Icon) öffnet, opt-rule-tf-toggle sichtbar ('☐ Regel-Timeframes optimieren (Multi-Timeframe)'), nach Klick opt-rule-tf-min='1m', opt-rule-tf-max='4h' als Defaults. Alle Erwartungen aus Review-Request erfüllt.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "StrategyBuilder (Rule-TF-Select)", "issues": [
+        "Konsolen-Hydration-Warning: '<span> cannot be a child of <option>'. Im select-Option der Regel-TF-Dropdowns wird ein <span> gerendert. Funktional korrekt, aber React 19 warnt bei jedem Render. Empfehlung: reine Text-Option verwenden."
+      ]}
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_rule_tf_api.py",
+    "/app/backend/tests/test_rule_timeframes.py",
+    "/app/test_reports/pytest/rule_tf_api.xml"
+  ],
+  "action_items": [
+    "Optional: Hydration-Warning im Rule-TF <select><option> beheben (Text ohne <span>-Wrapper).",
+    "Optional: GET-Endpoint /api/strategies/custom/{id} ergänzen (aktuell nur 405); Frontend nutzt derzeit /api/strategies-Liste."
+  ],
+  "critical_code_review_comments": [
+    "Optimizer: best.params enthält *_tf Keys nur, wenn eine TF-Variante die Baseline schlägt. Bei kurzen iterations (~8) und stabilem Score bleibt best.params leer (is_baseline=true). Für den API-Test wurden iterations=40 gewählt; unter Live-Bedingungen ok.",
+    "StrategyBuilder: <option>-Kind darf laut React kein <span> sein. Codepfad prüfen (Zeile ~479 der Datei, `<span data-testid=…>` in <option>).",
+    "Backend: apply_params entfernt korrekt Overrides, wenn Ziel-TF == Basis-TF (getestet)."
+  ],
+  "updated_files": ["/app/backend/tests/test_rule_tf_api.py"],
+  "success_rate": {"backend": "100% (9/9)", "frontend": "100%"},
+  "test_credentials": "Admin / Dean06Greif!/Admin (aus /app/memory/test_credentials.md)",
+  "seed_data_creation": "Test-Custom-Strategie 'TEST_MTF_API' im Setup angelegt; im Teardown via DELETE /api/strategies/custom/{id} bereinigt (Fixture created_ids). Bestehende Strategie custom_ba25570d 'MTF Demo' unangetastet gelassen.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Backend-Suite in /app/backend/tests/test_rule_tf_api.py (pytest, 9 Tests). Regressionssuite /app/backend/tests/test_rule_timeframes.py bleibt (25 Unit-Tests). Optimizer-Jobs cachen Marktdaten – zweite Runs sind ~5s statt ~20s. Tools-Menü im Header hat data-testid='tools-menu-button' → 'tools-menu-optimizer'; StrategyBuilder-Edit hat testid 'edit-strategy-<id>'. Login: POST /api/auth/login {username,password}. Frontend Auth via localStorage 'admin_token' + 'admin_token_ts'.",
+  "rca of the issue": "Keine Bugs gefunden. Nur eine kleine kosmetische Hydration-Warning (span in option) in StrategyBuilder-Rule-TF-Dropdowns."
+}

@@ -1,0 +1,24 @@
+{
+  "summary": "Iteration 2 (Strategie-Vergleich Reihenfolge, Watchdog-Ausschluss, RAM-Projektionen, Candle-Cache 500k) vollständig verifiziert. Backend-Pytest: 17/17 grün (test_comparison_and_ram_iter2.py 4/4 + test_improvements_0_6.py 13/13). Frontend: Trophy-Button öffnet Modal, Mode-Reiter in Reihenfolge ALLE→LIVE→PAPER, Zeit-Reiter in Reihenfolge Gesamt→30 Tage→7 Tage, alle klickbar (active-Klasse wechselt), keine Zeile 'Manuell (Bitunix)' oder 'Extern (Watchdog)' sichtbar. Backend-Regression: /api/analytics/strategy-comparison?mode=live&days=7 → 200 mit vollständigen UI-Feldern (trades, win_rate, pnl, profit_factor, max_drawdown, avg_duration_min, fees, paper_trades, live_trades, by_symbol, open_trades, best_trade, worst_trade, long_trades, short_trades, avg_pnl, pnl_pct) verifiziert; /api/performance 200, /api/analytics/daily 200, /api/autotrade/trades 200 mit computed-Feldern, /api/autotrade/watchdog/status 200 (Bitunix configured:false wie erwartet). Manueller DB-Round-Trip: Einfügen strategy_id='external' + manual_trade=True Trade → im Endpoint NICHT sichtbar → Cleanup.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": [
+    "/app/backend/tests/test_comparison_and_ram_iter2.py",
+    "/app/backend/tests/test_improvements_0_6.py"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "routers/analytics.py:734-751 strategy_comparison: Mongo-Filter kombiniert $ne 'external' UND manual_trade $ne True + Projektion auf nur 13 Felder → korrekt implementiert, verhindert Laden von großen manage_log/KI-Feldern.",
+    "routers/analytics.py:753-759 open_counts: filtert erneut external/manual_trade/external_adopted → doppelt abgesichert.",
+    "services/candle_cache.py MAX_CANDLES_IN_MEMORY=500000 Default + env-Override via CANDLE_CACHE_MAX_CANDLES per importlib.reload verifiziert.",
+    "StrategyComparison.js Zeile 41: mode-Reihenfolge ['all','live','paper'] korrekt; Zeile 48: days-Reihenfolge [{0 Gesamt},{30},{7}] korrekt."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "100% (17/17 pytest + alle Regression-Endpoints 200)", "frontend": "100% (Modal, Reihenfolgen, alle Tabs klickbar, keine external-Zeile)"},
+  "test_credentials": "Admin/admin123 (nicht benötigt, Strategie-Vergleich ist ohne Login sichtbar)",
+  "seed_data_creation": "Temporär: 1x closed manual_trade (strategy_id=external, manual_trade=true) via pymongo eingefügt und wieder gelöscht (Round-Trip-Verifikation).",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Iteration 2 Verbesserungen (Reihenfolge Mode/Days-Tabs, external-Ausschluss aus comparison, 500k Candle-Cache Default, Mongo-Projektionen für strategy_comparison/rebuild_performance/_aggregate_ai_stats) grün. Bitunix bewusst nicht konfiguriert (configured:false). Endpoints: /api/analytics/strategy-comparison (public), /api/performance (public), /api/analytics/daily (public). Frontend-Testids: compare-strategies-button, strategy-comparison-modal, comparison-mode-{all|live|paper}, comparison-mode-filter, comparison-days-filter, comparison-row-<sid>.",
+  "rca of the issue": "N/A – keine Bugs; alle geforderten Änderungen verifiziert."
+}

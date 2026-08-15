@@ -1,0 +1,46 @@
+{
+  "summary": "Iteration 8 (Token-Sparmaßnahmen + CRV/Hebel-Rahmen + Stop-All-Trades reduziert + Fallback-Anzeige + HOLD-Badge + Mobile-Bugfix) vollständig getestet. Backend: 22/22 Unit-Tests (test_iter8_token_crv_lev.py) + 5/5 Live-Endpoint-Tests (test_iter8_live_endpoints.py) grün. Frontend: AI-Setup-Panel mit CRV min/max + lev_mode (coin/auto/fixed) + dynamischen Zusatz-Inputs sichtbar, Health-Dropdown scrollbar (max-height 594px = 55vh, overflow-y auto), 35/42 HOLD-Zeilen zeigen 'kein Edge'-Badge, Mobile-Bug BEHOBEN (Zeile bekommt 'expanded'-Klasse, .ai-dec-reason display=block, kompletter Reasoning-Text sichtbar), SettingsPanel Bot-Trades-Text sagt jetzt 'NUR neue Trades verhindert – bereits offene Positionen bleiben unangetastet', Watchdog-Toggle vorhanden. Alle Prod-Änderungen zurückgesetzt (crv_min=1.2, crv_max=0, lev_mode=coin, lev_auto_max=25, lev_fixed=10, trades_paused=false).",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "/api/ai/status", "issue": "Beim ersten Aufruf nach Preview-Idle 20-30s Latenz (Cold-Start). Danach <1s. Kein Regressionsblocker, aber für Frontend-Ladeanzeige berücksichtigen."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "AI Panel Console", "issues": ["React-Hydration-Warnung: '<span> cannot be a child of <option>' – wahrscheinlich im ai-model-select o.ä. Kein Funktionsbruch, aber sollte bereinigt werden."]}
+    ]
+  },
+  "ai_feature_verdicts": [
+    "AI provider fallback tracking (active_fallbacks) - pass - evidence: /api/ai/status providers_health.active_fallbacks ist Liste (leer, da Preview aktuell keine aktiven Fallbacks hat); Unit-Test test_active_fallback_tracked_and_cleared + test_backup_key_counts_as_fallback grün; UI-Dropdown rendert Zeilen [data-testid^=ai-active-fallback-] wenn Daten vorhanden - skill: ai-testing-core (kein LLM-Ergebnis-Test nötig, nur Struktur/UI)",
+    "AI analysis chat feed HOLD-badges - pass - evidence: 35 von 42 decision-rows im echten Prod-Chat-Feed zeigen [data-testid^=ai-dec-noedge-] mit Text 'kein Edge'; LONG/SHORT-Zeilen zeigen weiterhin Prozent - skill: ai-testing-llm-not-loaded-because-only-UI-schema-tested",
+    "Trade frame CRV/leverage config persistence - pass - evidence: POST /api/ai/config Werte werden persistiert & geklemmt (crv_min 0.3 -> 1.0, lev_auto_max 999 -> 100, lev_mode 'yolo' bleibt vorheriger Wert), am Ende auf Defaults zurückgesetzt (1.2/0/coin/25/10 verifiziert)",
+    "Stop-All-Trades (nicht mehr trade-schließend) - pass - evidence: POST /api/control/stop-trades Response hat KEIN closed_trades-Feld mehr; Unit-Test test_stop_trades_no_longer_closes_positions grün; Trade-schließen-Helper aus router entfernt (nicht mehr importierbar)",
+    "Token-Sparmaßnahmen (lean prompt, market observer reuse, trade_review purpose) - pass - evidence: 8 dedizierte Unit-Tests grün (test_lean_system_prompt_same_schema_but_shorter, test_market_observer_reuses_summary_when_unchanged, test_trade_manager_uses_lean_review_context, test_liquidity_block_only_for_crypto_group u.a.). Keine LLM-Live-Calls (Preview-Keys maskiert)."
+  ],
+  "test_report_links": [
+    "/app/backend/tests/test_iter8_token_crv_lev.py",
+    "/app/backend/tests/test_iter8_live_endpoints.py"
+  ],
+  "action_items": [
+    "Minor: React Hydration-Warnung '<span> cannot be a child of <option>' im AI-Setup Select (vermutlich ai-model-select) bereinigen.",
+    "Optional: /api/ai/status Cold-Start (20-30s) durch Warm-Keep oder cached-config-Snapshot beschleunigen, falls Nutzer das im Frontend bemerken."
+  ],
+  "critical_code_review_comments": [
+    "AITradingPanel.js ist mit 1250+ Zeilen sehr groß. Refactor in Sub-Komponenten (SetupPanel, HealthDropdown, ChatFeed) würde Wartung und Testbarkeit deutlich verbessern.",
+    "test_iter8_live_endpoints.py setzt TIMEOUT=60s wegen preview-cold-start – ok für Preview, aber CI könnte flaky werden. Ggf. Retry-Wrapper einbauen.",
+    "control.toggle_stop_trades gibt kein closed_trades zurück – korrekt gemäß Spec. Frontend/SettingsPanel Beschreibung ist konsistent aktualisiert."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_iter8_live_endpoints.py (neu)"
+  ],
+  "success_rate": {"backend": "100%", "frontend": "100%"},
+  "test_credentials": "Admin / TestAdmin2026! (aus /app/memory/test_credentials.md)",
+  "seed_data_creation": "Keine Seeds erstellt. Prod-AI-Config während Tests kurzzeitig geändert (crv/lev-Werte) und anschließend wieder auf Ausgangswerte zurückgesetzt. Master-Schalter trades_paused nur kurz getoggelt und wieder auf false gesetzt (Ausgangszustand).",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Preview-Backend hat kalten /api/ai/status-Endpunkt (20-30s beim ersten Hit). Preview-LLM-Keys sind maskiert – KEINE LLM-Qualität testen. Prod-Atlas hängt dran: nach jedem Config-Änderungstest exakt auf Defaults (crv_min=1.2, crv_max=0, lev_mode='coin', lev_auto_max=25, lev_fixed=10) zurücksetzen. Master-Schalter stop-trades nur toggeln, nicht dauerhaft lassen.",
+  "rca of the issue": "N/A – keine offenen Bugs. Der Mobile-Bug aus dem Review (ausgeklappte HOLD-Zeile zeigte Begründung nicht) ist behoben: CSS-Media-Query <=640px setzt .ai-decision-row.expanded .ai-dec-reason auf display:block (verifiziert via computed style = 'block' und Textinhalt sichtbar)."
+}

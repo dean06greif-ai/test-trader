@@ -1,0 +1,211 @@
+/* Deep Analytics – Analyse-Ansicht.
+   Nutzt bewusst dunkles Farbschema, das zum Rest der App passt. */
+
+.deep-analytics {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  overflow-y: auto;
+  color: #D8DBE5;
+  font-family: inherit;
+}
+
+.da-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.da-header h3 {
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  color: #FFFFFF;
+  display: flex; align-items: center; gap: 6px;
+  margin: 0 0 3px 0;
+}
+.da-sub { font-size: 11px; color: #5C6070; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; }
+
+.da-refresh {
+  background: #1A1C23;
+  color: #D8DBE5;
+  border: 1px solid #2A2D3A;
+  padding: 6px 10px;
+  font-size: 11px; letter-spacing: 0.06em;
+  display: inline-flex; align-items: center; gap: 6px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+.da-refresh:hover { background: #22252F; border-color: #3A3E4C; }
+.da-refresh:disabled { opacity: 0.5; cursor: default; }
+
+.da-error {
+  background: #2A1418; border: 1px solid #5A2028;
+  color: #FFB0B7; padding: 8px 10px; font-size: 12px;
+}
+
+/* KPI grid */
+.da-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+@media (min-width: 900px) {
+  .da-kpi-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+.da-kpi {
+  background: #14161C; border: 1px solid #262935; padding: 12px;
+}
+.da-kpi-label { font-size: 10px; color: #5C6070; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px; }
+.da-kpi-value {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 20px; font-weight: 800; color: #F0F2F5;
+  line-height: 1.1;
+}
+.da-kpi-sub { font-size: 10.5px; color: #7A7F8F; margin-top: 4px; letter-spacing: 0.02em; }
+
+/* Section */
+.da-section { display: flex; flex-direction: column; gap: 10px; }
+.da-section-title {
+  font-size: 11px; color: #7B8194; text-transform: uppercase; letter-spacing: 0.14em;
+  font-weight: 700; display: flex; align-items: center; gap: 6px;
+}
+
+/* Equity curve */
+.da-equity {
+  width: 100%; height: 140px;
+  background: #10121A; border: 1px solid #262935; display: block;
+}
+
+/* Rolling boxes */
+.da-rolling-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.da-rolling {
+  background: #14161C; border: 1px solid #262935; padding: 10px;
+}
+.da-rolling-title { font-size: 10px; letter-spacing: 0.12em; color: #7B8194; text-transform: uppercase; margin-bottom: 6px; }
+.da-rolling-row {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 6px;
+  font-size: 12px; color: #B7BCCB; padding: 3px 0; border-bottom: 1px dashed #22252F;
+}
+.da-rolling-row:last-child { border-bottom: 0; }
+.da-rolling-row b { color: #F0F2F5; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+
+/* Strategy list */
+.da-strat-list { display: flex; flex-direction: column; gap: 10px; }
+.da-strat-card {
+  background: #14161C; border: 1px solid #262935; border-left-width: 3px;
+}
+.da-strat-card.status-red { border-left-color: #FF3366; }
+.da-strat-card.status-yellow { border-left-color: #FFB020; }
+.da-strat-card.status-green { border-left-color: #00FF66; }
+.da-strat-card.status-gray { border-left-color: #5C6070; }
+
+.da-strat-head {
+  width: 100%;
+  background: transparent; border: 0; color: inherit;
+  display: grid;
+  grid-template-columns: 14px 1fr auto auto 14px;
+  gap: 10px; align-items: center;
+  padding: 10px 12px;
+  cursor: pointer; text-align: left;
+}
+.da-strat-head:hover { background: #191C24; }
+.da-dot { width: 10px; height: 10px; border-radius: 999px; display: inline-block; }
+.da-strat-name { font-weight: 700; color: #F0F2F5; font-size: 13px; }
+.da-strat-status {
+  font-size: 10px; letter-spacing: 0.12em; font-weight: 800;
+  padding: 3px 6px; border: 1px solid currentColor;
+}
+.da-strat-kpis {
+  display: flex; gap: 10px; font-size: 11px; color: #A7ACBB;
+  align-items: baseline;
+}
+.da-strat-kpis b { color: #F0F2F5; font-family: 'JetBrains Mono', ui-monospace, monospace; font-weight: 700; margin-left: 3px; }
+
+.da-hints { display: flex; flex-direction: column; gap: 4px; padding: 4px 12px 10px 30px; }
+.da-hint {
+  font-size: 11.5px; color: #C9CDD8;
+  display: flex; align-items: flex-start; gap: 6px;
+}
+
+.da-strat-body {
+  padding: 4px 12px 12px 12px;
+  border-top: 1px dashed #262935;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.da-breakdown-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 720px) { .da-breakdown-row { grid-template-columns: 1fr; } }
+.da-breakdown { background: #10121A; border: 1px solid #262935; padding: 8px 10px; }
+.da-bk-title { font-size: 10px; color: #7B8194; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 6px; }
+.da-bk-row { display: grid; grid-template-columns: 44px 60px 70px 1fr; gap: 4px; font-size: 11px; color: #B7BCCB; padding: 2px 0; }
+.da-bk-row b { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+
+.da-kv-inline { display: flex; flex-wrap: wrap; gap: 10px; font-size: 11.5px; color: #A7ACBB; }
+.da-kv-inline b { color: #F0F2F5; margin-left: 4px; }
+
+/* Review */
+.da-review-box { background: #10121A; border: 1px solid #262935; padding: 10px; }
+.da-review { white-space: pre-wrap; color: #C9CDD8; font-size: 12px; line-height: 1.5; margin: 0; font-family: inherit; }
+.da-review-copy {
+  margin-top: 8px; background: #1A1C23; border: 1px solid #2A2D3A; color: #F0F2F5;
+  font-size: 11px; padding: 6px 10px; cursor: pointer;
+  letter-spacing: 0.06em;
+}
+.da-review-copy:hover { background: #22252F; }
+.da-review-copy:disabled { opacity: 0.5; cursor: default; }
+
+/* Trade rows */
+.da-trade-list { display: flex; flex-direction: column; gap: 4px; }
+.da-trade {
+  background: #14161C; border: 1px solid #262935;
+}
+.da-trade-head {
+  width: 100%; background: transparent; border: 0; color: #D8DBE5;
+  display: grid;
+  grid-template-columns: 14px 44px 60px 1fr auto auto auto;
+  align-items: center; gap: 8px;
+  padding: 7px 10px; cursor: pointer; text-align: left;
+  font-size: 12px;
+}
+.da-trade-head:hover { background: #191C24; }
+.da-badge {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 10px; padding: 2px 6px; letter-spacing: 0.08em; font-weight: 700;
+}
+.da-long { background: rgba(0,255,102,0.12); color: #00FF66; }
+.da-short { background: rgba(255,51,102,0.12); color: #FF3366; }
+.da-symbol { font-family: 'JetBrains Mono', ui-monospace, monospace; color: #F0F2F5; font-weight: 700; }
+.da-strat { font-size: 11px; color: #A7ACBB; }
+.da-reason { font-size: 10.5px; color: #7B8194; text-transform: uppercase; letter-spacing: 0.06em; }
+.da-pnl { font-family: 'JetBrains Mono', ui-monospace, monospace; font-weight: 700; }
+.da-time { font-size: 10.5px; color: #6E7383; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+
+.da-trade-body {
+  padding: 8px 12px 12px 12px; border-top: 1px dashed #262935;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.da-kv-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 12px; }
+@media (min-width: 720px) { .da-kv-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.da-kv-grid > div {
+  display: flex; justify-content: space-between; gap: 8px;
+  font-size: 11.5px; color: #A7ACBB;
+  padding: 3px 0; border-bottom: 1px dashed #22252F;
+}
+.da-kv-grid b { color: #F0F2F5; font-family: 'JetBrains Mono', ui-monospace, monospace; font-weight: 700; }
+
+.da-events { background: #10121A; border: 1px solid #262935; padding: 8px 10px; }
+.da-events-title { font-size: 10px; color: #7B8194; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 6px; }
+.da-event { font-size: 11px; color: #B7BCCB; font-family: 'JetBrains Mono', ui-monospace, monospace; padding: 2px 0; }
+
+.da-signal-ref {
+  display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+  font-size: 11px; color: #B7BCCB; padding: 6px 10px;
+  background: #10121A; border: 1px solid #262935;
+}
+
+.da-loading { color: #7B8194; font-size: 11.5px; padding: 4px 0; }
+.da-empty { color: #6E7383; font-size: 12px; padding: 10px; text-align: center; background: #10121A; border: 1px solid #262935; }
+.da-pos { color: #00FF66; }
+.da-neg { color: #FF3366; }
+.da-mono { font-family: 'JetBrains Mono', ui-monospace, monospace; }

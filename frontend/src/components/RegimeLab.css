@@ -1,0 +1,65 @@
+.rl-chart { background: #12141d; border: 1px solid #262a38; border-radius: 10px; padding: 8px 10px 4px; margin-bottom: 10px; }
+.rl-chart-title { font-size: 11px; font-weight: 700; color: #c9cddb; margin-bottom: 4px; letter-spacing: 0.3px; }
+.rl-legend { display: flex; flex-wrap: wrap; gap: 6px; padding: 6px 0 4px; }
+.rl-legend-item {
+  display: inline-flex; align-items: center; gap: 5px; font-size: 10px; color: #c9cddb;
+  background: #171a26; border: 1px solid #2a2e3f; border-radius: 20px; padding: 2px 8px; cursor: pointer;
+}
+.rl-legend-item.off { opacity: 0.35; }
+.rl-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+.rl-regime-card {
+  background: #12141d; border: 1px solid #262a38; border-radius: 10px;
+  padding: 10px 12px; margin-bottom: 8px;
+}
+.rl-regime-card.discarded { opacity: 0.45; }
+.rl-regime-card.assigned { border-color: rgba(0, 229, 160, 0.35); }
+.rl-regime-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.rl-regime-stats { display: flex; flex-wrap: wrap; gap: 10px; font-size: 10.5px; color: #8b90a0; margin-top: 4px; }
+.rl-regime-stats b { color: #c9cddb; }
+
+.rl-scope-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; }
+.rl-sim { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 10px; }
+
+.rl-analysis-row {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  background: #12141d; border: 1px solid #262a38; border-radius: 10px;
+  padding: 8px 12px; margin-bottom: 6px; cursor: pointer; font-size: 12px; color: #c9cddb;
+}
+.rl-analysis-row:hover { border-color: #4a4f63; }
+.rl-analysis-row.on { border-color: #b388ff; }
+
+.rl-opt-box { background: #171a26; border: 1px dashed #2a2e3f; border-radius: 10px; padding: 10px 12px; margin-top: 8px; }
+.rl-assign { background: rgba(0, 229, 160, 0.06); border: 1px solid rgba(0, 229, 160, 0.25); border-radius: 8px; padding: 8px 10px; margin-top: 8px; font-size: 11.5px; color: #c9cddb; }
+.rl-wf-box { background: #12141d; border: 1px solid #262a38; border-radius: 10px; padding: 12px; margin-top: 10px; }
+.rl-verdict { font-size: 12px; padding: 8px 10px; border-radius: 8px; margin: 8px 0; }
+.rl-verdict.good { background: rgba(0, 229, 160, 0.08); border: 1px solid rgba(0, 229, 160, 0.3); color: #7CFFB2; }
+.rl-verdict.bad { background: rgba(255, 71, 87, 0.08); border: 1px solid rgba(255, 71, 87, 0.3); color: #ff8a95; }
+
+/* ---- Regime-Engine v2: Einstellungen, aktuelles Regime, Prüfbericht ---- */
+.rl-engine-box { background: #171a26; border: 1px solid #2a2e3f; border-radius: 10px; padding: 8px 10px; margin-bottom: 8px; }
+.rl-engine-grid { display: flex; flex-wrap: wrap; gap: 10px 14px; margin-top: 8px; padding-top: 8px; border-top: 1px dashed #2a2e3f; }
+
+.rl-nnfx-tag { font-size: 9.5px; font-weight: 700; letter-spacing: 0.3px; padding: 1px 7px; border-radius: 20px; text-transform: uppercase; }
+.rl-nnfx-tag.trend { background: rgba(48, 209, 88, 0.14); color: #7CFFB2; border: 1px solid rgba(48, 209, 88, 0.35); }
+.rl-nnfx-tag.range { background: rgba(100, 210, 255, 0.14); color: #9adcff; border: 1px solid rgba(100, 210, 255, 0.35); }
+.rl-nnfx-tag.breakout { background: rgba(255, 159, 10, 0.14); color: #ffcc80; border: 1px solid rgba(255, 159, 10, 0.35); }
+
+.rl-current-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 10px; }
+.rl-current { display: inline-flex; align-items: center; gap: 8px; background: #12141d; border: 1px solid #2a2e3f; border-radius: 20px; padding: 4px 12px; font-size: 11px; color: #c9cddb; }
+.rl-current-label { font-weight: 600; color: #e6e9f2; }
+
+.rl-valid { border-radius: 10px; margin: 4px 0 10px; font-size: 11.5px; }
+.rl-valid.good { background: rgba(0, 229, 160, 0.06); border: 1px solid rgba(0, 229, 160, 0.25); color: #c9cddb; }
+.rl-valid.bad { background: rgba(255, 159, 10, 0.07); border: 1px solid rgba(255, 159, 10, 0.3); color: #c9cddb; }
+.rl-valid-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 7px 10px; cursor: pointer; }
+.rl-valid-body { padding: 4px 10px 10px; }
+.rl-valid-row { display: flex; gap: 10px; flex-wrap: wrap; padding: 4px 0; border-top: 1px dashed #2a2e3f; font-size: 10.5px; color: #8b90a0; }
+.rl-valid-row b { color: #c9cddb; }
+
+/* Frühwarnung für einen Regime-Wechsel */
+.rl-warn {
+  display: inline-flex; align-items: center; gap: 5px; font-size: 10.5px;
+  background: rgba(255, 214, 10, 0.1); border: 1px solid rgba(255, 214, 10, 0.35);
+  color: #ffe27a; border-radius: 20px; padding: 1px 9px;
+}

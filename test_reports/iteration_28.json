@@ -1,0 +1,48 @@
+{
+  "summary": "Iteration 28: End-to-End Verifikation der drei Aufgaben aus dem Review-Request auf der PROD-Vorschau (https://daytrader-refine-2.preview.emergentagent.com). ALLE Punkte grün. (1) BUG Manuelle Bitunix-Trades: GET /api/autotrade/trades?limit=200 liefert 139 Trades OHNE Duplikate (ids eindeutig, 11 offen, 128 geschlossen). Darin enthalten der Live-Trade 'QQQUSDT-ext-1786654962450' mit strategy_id='external' & strategy_name='Manuell (Bitunix)' (opened_at 13.08.2026 21:02 – ~40h alt und trotzdem in der Liste; Bug-Fix bestätigt). GET /api/autotrade/watchdog/status liefert settings.enabled=false, adopt_unknown=true, mode='sync-only', last_run_at frisch (~30s Loop), positions=1, errors=[]. (2) BUG Trades-Karten CSS: Analyse-Sidebar > Trades > 82 Trade-Karten sichtbar, 20/20 stichprobenartig geprüfte .tdc-coin (48px min-width, kein Truncation), .tdc-caret & .tdc-pnl liegen alle innerhalb der Parent-Bounds (offscreen: False), .tdc-main hat flex-wrap: wrap. Manuell(Bitunix) QQQ-Karte aufgeklappt: alle Details (Entry 733.42, Aktueller Kurs 731.72, SL 806.762, PnL +1.33 (+3.26%), Dauer 39h 36m, R-Vielfaches 0.02R, R:R %margin %positionsgröße %kapital) sichtbar, kein Layout-Bruch (Screenshot manual_trade_expanded.png). (3) FEATURE Multi-Timeframe pro Regel: POST /api/strategies/custom mit {indicator:'rsi', op:'<', value:30, timeframe:'15m'} → HTTP 200 akzeptiert. Mit timeframe:'7m' → HTTP 422 mit Fehlermeldung 'Timeframe 7m wird nicht unterstützt (erlaubt: 1m, 3m, 5m, 15m, 30m, 1h, 2h, 4h, 8h, 12h, 1d)'. POST /api/optimizer/run mit body {strategy_id, symbols:['BTCUSDT'], mode:'params', rule_timeframes:{enabled:true,min:'1m',max:'4h'}} → HTTP 200 {status:'started', job_id}. Deployed Bundle enthält 'TF: Strategie' + rule-tf-* testid (StrategyBuilder Zeile 307-314) sowie 'Regel-Timeframes optimieren' (Optimizer Zeile 737) → beide Features ausgeliefert. Beide Test-Strategien am Ende via DELETE /api/strategies/custom/{id} wieder entfernt (200 status:success). Keine destruktiven Bitunix-Aufrufe gemacht. Regression-Tests test_trades_visibility.py, test_watchdog_sync_only.py, test_rule_timeframes.py sind bereits im Repo und grün.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "tests_executed": {
+    "backend_curl": {
+      "GET /api/autotrade/trades?limit=200": "200 OK; 139 trades, 0 dupes, 11 open incl. QQQUSDT-ext (Manuell Bitunix, opened_at 2026-08-13)",
+      "GET /api/autotrade/watchdog/status": "200 OK; enabled=false, adopt_unknown=true, mode=sync-only, last_run_at frisch, positions=1",
+      "POST /api/strategies/custom (rule tf=15m)": "200 OK",
+      "POST /api/strategies/custom (rule tf=7m)": "422 mit klarer Fehlermeldung",
+      "POST /api/optimizer/run rule_timeframes": "200 OK, job started",
+      "DELETE /api/strategies/custom/{id} cleanup": "200 status:success (2x)"
+    },
+    "frontend_playwright": {
+      "view-trades tab click": "ok, 82 trade-cards gerendert",
+      "tdc-coin (20 Stichproben)": "alle 48px, kein Truncation, Coins: DOT/POL/ETH/BNB/OIL/DOGE/SILVER/GOLD/XRP/QQQ/DOT/SPY/SPY/ADA/POL/BNB/DOT/DOGE/…",
+      "tdc-caret + tdc-pnl innerhalb .tdc-main": "20/20 offscreen=False, mainRight=1889 (kein Cut-off)",
+      "flex-wrap": "wrap",
+      "trade-card-toggle-QQQUSDT-ext-...": "expand ok; alle Details sichtbar (Entry/SL/Aktueller Kurs/PnL/Dauer/R/Kapital-%)",
+      "Manuell (Bitunix) Label sichtbar": "true",
+      "StrategyBuilder rule-tf-* + 'TF: Strategie' im Bundle": "verifiziert per curl static/js/bundle.js grep",
+      "Optimizer 'Regel-Timeframes optimieren' im Bundle": "verifiziert"
+    }
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_trades_visibility.py",
+    "/app/backend/tests/test_watchdog_sync_only.py",
+    "/app/backend/tests/test_rule_timeframes.py",
+    "/app/test_reports/trades_view.png",
+    "/app/test_reports/manual_trade_expanded.png"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "backend/routers/autotrade.py get_trades: 'extra_open'-Block hängt offene Trades zusätzlich an, wenn sie durch das limit-Fenster gefallen sind – im Live-Response bestätigt (QQQUSDT-ext ist der 11. offene Trade, viel älter als die anderen 10 KI-Trader-Trades).",
+    "services/position_watchdog.py: run_loop startet nun auch bei enabled=false wenn adopt_unknown=true (sync-only Modus). Bestätigt durch mode='sync-only' und errors=[] im Status.",
+    "backend/strategies/custom_params.normalize_definition: gibt sehr klare deutsche Fehlermeldung inkl. erlaubter TF-Liste bei ungültigem Regel-TF – gute UX.",
+    "frontend/PerformanceAnalytics.css .tdc-main flex-wrap + .tdc-coin min-width 48px: Fix ist sauber, alle 20 Stichproben zeigen 48px, kein Cut-off. Kein Regressionsrisiko erkennbar.",
+    "Konsolen-Fehler 'TypeError: Failed to fetch' beim Kaltstart – bekannt aus iter26/27, kein neues Problem."
+  ],
+  "updated_files": ["/app/test_reports/iteration_28.json (neu)"],
+  "success_rate": {"backend": "100% (5/5 relevante Endpoints)", "frontend": "100% (view-trades tab, coin-name-visibility, caret/pnl visibility, expand, Manuell-Bitunix Label, deployed StrategyBuilder+Optimizer strings)"},
+  "test_credentials": "Admin / Dean06Greif!/Admin (POST /api/auth/login → {token} → im curl als Authorization: Bearer verwendet)",
+  "seed_data_creation": "Zwei temporäre Custom-Strategien für Rule-TF-Validation und Optimizer-Payload angelegt (custom_2e78620c, custom_fc58ec51), beide direkt danach via DELETE /api/strategies/custom/{id} entfernt. Keine offenen Aufräum-Reste. Keine echten Orders, kein flash_close, keine Settings-Änderungen an Watchdog/Auto-Trade.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Optimizer /api/optimizer/run erwartet den Key 'symbols' als Liste (nicht 'symbol' als String). Für sync-only Trades ist der Manuell-Bitunix-Trade (strategy_id='external') das entscheidende Sichtbarkeits-Testobjekt – aktuell QQQUSDT SHORT. Die Trade-Karten in der Analyse-Sidebar/Trades zeigen ~82 Cards, obwohl DB 139 hat – das ist gewollt (Frontend zeigt nur eine Teilmenge, alle offenen sind aber immer dabei). Login-Modal aktiviert sich beim ersten Klick auf edit-strategy-params-btn oder manage-strategies-btn.",
+  "rca of the issue": "Keine Bugs. Alle 3 Aufgaben des Review-Requests verifiziert (2 Bug-Fixes + 1 Feature-Verification)."
+}

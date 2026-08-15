@@ -1,0 +1,42 @@
+{
+  "summary": "Phase-0 Backend-Verifikation (Fixes 0.1/0.2/0.3) komplett grün. Alle drei isolierten Fix-Skripte laufen sauber durch (11 PASS gesamt inkl. echtem on_signal-Paper-Trade in lokale Mongo, korrektem zeitbasiertem Snapshot-Prune und Swing-Labeling über Tagesgrenzen). Kern-APIs liefern 200 (health, ai/status, signals, autotrade/trades, ai/observer/status). Pytest-Regressions-Subset (63 Tests, keyword: pipeline/signal/eval/scheduler/reset/observer/snapshot): 56 passed, 3 failed, 2 errors. Alle 5 Non-Pass-Fälle sind PRE-EXISTING (via git stash bestätigt: identisches Verhalten ohne die Phase-0-Änderungen) – keine neuen Regressionen durch Fix 0.1/0.2/0.3. Note: Review-Request listete 3 bekannte Pre-Existing-Fails; die verbleibenden 2 (test_ai_lab.py::test_load_keeps_preset_when_user_never_configured und test_ai_governance_api.py::test_strategies_decide_reset) sind ebenfalls Pre-Existing (nicht in Fix-Scope, Rollen/Governance-Bereiche). Endpoint-Pfade in der Review-Request-Beschreibung (/api/auto-trades, /api/ai/market-observer) existieren nicht; die tatsächlichen Pfade sind /api/autotrade/trades und /api/ai/observer/status – beide 200 OK.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "tests/test_ai_lab.py::test_load_keeps_preset_when_user_never_configured", "issue": "PRE-EXISTING (git stash bestätigt): assert True is False bei stored={'enabled': False}. Rollen-Loader übernimmt Nutzer-Einstellung nicht wie im Test erwartet. Nicht durch Fix 0.1/0.2/0.3 verursacht."},
+      {"endpoint": "tests/test_ai_governance_api.py::test_strategies_decide_reset", "issue": "PRE-EXISTING (git stash bestätigt): KeyError 'id'. Nicht durch Fix 0.1/0.2/0.3 verursacht."},
+      {"endpoint": "tests/test_ai_iter3_api.py::test_master_prompt_reset", "issue": "PRE-EXISTING (in Review-Request als bekannt gelistet): KeyError 'defaults'."},
+      {"endpoint": "tests/test_iter5_session_fixes.py::test_watchdog_manage_external_toggle_and_reset", "issue": "PRE-EXISTING (in Review-Request als bekannt gelistet): Login 401 (Falsche Zugangsdaten)."},
+      {"endpoint": "tests/test_iter8_live_endpoints.py::test_zzz_reset_ai_config_to_defaults", "issue": "PRE-EXISTING (in Review-Request als bekannt gelistet): Admin-Login 401."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/tests/test_fix_0_1_snapshot_prune.py",
+    "/app/tests/test_fix_0_2_entry_snapshot.py",
+    "/app/tests/test_fix_0_3_swing_labeling.py",
+    "/app/test_reports/pytest/iter13_regression.xml"
+  ],
+  "action_items": [
+    "Optional (nicht Teil von Phase 0): 2 weitere pre-existing Failures im Rollen/Governance-Bereich adressieren (test_ai_lab.py::test_load_keeps_preset_when_user_never_configured, test_ai_governance_api.py::test_strategies_decide_reset). Beide existieren unabhängig von den Phase-0-Änderungen.",
+    "Doku-Hinweis: Endpoint-Pfade in Review-Requests künftig als /api/autotrade/trades und /api/ai/observer/status referenzieren (nicht /api/auto-trades / /api/ai/market-observer)."
+  ],
+  "critical_code_review_comments": [
+    "Fix 0.1 (ai_market_observer._prune) korrekt implementiert: zeitbasierter Cut-off via SNAPSHOT_RETENTION_DAYS=200, idempotent, echte Snapshots unangetastet.",
+    "Fix 0.2 (entry_market_snapshot): Trade-Doc und ai_decisions bekommen beim Open den Marktzustand (source: live/signal_candles/last_snapshot) mit vollständigen Features (rsi/regime/price/atr_pct/trend_pct/volatility_pct/volume_ratio/range_pos/change_60m_pct). Fallback-Kette sauber (live -> signal_candles -> last_snapshot -> None).",
+    "Fix 0.3 (Swing-Labeling): pipeline.evaluate_open_signals wertet Signale bis SIGNAL_EVAL_MAX_DAYS=14 aus, expired-Signale bleiben result=None, Mitternachts-clear() im Scheduler entfernt (via inspect.getsource bestätigt).",
+    "Rehydrierung 14-Tage-Fenster in server.py aktiv (indirekt bestätigt durch server-Start ohne Fehler und funktionierendes evaluate_open_signals über 3/5-Tage-alte Signale)."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "100% (Fixes 0.1/0.2/0.3 + Kern-APIs + Regression ohne neue Failures)", "frontend": "n/a (skip per review_request)"},
+  "test_credentials": "Nicht benötigt (Backend-only, öffentliche API-Endpoints).",
+  "seed_data_creation": "Die drei Fix-Skripte legen selbst temporäre Test-Docs an (symbol=TESTUSDT/SWINGUSDT/FALLUSDT) und räumen sie am Ende via delete_many wieder auf – Cleanup in allen 3 Läufen bestätigt.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Phase-0 (Fix 0.1/0.2/0.3) ist verifiziert und stabil. Für künftige Regression: (a) /app/tests/test_fix_0_{1,2,3}_*.py sind standalone asyncio-Skripte, aus /app mit `python tests/test_fix_0_X_*.py` starten; (b) Pytest-Subset via `cd /app/backend && python -m pytest tests -k 'pipeline or signal or eval or scheduler or reset or observer or snapshot' -q` – erwartete 5 Pre-Existing-Failures dürfen nicht anwachsen. Endpoints: /api/autotrade/trades, /api/ai/observer/status (nicht /api/auto-trades / /api/ai/market-observer). KI-Trader war und bleibt enabled=false; LLM-Keys sind vorhanden aber nicht Testgegenstand.",
+  "rca of the issue": "Keine Bugs in Phase-0-Fixes. Die zwei nicht in der Review-Request gelisteten Pre-Existing-Failures (test_ai_lab::test_load_keeps_preset_when_user_never_configured, test_ai_governance_api::test_strategies_decide_reset) wurden via `git stash --include-untracked` verifiziert – beide failen mit exakt derselben Assertion/Exception auch ohne die Phase-0-Änderungen (Rollen-Loader-Merge-Verhalten bzw. fehlendes 'id'-Feld in Strategies-Reset-Response). Sie sind daher NICHT durch Fix 0.1/0.2/0.3 verursacht und liegen außerhalb des Phase-0-Scopes."
+}

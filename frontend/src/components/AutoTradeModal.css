@@ -1,0 +1,68 @@
+.at-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.72);
+  backdrop-filter: blur(4px); z-index: 1000;
+  display: flex; align-items: center; justify-content: center; padding: 20px;
+}
+.at-panel {
+  background: #121212; border: 1px solid #2A2D3A; border-radius: 14px;
+  width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto;
+  padding: 20px; box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+}
+.at-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.at-title { display: flex; align-items: center; gap: 8px; font-weight: 800; letter-spacing: 0.5px; color: #FFD700; }
+.at-close { background: transparent; border: none; color: #A1A4B0; cursor: pointer; }
+.at-close:hover { color: #fff; }
+
+.at-mode-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.at-mode-toggle { display: flex; border: 1px solid #2A2D3A; border-radius: 8px; overflow: hidden; }
+.at-mode-toggle button { padding: 8px 16px; background: #151515; border: none; color: #A1A4B0; cursor: pointer; font-weight: 700; font-size: 12px; }
+.at-mode-toggle button.active { background: #00A8FF22; color: #00A8FF; }
+.at-mode-toggle button.active.live { background: #FF336622; color: #FF3366; }
+.at-enable { display: flex; align-items: center; gap: 10px; font-size: 13px; color: #A1A4B0; }
+
+.at-warn { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #FFD700; background: #FFD70012; border: 1px solid #FFD70044; border-radius: 8px; padding: 8px 10px; margin-bottom: 12px; }
+.at-warn.err { color: #FF3366; background: #FF336612; border-color: #FF336644; }
+
+.at-section { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 8px; }
+.at-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; min-width: 0; }
+.at-field.small { max-width: 240px; }
+.at-field label { font-size: 11px; color: #A1A4B0; text-transform: uppercase; letter-spacing: 0.4px; }
+.at-field input[type=number] { width: 100%; box-sizing: border-box; background: #0A0A0A; border: 1px solid #2A2D3A; border-radius: 8px; padding: 9px 11px; color: #fff; font-family: 'JetBrains Mono', monospace; }
+.at-field input[type=number]:focus { outline: none; border-color: #00FF66; }
+.at-field input[type=range] { accent-color: #00FF66; }
+.at-possize { font-size: 12px; color: #A1A4B0; margin-bottom: 14px; }
+.at-possize b { color: #00FF66; font-family: 'JetBrains Mono', monospace; }
+
+.at-block { border: 1px solid #2A2D3A; border-radius: 10px; padding: 14px; margin-bottom: 12px; }
+.at-block-title { font-size: 11px; font-weight: 800; letter-spacing: 1px; color: #FFD700; margin-bottom: 12px; }
+.at-seg { display: flex; gap: 6px; margin-bottom: 12px; }
+.at-seg button { flex: 1; padding: 8px; font-size: 11px; border: 1px solid #2A2D3A; background: #0A0A0A; color: #A1A4B0; border-radius: 8px; cursor: pointer; }
+.at-seg button.active { border-color: #00FF66; color: #00FF66; background: #00FF6610; }
+.at-check { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #C8CAD2; margin-top: 8px; cursor: pointer; }
+.at-check input { accent-color: #00FF66; width: 16px; height: 16px; }
+
+.at-save { width: 100%; padding: 13px; background: #00FF66; color: #001a08; border: none; border-radius: 10px; font-weight: 800; cursor: pointer; font-size: 14px; margin-bottom: 12px; transition: opacity 0.15s; }
+.at-save:hover { opacity: 0.9; }
+.at-save:disabled { opacity: 0.5; cursor: default; }
+
+.at-trade { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #1E2028; }
+.at-trade-side { display: flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 800; }
+.at-trade-side.long { color: #00FF66; }
+.at-trade-side.short { color: #FF3366; }
+.at-trade-info { font-size: 11px; color: #A1A4B0; flex: 1; }
+.at-trade-info b.long { color: #00FF66; }
+.at-trade-info b.short { color: #FF3366; }
+.at-trade-close { padding: 5px 10px; font-size: 11px; background: #FF336622; color: #FF3366; border: 1px solid #FF336644; border-radius: 6px; cursor: pointer; }
+
+.switch { position: relative; display: inline-block; width: 40px; height: 22px; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.switch .slider { position: absolute; cursor: pointer; inset: 0; background: #2A2D3A; border-radius: 22px; transition: 0.2s; }
+.switch .slider:before { content: ''; position: absolute; height: 16px; width: 16px; left: 3px; bottom: 3px; background: #fff; border-radius: 50%; transition: 0.2s; }
+.switch input:checked + .slider { background: #00FF66; }
+.switch input:checked + .slider:before { transform: translateX(18px); }
+
+/* Fix: Break-Even/Select-Dropdowns waren weiß (Namen erst beim Hover sichtbar) */
+.at-field select { width: 100%; box-sizing: border-box; background: #0A0A0A; border: 1px solid #2A2D3A; border-radius: 8px; padding: 9px 11px; color: #fff; font-family: 'JetBrains Mono', monospace; cursor: pointer; }
+.at-field select:focus { outline: none; border-color: #00FF66; }
+.at-field select option { background: #0A0A0A; color: #fff; }
+.at-panel select, .at-panel select option { background-color: #0A0A0A; color: #fff; }

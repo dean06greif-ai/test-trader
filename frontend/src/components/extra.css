@@ -1,0 +1,54 @@
+/* ===== Shared additions for new features ===== */
+
+/* Error boundary */
+.error-boundary { display: flex; align-items: center; justify-content: center; height: 100%; padding: 40px; }
+.error-boundary-card { text-align: center; border: 1px solid #2A2D3A; border-radius: 12px; padding: 30px; background: #121212; }
+.error-boundary-card h2 { color: #FF3366; margin-bottom: 10px; }
+.error-boundary-card p { color: #A1A4B0; margin-bottom: 16px; }
+.error-boundary-card button { padding: 10px 20px; background: #00FF66; color: #001a08; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; }
+
+/* MainChart */
+.chart-wrap { position: relative; width: 100%; flex: 1; min-height: 0; }
+.chart-wrap .chart-container { position: absolute; inset: 0; }
+.chart-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: #A1A4B0; font-size: 13px; background: rgba(18,18,18,0.6); z-index: 5; }
+.chart-overlay.chart-error { color: #FF3366; }
+
+/* SignalPanel additions */
+.panel-header-right { display: flex; align-items: center; gap: 8px; }
+.bias-pill { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 800; padding: 4px 8px; border-radius: 6px; }
+.bias-pill.bias-long { color: #00FF66; background: #00FF6614; border: 1px solid #00FF6644; }
+.bias-pill.bias-short { color: #FF3366; background: #FF336614; border: 1px solid #FF336644; }
+.tf-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; color: #A1A4B0; background: #1A1A1A; padding: 3px 6px; border-radius: 5px; }
+.all-aligned { text-align: center; font-weight: 800; font-size: 12px; letter-spacing: 1px; padding: 8px; border-radius: 8px; margin: 0 16px 12px; animation: pulseGlow 1.5s infinite; }
+.all-aligned.aligned-long { color: #00FF66; background: #00FF6618; border: 1px solid #00FF66; }
+.all-aligned.aligned-short { color: #FF3366; background: #FF336618; border: 1px solid #FF3366; }
+@keyframes pulseGlow { 0%,100% { opacity: 1; } 50% { opacity: 0.55; } }
+.rule-item.rule-long { border-left: 2px solid #00FF66; }
+.rule-item.rule-short { border-left: 2px solid #FF3366; }
+.rules-loading, .no-signal-hint, .rules-loading { padding: 14px 16px; font-size: 12px; }
+.indicator-strip { display: flex; gap: 16px; padding: 8px 16px; font-size: 11px; color: #A1A4B0; border-top: 1px solid #1E2028; }
+.indicator-strip b { color: #fff; margin-left: 4px; }
+
+/* CoinSidebar additions */
+.coin-indicator-long { color: #00FF66 !important; }
+.coin-indicator-short { color: #FF3366 !important; }
+.coin-bias-count { font-size: 10px; color: #5C6070; margin-left: 4px; }
+.auto-toggle { display: flex; align-items: center; justify-content: center; background: transparent; border: none; color: #5C6070; cursor: pointer; padding: 3px; border-radius: 4px; transition: color 0.15s; }
+.auto-toggle:hover { color: #FFD700; background: #ffffff08; }
+.auto-toggle.auto-on { color: #FFD700; }
+
+/* PerformanceAnalytics additions */
+.global-stats { display: flex; justify-content: space-around; padding: 12px; border: 1px solid #2A2D3A; border-radius: 10px; }
+.global-stat { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.global-stat span:first-child { font-size: 18px; font-weight: 800; }
+.global-stat .text-muted { font-size: 10px; }
+.trade-row { display: flex; align-items: center; gap: 8px; padding: 7px 0; border-bottom: 1px solid #1E2028; }
+
+/* Responsive - fixes mobile black screen from fixed grid */
+@media (max-width: 900px) {
+  .app-layout { grid-template-columns: 1fr; grid-auto-rows: auto; height: auto; overflow-y: auto; }
+  .coin-sidebar { max-height: 240px; overflow-y: auto; }
+  .main-content { min-height: 70vh; }
+  .right-panel { max-height: 60vh; }
+  .main-chart .chart-container { min-height: 300px; }
+}

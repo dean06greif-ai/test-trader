@@ -1,0 +1,261 @@
+/* ==========================================================================
+   StrategyAutoTradeModal.css
+   Verwendet dieselben .at-* Klassen aus AutoTradeModal.css (Overlay, Panel,
+   Header, Title, Close, Section, Field, Block, Save, Warn, Check, etc.).
+   Diese Datei enthält nur die zusätzlichen Strategie-spezifischen Styles.
+   ========================================================================== */
+
+/* ----- Coin-Badge im Header ----------------------------------------------- */
+.sat-coin-badge {
+  margin-left: 8px;
+  background: #f59e0b22;
+  color: #f59e0b;
+  border: 1px solid #f59e0b55;
+  border-radius: 6px;
+  padding: 2px 8px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* ----- Lade-Zustand ------------------------------------------------------- */
+.sat-loading {
+  padding: 40px 20px;
+  text-align: center;
+  color: #A1A4B0;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+}
+
+/* ==========================================================================
+   Aktiver-Modus Banner (immer sichtbar)
+   ========================================================================== */
+.sat-active-mode {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid #2A2D3A;
+  background: #0F1015;
+  margin-bottom: 14px;
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+
+.sat-active-mode-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #5C6070;
+  flex-shrink: 0;
+}
+
+.sat-active-mode-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sat-active-mode-label {
+  font-size: 10px;
+  letter-spacing: 1.4px;
+  color: #A1A4B0;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.sat-active-mode-value {
+  font-size: 14px;
+  color: #FFFFFF;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  font-family: 'Manrope', sans-serif;
+}
+
+.sat-active-mode-pill {
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  font-family: 'JetBrains Mono', monospace;
+  flex-shrink: 0;
+  border: 1px solid transparent;
+}
+
+/* --- LIVE variant --------------------------------------------------------- */
+.sat-active-mode.live {
+  background: linear-gradient(135deg, #FF336612 0%, #FF336604 100%);
+  border-color: #FF336655;
+  box-shadow: 0 0 24px -6px #FF336640;
+}
+.sat-active-mode.live .sat-active-mode-dot {
+  background: #FF3366;
+  box-shadow: 0 0 8px #FF336680;
+  animation: sat-pulse 1.6s ease-out infinite;
+}
+.sat-active-mode.live .sat-active-mode-value {
+  color: #FF6688;
+}
+.sat-active-mode.live .sat-active-mode-pill {
+  background: #FF3366;
+  color: #FFFFFF;
+  border-color: #FF3366;
+  box-shadow: 0 0 12px -2px #FF336680;
+}
+
+/* --- PAPER variant -------------------------------------------------------- */
+.sat-active-mode.paper {
+  background: linear-gradient(135deg, #00A8FF12 0%, #00A8FF04 100%);
+  border-color: #00A8FF55;
+  box-shadow: 0 0 20px -6px #00A8FF30;
+}
+.sat-active-mode.paper .sat-active-mode-dot {
+  background: #00A8FF;
+  box-shadow: 0 0 8px #00A8FF80;
+}
+.sat-active-mode.paper .sat-active-mode-value {
+  color: #4EC3FF;
+}
+.sat-active-mode.paper .sat-active-mode-pill {
+  background: #00A8FF22;
+  color: #00A8FF;
+  border-color: #00A8FF66;
+}
+
+/* --- OFF variant ---------------------------------------------------------- */
+.sat-active-mode.off {
+  background: #15161C;
+  border-color: #2A2D3A;
+}
+.sat-active-mode.off .sat-active-mode-dot {
+  background: #5C6070;
+}
+.sat-active-mode.off .sat-active-mode-value {
+  color: #C8CAD2;
+}
+.sat-active-mode.off .sat-active-mode-pill {
+  background: #2A2D3A;
+  color: #A1A4B0;
+  border-color: #3A3D4A;
+}
+
+@keyframes sat-pulse {
+  0%   { box-shadow: 0 0 0 0    #FF336680; }
+  70%  { box-shadow: 0 0 0 10px #FF336600; }
+  100% { box-shadow: 0 0 0 0    #FF336600; }
+}
+
+/* ==========================================================================
+   3-Weg Mode-Toggle (LIVE / PAPER / AUS) — erweitert .at-mode-toggle
+   ========================================================================== */
+.at-mode-toggle.sat-mode-3 {
+  flex: 1;
+  width: 100%;
+}
+
+.at-mode-toggle.sat-mode-3 button {
+  flex: 1;
+  padding: 10px 16px;
+  transition: all 0.15s;
+}
+
+.at-mode-toggle.sat-mode-3 button:not(:last-child) {
+  border-right: 1px solid #2A2D3A;
+}
+
+.at-mode-toggle.sat-mode-3 button.active.off {
+  background: #3A3D4A44;
+  color: #C8CAD2;
+}
+
+.at-mode-toggle.sat-mode-3 button.active {
+  background: #00A8FF22;
+  color: #00A8FF;
+}
+
+.at-mode-toggle.sat-mode-3 button.active.live {
+  background: #FF336622;
+  color: #FF3366;
+}
+
+/* ==========================================================================
+   Actions (Abbrechen + Speichern nebeneinander)
+   ========================================================================== */
+.sat-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.sat-cancel-btn {
+  flex: 0 0 auto;
+  padding: 13px 20px;
+  background: transparent;
+  color: #A1A4B0;
+  border: 1px solid #2A2D3A;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.sat-cancel-btn:hover {
+  background: #1A1C24;
+  color: #FFFFFF;
+  border-color: #3A3D4A;
+}
+
+/* ==========================================================================
+   Per-Coin Toggle-Grid (falls im Strategy-Modal genutzt)
+   ========================================================================== */
+.sat-coin-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+  gap: 6px;
+  margin-top: 4px;
+}
+.sat-coin-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid #2A2D3A;
+  background: #151515;
+  color: #A1A4B0;
+  font-family: 'Manrope', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+}
+.sat-coin-chip:hover { border-color: #3A3D4A; }
+.sat-coin-chip .sat-coin-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #5C6070;
+  transition: background 0.15s, box-shadow 0.15s;
+}
+.sat-coin-chip.on {
+  border-color: #00FF66;
+  background: #00FF6614;
+  color: #FFFFFF;
+}
+.sat-coin-chip.on .sat-coin-dot {
+  background: #00FF66;
+  box-shadow: 0 0 6px #00FF6688;
+}
+.sat-coin-chip.off {
+  opacity: 0.65;
+}
+
+/* ----- Mobile ------------------------------------------------------------- */
+@media (max-width: 520px) {
+  .sat-actions { flex-direction: column-reverse; }
+  .sat-cancel-btn { width: 100%; }
+}

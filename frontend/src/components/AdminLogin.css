@@ -1,0 +1,13 @@
+.al-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(4px); z-index: 1100; display: flex; align-items: center; justify-content: center; padding: 20px; }
+.al-panel { background: #121212; border: 1px solid #2A2D3A; border-radius: 14px; width: 100%; max-width: 360px; padding: 22px; }
+.al-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.al-title { display: flex; align-items: center; gap: 8px; font-weight: 800; letter-spacing: 0.5px; color: #FFD700; }
+.al-close { background: transparent; border: none; color: #A1A4B0; cursor: pointer; }
+.al-close:hover { color: #fff; }
+.al-hint { font-size: 12px; color: #A1A4B0; margin-bottom: 16px; }
+.al-input { width: 100%; box-sizing: border-box; background: #0A0A0A; border: 1px solid #2A2D3A; border-radius: 8px; padding: 11px 12px; color: #fff; margin-bottom: 10px; }
+.al-input:focus { outline: none; border-color: #00FF66; }
+.al-submit { width: 100%; padding: 12px; background: #00FF66; color: #001a08; border: none; border-radius: 10px; font-weight: 800; cursor: pointer; }
+.al-submit:hover { opacity: 0.9; }
+.al-submit:disabled { opacity: 0.5; }
+.btn-admin-on { border-color: #00FF66 !important; color: #00FF66 !important; }

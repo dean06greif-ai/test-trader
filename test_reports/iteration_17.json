@@ -1,0 +1,24 @@
+{
+  "summary": "Verified iteration 17 changes: (1) QQQ manual-trade Guard + review-Query exclusion + reject-cooldown, (2) chart-signal overlay + rule-TF badges + signal rules_snapshot, (3) range analysis + KI panel regression. Backend unit-suite (10 tests) + new Mongo regression (1 test) all green. Frontend UI: MTF Demo tab shows SignalPanel with rule-tf-badges (@1h, @5m; L2 correctly none), clicking latest-signal opens chart-signal-panel with 3 rules incl. TF-badges 1h/5m/1m, close button removes overlay, re-click toggles it back on. No console errors relevant to features.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": [
+    "/app/backend/tests/test_qqq_range_chart_fixes.py",
+    "/app/backend/tests/test_qqq_review_query_regression.py"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "ai_trade_manager.py file grows large (>600 lines) - consider splitting review()/apply_action() into submodules for maintainability.",
+    "Test file test_qqq_review_query_regression.py uses asyncio.run wrapper because pytest-asyncio is not registered as auto-mode; consider adding pytest-asyncio config for cleaner async tests."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_qqq_review_query_regression.py (new)"
+  ],
+  "success_rate": {"backend": "100% (11/11)", "frontend": "100% (6/6 UI checks)"},
+  "test_credentials": "Admin / Dean06Greif!/Admin (not needed - landing page verified without login)",
+  "seed_data_creation": "Regression test inserts + cleans up 3 auto_trades docs with _test_marker='TEST_qqq_regression'. Demo signal for BTCUSDT/custom_ba25570d left untouched.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Iter 17 verified end-to-end. Unit suite: pytest tests/test_qqq_range_chart_fixes.py + tests/test_qqq_review_query_regression.py. Frontend flow: open landing -> click strategy-tab-custom_ba25570d -> latest-signal box + rule-tf-badge-L0/L1 visible; click latest-signal opens chart-signal-panel with chart-signal-rule-L0/L1/L2 + chart-signal-close. Backend signals endpoint /api/signals?symbol=BTCUSDT&strategy_id=custom_ba25570d returns rules_snapshot with timeframe field per rule as expected.",
+  "rca of the issue": "N/A - verification only"
+}

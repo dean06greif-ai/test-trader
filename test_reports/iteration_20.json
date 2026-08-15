@@ -1,0 +1,31 @@
+{
+  "summary": "Phase 5 'Gate v1 Shadow-Modus' backend fully verified. 11 API tests + 7 pre-existing unit tests -> 18/18 green. Shadow mode active with v1 model, dataset from prod_readonly (970 samples), training produces v2 with all required metrics and versioning (no overwrite), admin-only mutations enforced, settings persist, models endpoint hides booster_b64, report/28d returns evaluated=0 without 500, Phase-4 regression (ai/status tune_conf_min=55, collection_enabled=true) and ai/lab/status still healthy.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "/api/auth/login", "issue": "test_credentials.md lists password 'Dean06Greif!' but backend/.env ADMIN_PASSWORD is 'Dean06Greif!/Admin'. Only the /.env value works. Please align docs or env."}
+    ]
+  },
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": [
+    "/app/backend/tests/test_phase5_ml_gate_api.py",
+    "/app/tests/test_phase5_gate_shadow.py",
+    "/app/test_reports/pytest/phase5_gate_api.xml"
+  ],
+  "action_items": [
+    "Sync /app/memory/test_credentials.md with actual ADMIN_PASSWORD in /app/backend/.env (currently 'Dean06Greif!/Admin')."
+  ],
+  "critical_code_review_comments": [
+    "ml_gate.py: models list endpoint correctly strips booster_b64 - verified via test.",
+    "Versioning append-only in ml_gate_models works (v1 preserved, v2 added).",
+    "PROD_MONGO_URL access is read-only (dataset endpoint reports source=prod_readonly, samples=970 from prod signals+ghost+decisions)."
+  ],
+  "updated_files": ["/app/backend/tests/test_phase5_ml_gate_api.py"],
+  "success_rate": {"backend": "100%", "frontend": "n/a (skipped per request)"},
+  "test_credentials": "Admin / Dean06Greif!/Admin (from /app/backend/.env - NOT the value in test_credentials.md)",
+  "seed_data_creation": "None. Dev-DB writes limited to ml_gate_models (v2 added, v1 preserved) + ml_gate_settings (threshold 0.5 then reset to 0.45). No prod data touched.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Use ADMIN_PASSWORD from /app/backend/.env for /api/auth/login. Phase-5 gate endpoints under /api/ml/gate/{status,dataset,train,models,report,settings}. Training is idempotent-append (always creates a new version). test_gate_train_success expects version=2; if a further training run happened, bump the expected version accordingly.",
+  "rca of the issue": "n/a - no bugs found. Auth confusion resolved by using actual .env password."
+}

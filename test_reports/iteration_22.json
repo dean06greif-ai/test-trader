@@ -1,0 +1,32 @@
+{
+  "summary": "Verified RAM/ML-Lab projection fix + Trade-Manager guards. 9/9 unit tests in /app/tests/test_ram_and_manager_guards.py pass. 10/10 API tests in new /app/backend/tests/test_bugfix_verification_iter22.py pass (health, admin login, /api/ai/ml/dataset, /api/ai/ml/status, /api/ml/gate/status shadow+model_loaded=true, /api/ml/gate/train, DC-KI-Block, DC-manual-Allowed, SL-Ratchet blocked-too-close, SL-Ratchet allowed-with-gap). Regression: test_swing_and_profit_lock.py 24/24 pass. test_review_bugfix_e2e.py: 7/8 pass; test_ai_leverage_clamp fails with pre-existing 'Kill-Switch aktiv' state in dev DB (unrelated to bugfixes - shared kill-switch state).",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "/api/health", "issue": "Occasional 15s read timeout when a heavy /api/ml/gate/train runs concurrently on same worker (flaky, not blocking)."},
+      {"endpoint": "/api/ai/trade/action (regression)", "issue": "test_review_bugfix_e2e.test_ai_leverage_clamp fails due to persistent kill-switch state in dev DB from earlier iterations (pre-existing, not caused by this change)."}
+    ]
+  },
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": [
+    "/app/backend/tests/test_bugfix_verification_iter22.py",
+    "/app/tests/test_ram_and_manager_guards.py",
+    "/app/test_reports/pytest/iter22_bugfix.xml"
+  ],
+  "action_items": [
+    "Optional: consider resetting/gating the kill-switch state so test_ai_leverage_clamp regression is clean (not caused by current bugfixes)."
+  ],
+  "critical_code_review_comments": [
+    "services/ai_trade_manager.min_sl_gap: correctly floors at max(30% initial-SL-distance, 0.1% of mark). Verified deterministically via TESTUSDT symbol (mark falls back to entry).",
+    "apply_action data_collection block: fires only on source='ki'; manual path via /api/autotrade/trade/{id}/action (source=manual, enforce_limits=False) correctly bypasses guard.",
+    "ai_ml_lab _ROW_PROJECTION + gc_after_trial + gc.collect in finally verified via successful /api/ai/ml/dataset call returning valid dataset counts (samples/wins/losses/with_market_state) without 500."
+  ],
+  "updated_files": ["/app/backend/tests/test_bugfix_verification_iter22.py"],
+  "success_rate": {"backend": "100% (bugfix scope, 19/19 tests: 9 unit + 10 API)", "frontend": "n/a (skipped as requested)"},
+  "test_credentials": "Admin / Dean06Greif!/Admin (from /app/memory/test_credentials.md)",
+  "seed_data_creation": "Transient auto_trades docs with id prefix TEST_ inserted into local MongoDB test_database, deleted per-test in finally + module-scope cleanup fixture.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Iter22 covered RAM/ML-Lab OOM fix + Trade-Manager DC/KI + SL-Ratchet guards. Use TESTUSDT symbol so _current_mark falls back to entry (deterministic gaps). /api/ai/ml/dataset returns {'dataset': {...}, 'labels', 'features'} (no top-level 'meta' key). Kill-switch persistent state in dev DB breaks test_ai_leverage_clamp - unrelated. Regression test file /app/backend/tests/test_swing_and_profit_lock.py needs PYTHONPATH=/app/backend to import 'services'.",
+  "rca of the issue": "n/a - both bugfixes verified working. RAM fix: projection restricts each Mongo doc to needed fields, gc.collect in finally releases Optuna trial memory. Guard fix: source='ki' blocked on data_collection trades AND when new SL closer than max(30% initial distance, 0.1% mark) - prevents ratcheting SL to ~0% of price."
+}

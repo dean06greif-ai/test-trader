@@ -1,0 +1,94 @@
+/* Erweiterungen für Backtester: Pro-Strategie-Konfiguration + CSV-Export */
+.btc-chipwrap { display: inline-flex; align-items: center; gap: 3px; }
+.btc-gear {
+  background: #14161f; border: 1px solid #2a2d3a; border-radius: 6px;
+  color: #8b90a0; cursor: pointer; padding: 4px 6px; display: inline-flex;
+  align-items: center; transition: background-color 0.15s, color 0.15s;
+}
+.btc-gear:hover, .btc-gear.on { color: #00a8ff; border-color: #00a8ff; }
+.btc-tf-tag {
+  margin-left: 6px; font-size: 9px; font-weight: 700; color: #00a8ff;
+  background: rgba(0, 168, 255, 0.12); border-radius: 4px; padding: 1px 4px;
+}
+.btc-hint-inline { font-size: 10px; color: #6b7080; font-weight: 400; text-transform: none; }
+
+.btc-panel {
+  margin-top: 10px; background: #101219; border: 1px solid #2a2d3a;
+  border-radius: 10px; padding: 12px;
+}
+.btc-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.btc-title { font-size: 12px; font-weight: 700; color: #e5e7ee; letter-spacing: 0.4px; }
+.btc-badge {
+  margin-left: 8px; font-size: 9px; color: #ffd700; background: rgba(255, 215, 0, 0.1);
+  border-radius: 4px; padding: 1px 5px; font-weight: 700;
+}
+.btc-reset {
+  background: none; border: 1px solid #2a2d3a; border-radius: 6px; color: #8b90a0;
+  font-size: 11px; cursor: pointer; padding: 4px 8px; display: inline-flex; gap: 4px;
+  align-items: center;
+}
+.btc-reset:hover { color: #fff; border-color: #555; }
+.btc-sub { font-size: 10px; font-weight: 700; color: #6b7080; letter-spacing: 0.6px; margin: 12px 0 6px; }
+.btc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+.btc-grid label { display: flex; flex-direction: column; gap: 4px; font-size: 11px; color: #8b90a0; }
+.btc-grid input, .btc-grid select {
+  background: #0a0a0f; border: 1px solid #2a2d3a; border-radius: 6px;
+  color: #fff; padding: 6px 8px; font-size: 12px;
+}
+.btc-grid input:focus, .btc-grid select:focus { border-color: #00a8ff; outline: none; }
+
+.btc-export { margin-left: auto; display: inline-flex; gap: 8px; }
+.btc-export-btn {
+  display: inline-flex; align-items: center; gap: 4px; font-size: 11px;
+  color: #00e5a0; border: 1px solid rgba(0, 229, 160, 0.35); border-radius: 6px;
+  padding: 4px 9px; text-decoration: none; transition: background-color 0.15s;
+}
+.btc-export-btn:hover { background: rgba(0, 229, 160, 0.12); }
+.btc-tf-cell { color: #00a8ff; font-weight: 600; font-size: 11px; }
+
+/* --- Abbruch-Button & ETA (Backtester) --- */
+.bt-progress-row, .opt-progress-row {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 10px; margin-top: 6px;
+}
+.bt-cancel, .opt-cancel-run {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: rgba(255, 71, 87, 0.15); color: #ff4757;
+  border: 1px solid rgba(255, 71, 87, 0.4); border-radius: 6px;
+  padding: 5px 12px; font-size: 12px; font-weight: 700; cursor: pointer;
+  transition: background-color 0.15s;
+}
+.bt-cancel:hover, .opt-cancel-run:hover { background: rgba(255, 71, 87, 0.3); }
+.bt-eta, .opt-eta { color: #ffa502; font-weight: 600; }
+.bt-session-field input { min-width: 190px; }
+.opt-apply-bt { margin-left: 8px; background: rgba(0, 168, 255, 0.15); border-color: rgba(0, 168, 255, 0.4); color: #00A8FF; }
+
+/* Tools-Leiste: RAM / Cache / Einstellungen speichern-laden */
+.bt-tools { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 8px 0 4px; border-top: 1px dashed rgba(255,255,255,0.08); margin-top: 6px; }
+.bt-ram { font-size: 11px; color: #8b93a7; font-family: 'JetBrains Mono', monospace; margin-right: auto; }
+.bt-tool-btn { display: inline-flex; align-items: center; gap: 4px; background: rgba(0,168,255,0.12); border: 1px solid rgba(0,168,255,0.35); color: #00A8FF; border-radius: 6px; padding: 4px 9px; font-size: 11px; cursor: pointer; }
+.bt-tool-btn:hover { background: rgba(0,168,255,0.25); }
+
+/* ---- Ausführungs-Auswahl Cloud/Lokal (Backtester + Optimizer) ---- */
+.bt-exec { display: inline-flex; align-items: center; gap: 6px; }
+.bt-exec-label { font-size: 10.5px; color: #8A8FA3; letter-spacing: 0.04em; }
+.bt-exec-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: #131B2E; border: 1px solid #232E4D; color: #A9B1C7;
+  border-radius: 999px; padding: 5px 12px; font-size: 11.5px; cursor: pointer;
+  transition: border-color 0.15s, background-color 0.15s, color 0.15s;
+}
+.bt-exec-btn:hover { border-color: #00A8FF; }
+.bt-exec-btn.on { background: rgba(0, 168, 255, 0.16); border-color: #00A8FF; color: #7FD4FF; font-weight: 600; }
+.bt-exec-dot { width: 7px; height: 7px; border-radius: 50%; background: #FF5470; }
+.bt-exec-dot.on { background: #37E29A; box-shadow: 0 0 6px rgba(55, 226, 154, 0.8); }
+.bt-exec-manage {
+  background: #1B2440; border: 1px solid #283355; color: #A9B1C7;
+  border-radius: 6px; padding: 5px 7px; cursor: pointer; display: inline-flex;
+}
+.bt-exec-manage:hover { color: #fff; border-color: #3A4A7A; }
+.bt-exec-tag {
+  background: rgba(55, 226, 154, 0.14); border: 1px solid rgba(55, 226, 154, 0.45);
+  color: #7CFFB2; border-radius: 5px; padding: 1px 7px; font-size: 10px;
+  font-weight: 700; margin-right: 7px; vertical-align: 1px;
+}

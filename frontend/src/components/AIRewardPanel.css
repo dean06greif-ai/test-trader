@@ -1,0 +1,45 @@
+/* Belohnungssystem (Reward-Score) im Lern-Panel */
+.ai-reward-panel {
+  margin: 10px 0 14px; padding: 12px 14px; border: 1px solid #232a44;
+  border-radius: 10px; background: #10152a;
+}
+.reward-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.reward-title {
+  display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px;
+  font-weight: 700; color: #d9c86a; letter-spacing: 0.4px;
+}
+.reward-head select {
+  margin-left: auto; background: #161b2e; border: 1px solid #2a3049; color: #a9b1d1;
+  border-radius: 6px; font-size: 11.5px; padding: 3px 6px;
+}
+.reward-reload {
+  background: #161b2e; border: 1px solid #2a3049; color: #a9b1d1; border-radius: 6px;
+  width: 26px; height: 24px; display: inline-flex; align-items: center;
+  justify-content: center; cursor: pointer;
+}
+.reward-reload:hover { color: #fff; }
+.reward-summary {
+  display: flex; flex-wrap: wrap; gap: 14px; font-size: 11.5px; color: #7c839c;
+  margin-bottom: 8px;
+}
+.reward-summary b.pos, .reward-regimes td.pos, .reward-tooltip .pos { color: #4ade80; }
+.reward-summary b.neg, .reward-regimes td.neg, .reward-tooltip .neg { color: #f87171; }
+.reward-trend { display: inline-flex; align-items: center; gap: 4px; font-weight: 600; }
+.reward-trend.pos { color: #4ade80; }
+.reward-trend.neg { color: #f87171; }
+.reward-chart { margin: 4px 0 6px; }
+.reward-empty { font-size: 11.5px; color: #5c6070; line-height: 1.6; padding: 6px 0; }
+.reward-sub { font-size: 11px; font-weight: 700; color: #8f96b3; margin: 8px 0 5px; letter-spacing: 0.4px; }
+.reward-regimes table { width: 100%; border-collapse: collapse; font-size: 11.5px; }
+.reward-regimes th {
+  text-align: left; color: #5c6070; font-weight: 600; padding: 3px 8px 3px 0;
+  border-bottom: 1px solid #1d2338;
+}
+.reward-regimes td { color: #a9b1d1; padding: 4px 8px 4px 0; border-bottom: 1px solid #161b2e; }
+.reward-hint { margin-top: 8px; font-size: 10.5px; color: #565d78; line-height: 1.5; }
+.reward-tooltip {
+  background: #161b2e; border: 1px solid #2a3049; border-radius: 8px; padding: 8px 10px;
+  font-size: 11px; color: #a9b1d1; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+}
+.reward-tt-head { font-weight: 700; color: #e2e6f5; margin-bottom: 3px; }
+.reward-tt-ts { margin-top: 3px; color: #565d78; font-size: 10px; }

@@ -1,0 +1,43 @@
+{
+  "summary": "Iteration 25: Vollstaendige Verifikation der neuen KI-Trader-Reset-Funktion (Backend + Frontend) sowie der neuen Trade-Karten-KI-Begruendung und Live-Chart-Umschaltung. Zusaetzlich: Regime-v2 Unit-Tests + ML-Gate-Report-Regression. Alle Kern-Flows bestanden (10/10 Assertions).",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "tests_executed": {
+    "backend": {
+      "test_regime_v2_and_gate_domain.py": "11/11 passed",
+      "test_iter25_reset_and_gate.py": "5/5 passed - admin login, reset 401 ohne JWT, reset 403 mit falschem PW, reset OK loescht nur ai_trader paper+signals (live+andere Strategien unangetastet, audit_log geschrieben), GET /api/ml/gate/report -> 200"
+    },
+    "frontend_playwright": {
+      "admin_login": "OK (toast 'Admin angemeldet')",
+      "ai_trader_reset_open_btn": "sichtbar in AITradingPanel > Setup-Grid (data-testid=ai-trader-reset-open-btn)",
+      "wrong_password_flow": "Confirm-Klick liefert HTTP 403 (Console: 'Failed to load resource: 403') -> Toast 'Falsches Passwort' wird kurz angezeigt",
+      "correct_password_flow": "Success-Toast 'KI-Trader zurueckgesetzt: 1 Trades, 0 Signale, 0 Rewards geloescht' erscheint",
+      "trade_card_ai_context": "data-testid trade-ai-context-ui-test-1 enthaelt 'KI-BEGRUENDUNG', 'breakout', 'Konfidenz 72%', 'News: bullish'",
+      "trade_ai_reasoning": "data-testid trade-ai-reasoning-ui-test-1 zeigt 'Testmuster: Ausbruch ueber 60m-Range mit Volumen'",
+      "chart_button_switch": "Klick auf trade-open-chart-ui-test-1 wechselt Haupt-Chart-Header korrekt auf 'XRPUSDT 1MIN | LIVE | 200 bars'"
+    }
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iter25_reset_and_gate.py",
+    "/app/backend/tests/test_regime_v2_and_gate_domain.py",
+    "/app/test_reports/pytest/iter25_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "AITradingPanel.js ist 1880 Zeilen gross - sollte in Sub-Panels (Setup, Team, Lab, Chat) aufgeteilt werden (>700-Zeilen-Regel).",
+    "Beim App-Start (unauthenticated) tauchen mehrfach 'TypeError: Failed to fetch' im Console-Log auf (fetchSession, fetchNotif etc.). Ursache offenbar Requests, die vor Session-Bootstrap fehlschlagen. Nicht funktionsblockierend, sollte aber sauberer per Guard/try-catch abgefangen werden.",
+    "Hydration-Warning: '<span> cannot be a child of <option>' (React) - kleiner DOM-Fehler in einer Select-Option, sollte bereinigt werden.",
+    "AITraderReset.js schliesst den Password-Row nach falscher Passwort-Eingabe nicht automatisch - UX-Punkt (Passwort bleibt sichtbar, ok).",
+    "reset-Endpoint POST /api/ai/trader/reset validiert Passwort per String-Vergleich gegen ADMIN_PASSWORD - kein Rate-Limit; da Admin-JWT-guarded akzeptabel, koennte aber Bruteforce-Log ergaenzt werden."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_iter25_reset_and_gate.py (neu erstellt)"
+  ],
+  "success_rate": {"backend": "100% (16/16 relevante Tests)", "frontend": "100% (alle geforderten data-testids gefunden + Flows funktional)"},
+  "test_credentials": "Admin / Dean06Greif!/Admin (aus /app/memory/test_credentials.md, funktioniert)",
+  "seed_data_creation": "Backend-Test: auto_trades T25-paper-1/T25-live-1/T25-mom-1 + signals S25-ai-1/S25-mom-1 (in-test seed+cleanup). Frontend-Test: auto_trades ui-test-1 XRPUSDT (ai_reasoning+ai_confidence+ai_news_impact). Alle Seed-Daten wurden nach den Tests wieder aus test_database geloescht (verifiziert).",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Reset-UI Pfad: strategy-tab-ai_trader -> edit-strategy-params-btn -> ai-setup-toggle -> ai-trader-reset-open-btn. Trade-Karten: Rechte Sidebar view-trades -> trade-card-toggle-<id>. AITradingPanel oeffnet direkt in Chat-Ansicht - Setup-Grid nur nach Klick auf ai-setup-toggle sichtbar. Backend Login-Endpoint: POST /api/auth/login mit {username,password} -> {access_token}.",
+  "rca of the issue": "N/A - keine Bugs gefunden. Reset-Flow, Trade-Karten-KI-Kontext, Chart-Umschaltung und ML-Gate-Report funktionieren wie spezifiziert."
+}

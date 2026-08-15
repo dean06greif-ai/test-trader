@@ -1,0 +1,293 @@
+@import url('https://fonts.googleapis.com/css2?family=Chivo:wght@300;900&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: 'Manrope', sans-serif;
+  background: #0A0A0A;
+  color: #FFFFFF;
+  overflow-x: hidden;
+}
+.App {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #0A0A0A;
+}
+.app-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr 320px;
+  gap: 0;
+  /* Seiten-Scroll statt fester Viewport-Höhe: das Strategie-/Regel-Panel ist
+     nicht mehr einzeln scrollbar, man scrollt mit dem normalen Website-Scroller
+     (Wunsch des Traders). Sidebar & Analyse-Panel bleiben per sticky sichtbar. */
+  height: auto;
+  min-height: calc(100vh - 70px);
+  min-height: calc(100dvh - 70px);
+  border-top: 1px solid #2A2D3A;
+}
+.main-content {
+  display: grid;
+  /* Chart-Zeile bekommt eine GARANTIERTE Mindesthöhe – so kann
+     weder die Strategie-Leiste noch das Signal-Panel den Chart zusammendrücken */
+  grid-template-rows: auto auto auto;
+  gap: 0;
+  background: #121212;
+  border-left: 1px solid #2A2D3A;
+  border-right: 1px solid #2A2D3A;
+  overflow: visible;
+  min-height: 0;
+}
+/* Chart-Bug-Fix: sichert dem Chart eine nutzbare Mindesthöhe */
+.main-content .chart-wrap {
+  min-height: 296px;
+}
+/* Desktop: Chart behält eine Viewport-basierte Höhe, alles darunter (Regeln,
+   Signal-Panel) steht fest im Seitenfluss – gescrollt wird die ganze Seite. */
+@media (min-width: 969px) {
+  .main-content .chart-wrap {
+    height: clamp(340px, calc(100dvh - 340px), 900px);
+  }
+  .coin-sidebar,
+  .right-panel {
+    position: sticky;
+    top: 0;
+    align-self: start;
+    height: calc(100vh - 70px);
+    height: calc(100dvh - 70px);
+    overflow-y: auto;
+  }
+}
+.right-panel {
+  background: #121212;
+  overflow-y: auto;
+}
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0A0A0A;
+}
+::-webkit-scrollbar-thumb {
+  background: #2A2D3A;
+  border-radius: 0;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3A3D4A;
+}
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Chivo', sans-serif;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+.mono {
+  font-family: 'JetBrains Mono', monospace;
+  font-variant-numeric: tabular-nums;
+}
+/* Colors */
+.text-primary {
+  color: #FFFFFF;
+}
+.text-secondary {
+  color: #A1A4B0;
+}
+.text-muted {
+  color: #5C6070;
+}
+.text-long {
+  color: #00FF66;
+}
+.text-short {
+  color: #FF3366;
+}
+.text-warning {
+  color: #FFD700;
+}
+.bg-surface-1 {
+  background: #121212;
+}
+.bg-surface-2 {
+  background: #1A1C23;
+}
+.border-default {
+  border-color: #2A2D3A;
+}
+/* Buttons */
+.btn {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 600;
+  padding: 10px 20px;
+  border: 1px solid #2A2D3A;
+  background: #121212;
+  color: #FFFFFF;
+  border-radius: 0;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  font-size: 14px;
+}
+.btn:hover {
+  border-color: #3A3D4A;
+  background: #1A1C23;
+}
+.btn-long {
+  border-color: #00FF66;
+  color: #00FF66;
+}
+.btn-long:hover {
+  background: rgba(0, 255, 102, 0.1);
+  border-color: #00FF66;
+}
+.btn-short {
+  border-color: #FF3366;
+  color: #FF3366;
+}
+.btn-short:hover {
+  background: rgba(255, 51, 102, 0.1);
+  border-color: #FF3366;
+}
+.btn-admin {
+  padding: 10px 12px;
+  color: #FFB020;
+  border-color: rgba(255, 176, 32, 0.35);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.2s, background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+.btn-admin:hover {
+  background: rgba(255, 176, 32, 0.08);
+  border-color: #FFB020;
+}
+.btn-admin.is-admin {
+  color: #00FF66;
+  border-color: rgba(0, 255, 102, 0.45);
+  box-shadow: 0 0 0 1px rgba(0, 255, 102, 0.15) inset;
+}
+.btn-admin.is-admin:hover {
+  background: rgba(0, 255, 102, 0.08);
+  border-color: #00FF66;
+}
+/* Cards */
+.card {
+  background: #121212;
+  border: 1px solid #2A2D3A;
+  border-radius: 0;
+  padding: 16px;
+}
+.card-header {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #A1A4B0;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+/* Badges */
+.badge {
+  display: inline-block;
+  padding: 4px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid;
+  font-family: 'JetBrains Mono', monospace;
+}
+.badge-long {
+  color: #00FF66;
+  border-color: #00FF66;
+  background: rgba(0, 255, 102, 0.1);
+}
+.badge-short {
+  color: #FF3366;
+  border-color: #FF3366;
+  background: rgba(255, 51, 102, 0.1);
+}
+.badge-swing {
+  color: #7dd8ff;
+  border-color: #7dd8ff;
+  background: rgba(125, 216, 255, 0.1);
+}
+.badge-collection {
+  color: #d8b4fe;
+  border-color: #d8b4fe;
+  background: rgba(216, 180, 254, 0.1);
+}
+.badge-active {
+  color: #00FF66;
+  border-color: #00FF66;
+  background: rgba(0, 255, 102, 0.1);
+  animation: pulse 2s infinite;
+}
+.badge-inactive {
+  color: #5C6070;
+  border-color: #2A2D3A;
+  background: rgba(90, 96, 112, 0.1);
+}
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+/* Flash animation for signals */
+@keyframes flash-green {
+  0%, 100% {
+    border-color: #2A2D3A;
+  }
+  50% {
+    border-color: #00FF66;
+    box-shadow: 0 0 20px rgba(0, 255, 102, 0.3);
+  }
+}
+@keyframes flash-red {
+  0%, 100% {
+    border-color: #2A2D3A;
+  }
+  50% {
+    border-color: #FF3366;
+    box-shadow: 0 0 20px rgba(255, 51, 102, 0.3);
+  }
+}
+.flash-long {
+  animation: flash-green 0.5s ease-in-out 3;
+}
+.flash-short {
+  animation: flash-red 0.5s ease-in-out 3;
+}
+/* Responsive */
+@media (max-width: 1200px) {
+  .app-layout {
+    grid-template-columns: 240px 1fr 280px;
+  }
+}
+@media (max-width: 968px) {
+  .app-layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    height: auto;
+    min-height: calc(100vh - 70px);
+    min-height: calc(100dvh - 70px);
+  }
+  .main-content {
+    overflow: visible;
+    min-height: 60vh;
+    border-left: none;
+    border-right: none;
+    border-top: 1px solid #2A2D3A;
+    border-bottom: 1px solid #2A2D3A;
+  }
+  
+  .right-panel {
+    border-top: 1px solid #2A2D3A;
+    overflow: visible;
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "summary": "Alle Verbesserungen 0.6 verifiziert (Backend + Frontend). Pytest-Suite (3 Zielfiles) 44/44 grün. Alle geforderten API-Endpoints (/api/autotrade/watchdog/status|config|clear, /api/autotrade/trades) liefern 200; live_pnl_source ist bei geschlossenen Trades null (open-Trades derzeit keine – Bitunix nicht konfiguriert, live_pnl_source-Fallback 'scanner' code-verifiziert via pytest). Frontend: Glocke ist an Blitz gekoppelt – 4/6 Strategien ohne Auto-Trade haben Bell in 'off'-Zustand; Klick auf gesperrte Glocke schreibt Fehler-Notification 'Glocke nur möglich, wenn Auto-Trade (Blitz) aktiv ist' in Benachrichtigungsglocke (via /api/notifications verifiziert). Settings > Positions-Watchdog vollständig sichtbar mit Toggle (enabled), Manage-External-Toggle, Verlauf-Löschen-Button und Text 'Manuell (Bitunix)'. PerformanceAnalytics.css enthält .tdc-pnl-pct { flex-shrink:0; white-space:nowrap; } wie gefordert. Watchdog wurde nach dem Test wieder enabled=true belassen.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_improvements_0_6.py",
+    "/app/backend/tests/test_position_watchdog.py",
+    "/app/backend/tests/test_playbook_backups_notify.py"
+  ],
+  "action_items": [
+    "Keine kritischen Punkte. Optional/Info: Die Meldung 'Glocke nur möglich, wenn Auto-Trade (Blitz) aktiv ist' erscheint NICHT als visuell aufpoppender Toast, sondern wird per Design (siehe /app/frontend/src/lib/toast.js Kommentar) still in die Benachrichtigungsglocke geschrieben. Das ist per aktuellem Code beabsichtigt; falls die Anforderung wirklich einen sichtbaren Popup-Toast verlangt, müsste toast.error zusätzlich sonner.error() aufrufen."
+  ],
+  "critical_code_review_comments": [
+    "services/ai_providers._backup_env_names: numerische Sortierung 2 < 17 korrekt implementiert (unbegrenzte _BACKUPn Keys, Fremdsuffix wie _BACKUPX werden ignoriert) – pytest bestätigt.",
+    "core/utils._enrich_trade: exchange-Override setzt live_pnl_source='bitunix' und nutzt uPnL der Börse, skaliert Rest-Menge korrekt bei Teilclose (TP1 50%) – pytest bestätigt.",
+    "services/position_watchdog._adopt: strategy_name='Manuell (Bitunix)', manual_trade=True, external_adopted=True, strategy_id='external' rückwärtskompatibel – pytest bestätigt.",
+    "services/session_levels: Asia/London/NY H/L Erkennung und Volume-Cluster-Zonen funktionieren, levels_text enthält Sweep-Hinweis – pytest bestätigt.",
+    "StrategyTabs.js Zeile 88: sigOn = isSignalsEnabled(id) && atStatus !== null – Kopplung Glocke↔Blitz korrekt.",
+    "PerformanceAnalytics.css Zeile 451-458: flex-shrink:0 + white-space:nowrap für .tdc-pnl-pct und .tdc-pnl verhindert Truncation.",
+    "Hinweis (nicht Bug): /app/frontend/src/lib/toast.js unterdrückt visuelle Popups für toast.error/warning und leitet sie in die Notification-Bell um – konsistent mit Iter12."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "100% (44/44 Zieltests + alle geforderten Endpoints)", "frontend": "100% (Bell-Kopplung, Watchdog-Sektion, CSS-Fix)"},
+  "test_credentials": "Admin/admin123 (aus /app/backend/.env, /app/memory/test_credentials.md)",
+  "seed_data_creation": "Keine – nur bestehende Fixture-Trades gelesen. Watchdog-Enabled zwischenzeitlich false gesetzt und wieder auf true zurückgeschaltet.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "0.6-Improvements getestet. Wichtige Endpoints: GET /api/autotrade/watchdog/status (public), POST /api/autotrade/watchdog/config + /clear (admin, Bearer token via /api/auth/login username=Admin password=admin123). Frontend-Testids: strategy-bell-toggle-<id>, strategy-trade-toggle-<id>, admin-lock-button, settings-button, watchdog-enabled-toggle, watchdog-manage-external-toggle, watchdog-clear-btn, watchdog-run-btn, watchdog-status. Bitunix ist absichtlich nicht konfiguriert → configured:false ist erwartet, keine offenen Live-Trades vorhanden → live_pnl_source='bitunix' wird nur pytest-verifiziert. Toast.error zeigt KEINE Popups – Meldungen landen in der Notification-Bell (GET /api/notifications?filter=unread verifiziert).",
+  "rca of the issue": "N/A – keine Regressionen gefunden."
+}

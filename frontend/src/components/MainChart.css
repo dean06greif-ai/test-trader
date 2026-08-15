@@ -1,0 +1,361 @@
+.main-chart {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #121212;
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid #2A2D3A;
+}
+
+.chart-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.chart-title > span:first-child {
+  font-size: 18px;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+.chart-subtitle {
+  font-size: 11px;
+  color: #5C6070;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+}
+
+.chart-indicators {
+  display: flex;
+  gap: 16px;
+}
+
+.indicator-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #A1A4B0;
+  font-weight: 600;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: opacity 0.15s, color 0.15s;
+}
+.indicator-label:hover { color: #E8EAF0; }
+.indicator-label.off { opacity: 0.35; }
+
+.indicator-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+/* Wrapper: eigener stacking- und resize-Kontext, damit der Chart
+   nicht in einer Feedback-Schleife mit dem Flex-Parent immer kleiner wird.
+   - min-height: 0 ist Pflicht in Flex-Column-Layouts, sonst kollabiert der Chart
+   - overflow: hidden isoliert die ResizeObserver-Messung von lightweight-charts */
+.chart-wrap {
+  flex: 1 1 auto;
+  position: relative;
+  min-height: 0;
+  min-width: 0;
+  width: 100%;
+  overflow: hidden;
+  contain: strict;
+}
+
+.chart-container {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.chart-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(18, 18, 18, 0.85);
+  color: #A1A4B0;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.chart-overlay.chart-error {
+  color: #FF4D4D;
+}
+
+/* Liquiditäts-Overlay (standardmäßig aus, keine Persistenz) */
+.chart-liq-toggle {
+  background: #151b26; color: #7f93ad; border: 1px solid #26303f; border-radius: 999px;
+  padding: 3px 10px; font-size: 10px; font-weight: 700; letter-spacing: .8px;
+  cursor: pointer; transition: color .18s ease, border-color .18s ease, background-color .18s ease;
+}
+.chart-liq-toggle:hover { color: #cfe0f5; border-color: #3d78d8; }
+.chart-liq-toggle.on { color: #0b0f16; background: #4d9cff; border-color: #4d9cff; }
+.chart-liq-toggle.heat:hover { color: #ffd9c4; border-color: #ff9f43; }
+.chart-liq-toggle.heat.on { color: #16100b; background: #ff9f43; border-color: #ff9f43; }
+.chart-heat-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+.chart-liq-chip.heat-low { color: #7ab6ff; border-color: #2a4a75; }
+.chart-liq-chip.heat-mid { color: #ffb877; border-color: #7a5230; }
+.chart-liq-chip.heat-high { color: #ff8ba6; border-color: #77304a; }
+
+.chart-range-group { display: inline-flex; gap: 4px; margin-left: 10px; }
+.chart-liq-toggle.range { white-space: nowrap; }
+.chart-liq-toggle.range.on { color: #0b0f16; background: #00FF66; border-color: #00FF66; }
+
+/* Zeit-Dropdown (ersetzt die 1W/1M/1Y-Buttons) */
+.chart-range-dd { position: relative; display: inline-flex; margin-left: 10px; }
+.chart-range-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  min-width: 168px;
+  background: #14161d;
+  border: 1px solid #2A2D3A;
+  border-radius: 10px;
+  padding: 4px;
+  z-index: 20;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.55);
+}
+.chart-range-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  width: 100%;
+  background: none;
+  border: none;
+  border-radius: 7px;
+  padding: 6px 10px;
+  cursor: pointer;
+  color: #c7cddb;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: left;
+  transition: background-color 0.15s, color 0.15s;
+}
+.chart-range-item small {
+  font-size: 9.5px;
+  font-weight: 600;
+  color: #5C6070;
+  letter-spacing: 0.05em;
+}
+.chart-range-item:hover { background: #1d2230; color: #fff; }
+.chart-range-item.active { background: #12291c; color: #00FF66; }
+.chart-range-item.active small { color: #2f7a52; }
+.chart-range-item.reset { color: #ff9c9c; }
+.chart-range-hint {
+  padding: 6px 10px 4px;
+  font-size: 9.5px;
+  color: #5C6070;
+  border-top: 1px solid #1E2028;
+  margin-top: 4px;
+  max-width: 190px;
+}
+
+/* Offene Trades: kompakte Badge-Leiste oben links im Chart */
+.chart-open-trades {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  pointer-events: none;
+}
+.chart-open-badge {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: rgba(17, 20, 27, 0.88);
+  border: 1px solid #2A2D3A;
+  border-left-width: 3px;
+  font-size: 11px;
+  cursor: default;
+  backdrop-filter: blur(4px);
+  transition: border-color 0.15s, transform 0.15s;
+}
+.chart-open-badge:hover { transform: translateX(2px); }
+.chart-open-badge { cursor: pointer; }
+.chart-open-badge.pinned { outline: 1px solid #F5C518; box-shadow: 0 0 8px rgba(245,197,24,0.35); }
+.chart-open-badge.long { border-left-color: #00FF66; }
+.chart-open-badge.short { border-left-color: #FF3366; }
+.chart-open-badge.long .cob-side { color: #00FF66; }
+.chart-open-badge.short .cob-side { color: #FF3366; }
+.chart-open-badge .cob-side { font-weight: 800; letter-spacing: 0.04em; }
+.chart-open-badge .cob-swing {
+  color: #7dd8ff;
+  border: 1px solid rgba(125, 216, 255, 0.5);
+  border-radius: 4px;
+  padding: 0 4px;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+}
+.chart-open-badge .cob-meta { color: #7C8CA3; font-weight: 700; font-size: 10px; }
+.chart-open-badge .cob-entry { color: #A1A4B0; font-weight: 600; font-variant-numeric: tabular-nums; }
+.chart-open-badge .cob-pnl { font-weight: 800; font-variant-numeric: tabular-nums; }
+.chart-open-badge .cob-pnl.pos { color: #00FF66; }
+.chart-open-badge .cob-pnl.neg { color: #FF3366; }
+.chart-open-badge.more { color: #7C8CA3; font-weight: 700; font-size: 10px; }
+
+/* Manueller Trade: dezenter Button + Popover-Formular */
+.manual-trade { position: relative; display: inline-flex; }
+.chart-liq-toggle.manual:hover { color: #d8f7c9; border-color: #58c765; }
+.manual-trade-pop {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 230px;
+  background: #14161d;
+  border: 1px solid #2A2D3A;
+  border-radius: 12px;
+  padding: 12px;
+  z-index: 30;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
+}
+.manual-trade-pop .mt-head {
+  font-size: 11px; font-weight: 800; color: #E8EAF0; letter-spacing: 0.05em;
+  margin-bottom: 10px;
+}
+.mt-sides { display: flex; gap: 6px; margin-bottom: 10px; }
+.mt-side {
+  flex: 1; padding: 6px 0; border-radius: 8px; font-size: 11px; font-weight: 800;
+  background: #10131a; border: 1px solid #2A2D3A; color: #7C8CA3; cursor: pointer;
+  transition: color 0.15s, border-color 0.15s, background-color 0.15s;
+}
+.mt-side.long.on { color: #0b0f16; background: #00FF66; border-color: #00FF66; }
+.mt-side.short.on { color: #fff; background: #FF3366; border-color: #FF3366; }
+.mt-row {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 7px; font-size: 11px; color: #A1A4B0; font-weight: 600;
+}
+.mt-input { display: inline-flex; align-items: center; gap: 4px; }
+.mt-input input {
+  width: 64px; padding: 4px 6px; border-radius: 6px; text-align: right;
+  background: #10131a; border: 1px solid #2A2D3A; color: #E8EAF0;
+  font-size: 11px; font-weight: 700;
+}
+.mt-input em { font-style: normal; color: #5C6070; font-size: 10px; width: 12px; }
+.mt-hint { font-size: 9.5px; color: #5C6070; margin: 4px 0 10px; }
+.mt-submit {
+  width: 100%; padding: 7px 0; border-radius: 8px; border: none;
+  font-size: 12px; font-weight: 800; cursor: pointer; letter-spacing: 0.04em;
+  transition: filter 0.15s;
+}
+.mt-submit.long { background: #00FF66; color: #0b0f16; }
+.mt-submit.short { background: #FF3366; color: #fff; }
+.mt-submit:hover { filter: brightness(1.12); }
+.mt-submit:disabled { opacity: 0.5; cursor: wait; }
+.chart-liq-toggle.trades:hover { color: #d8f7c9; border-color: #58c765; }
+.chart-liq-toggle.trades.on { color: #0b0f16; background: #9be15d; border-color: #9be15d; }
+
+.chart-trade-tip {
+  position: absolute;
+  z-index: 6;
+  max-width: 260px;
+  background: #14161dee;
+  border: 1px solid #2A2D3A;
+  border-radius: 8px;
+  padding: 8px 10px;
+  pointer-events: none;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.5);
+}
+.chart-trade-tip-row {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 2px 0;
+  font-size: 11px;
+}
+.chart-trade-tip-row b { color: #E8EAF0; font-size: 11.5px; }
+.chart-trade-tip-row span { color: #8b93a7; font-size: 10.5px; }
+.chart-liq-legend {
+  display: flex; flex-wrap: wrap; gap: 6px; padding: 6px 14px 8px;
+  border-bottom: 1px solid #1E2028;
+}
+.chart-liq-chip {
+  font-size: 10px; padding: 2px 8px; border-radius: 999px;
+  background: #131a24; border: 1px solid #222c3a; color: #9fb2c9;
+}
+.chart-liq-chip.above { color: #ff9c9c; border-color: #4a2630; }
+.chart-liq-chip.below { color: #7ee0a8; border-color: #1f4436; }
+.chart-liq-err { font-size: 10.5px; color: #ff9c9c; }
+
+/* Signal-Overlay: Regeln + Timeframes zum angeklickten Signal */
+.chart-signal-panel {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 12;
+  max-width: 340px;
+  background: rgba(14, 15, 20, 0.92);
+  border: 1px solid #2A2D3A;
+  border-left: 3px solid #00FF66;
+  border-radius: 6px;
+  padding: 8px 10px;
+  backdrop-filter: blur(6px);
+  font-size: 11px;
+}
+.chart-signal-panel.short { border-left-color: #FF3366; }
+.csp-head { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+.csp-badge { font-weight: 700; font-size: 10px; padding: 1px 6px; border-radius: 3px; }
+.csp-badge.long { background: rgba(0, 255, 102, 0.15); color: #00FF66; }
+.csp-badge.short { background: rgba(255, 51, 102, 0.15); color: #FF3366; }
+.csp-title { color: #E6E8F0; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.csp-time { color: #8A8FA3; font-size: 10px; margin-left: auto; }
+.csp-close { background: none; border: none; color: #8A8FA3; cursor: pointer; font-size: 12px; padding: 0 2px; }
+.csp-close:hover { color: #fff; }
+.csp-rules { display: flex; flex-direction: column; gap: 3px; max-height: 180px; overflow-y: auto; }
+.csp-rule { display: flex; align-items: center; gap: 6px; color: #8A8FA3; }
+.csp-rule.met { color: #E6E8F0; }
+.csp-check { width: 12px; color: #555; }
+.csp-rule.met .csp-check { color: #00FF66; }
+.csp-label { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.csp-tf {
+  font-family: monospace;
+  font-size: 10px;
+  padding: 0 5px;
+  border-radius: 3px;
+  background: #1E2028;
+  color: #8A8FA3;
+  flex-shrink: 0;
+}
+.csp-tf.override { background: rgba(0, 168, 255, 0.15); color: #00A8FF; font-weight: 700; }
+.csp-empty { color: #8A8FA3; font-style: italic; }
+
+/* Regime-Badge im Chart-Header (aktuelles Markt-Regime v2 + Tages-Bias) */
+.regime-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-left: 8px; padding: 2px 8px;
+  font-size: 10.5px; font-weight: 600; letter-spacing: 0.3px;
+  border: 1px solid; border-radius: 999px;
+  cursor: default; white-space: nowrap;
+}
+.regime-badge-bias { opacity: 0.75; font-weight: 500; }
+

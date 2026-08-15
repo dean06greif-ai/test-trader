@@ -1,0 +1,395 @@
+diff --git a/backend/services/bitunix_trade.py b/backend/services/bitunix_trade.py
+index e9fd286..d8c42db 100644
+--- a/backend/services/bitunix_trade.py
++++ b/backend/services/bitunix_trade.py
+@@ -4,24 +4,25 @@ and an AutoTradeManager that opens/manages auto-trades with dynamic SL/TP,
+ partial TP1 and break-even logic.
+ 
+ Fix summary (Bitunix Live-Trading):
+-- Root cause: The app used the internal short names GOLD / SILVER / OIL as
++- Root cause #1: The app used the internal short names GOLD / SILVER / OIL as
+   order symbols. Bitunix does not know these symbols and rejected the order
+   with code 300105 "System error".
+-  The real Bitunix USDT-M futures contracts are:
+       GOLD   -> XAUUSDT
+       SILVER -> XAGUSDT
+       OIL    -> CLUSDT
+-  Crypto symbols like BTCUSDT / XRPUSDT already match.
+-- Every private call to Bitunix (place_order, flash_close, set_leverage,
+-  get_positions) now translates the internal symbol via `to_bitunix_symbol()`.
+-- The mapping is validated at startup against
+-  GET /api/v1/futures/market/trading_pairs so future contract-name changes
+-  on Bitunix don't break us silently.
+-- Second fix: `on_signal` no longer stores the trade locally when the live
+-  order was rejected. Instead a Telegram alert is emitted and the trade is
+-  dropped. That prevents "ghost positions" that never existed on Bitunix.
+-- qty/price are sent as strings, rounded to the contract's step/tick size
+-  when the metadata is available.
++- Root cause #2 (code 30027 "TP price must be greater than mark price"):
++  Bitunix returns `basePrecision` / `quotePrecision` as the NUMBER OF DECIMAL
++  PLACES (e.g. AVAXUSDT quotePrecision = 3 means tick 0.001). The old code
++  treated those integers as the tick STEP itself, so 6.716963 was rounded
++  DOWN to a multiple of 3.0 -> 6.0, which is below the mark price and
++  produces code 30027. Fix: convert decimals to step via 10^(-decimals).
++- Root cause #3: For MARKET orders SL/TP were calculated from the stale
++  `signal.entry_price`. If the market moved between signal generation and
++  order submit, TP could end up on the wrong side of the current mark.
++  Fix: fetch the live mark price right before submitting a MARKET order,
++  re-derive SL/TP against the mark, and enforce a minimum distance buffer
++  so Bitunix cannot reject with code 30027 / 30028.
++- `on_signal` never persists a local trade if the live order was rejected.
+ """
+ import os
+ import time
+@@ -78,11 +79,65 @@ def _round_step(value: float, step: float) -> str:
+     d_val = Decimal(str(value))
+     d_step = Decimal(str(step))
+     quant = (d_val / d_step).to_integral_value(rounding=ROUND_DOWN) * d_step
+-    # normalize: drop useless trailing zeros but keep required precision
+-    s = format(quant.normalize(), "f")
++    # Force the string to carry the same number of fractional digits as `step`
++    # so tiny values (e.g. 6.717) don't get normalized to "6" and land below
++    # the mark price -> Bitunix code 30027. Whole-unit steps (>=1) keep no
++    # trailing zeros so integer quantities look like "149" not "149.0".
++    step_exp = -d_step.as_tuple().exponent
++    if d_step >= 1:
++        s = format(quant.to_integral_value(), "f")
++    elif step_exp > 0:
++        q = quant.quantize(Decimal(10) ** -step_exp)
++        s = format(q, "f")
++    else:
++        s = format(quant, "f")
+     return s if s else "0"
+ 
+ 
++def _round_step_up(value: float, step: float) -> str:
++    """Same as `_round_step` but rounds UP (used for SHORT TP so the TP still
++    ends up strictly below the mark price after rounding)."""
++    from decimal import ROUND_UP
++    if step <= 0:
++        return f"{value}"
++    d_val = Decimal(str(value))
++    d_step = Decimal(str(step))
++    quant = (d_val / d_step).to_integral_value(rounding=ROUND_UP) * d_step
++    step_exp = -d_step.as_tuple().exponent
++    if d_step >= 1:
++        s = format(quant.to_integral_value(), "f")
++    elif step_exp > 0:
++        q = quant.quantize(Decimal(10) ** -step_exp)
++        s = format(q, "f")
++    else:
++        s = format(quant, "f")
++    return s if s else "0"
++
++
++def _precision_to_step(precision) -> float:
++    """Bitunix returns basePrecision / quotePrecision as the NUMBER OF
++    DECIMAL PLACES (integer), not as a tick step. Convert defensively:
++      3          -> 0.001
++      "0.001"    -> 0.001   (already a step)
++      0          -> 1       (whole units)
++    """
++    if precision is None:
++        return 0.0
++    try:
++        p = float(precision)
++    except (TypeError, ValueError):
++        return 0.0
++    if p == 0:
++        return 1.0
++    # A value <= 0 or already smaller than 1 is treated as a real step size.
++    if 0 < p < 1:
++        return p
++    # Positive integer -> decimals count -> 10^-p
++    if p == int(p) and 0 < p <= 12:
++        return 10 ** (-int(p))
++    return p
++
++
+ class BitunixTradeClient:
+     """Live Bitunix USDT-M futures client (signed private endpoints).
+ 
+@@ -152,10 +207,22 @@ class BitunixTradeClient:
+                 continue
+             valid.add(sym)
+             try:
++                # Bitunix returns basePrecision / quotePrecision as the NUMBER
++                # OF DECIMAL PLACES (integer), NOT as a tick step. Convert.
++                qty_step = _precision_to_step(row.get("basePrecision"))
++                price_tick = _precision_to_step(
++                    row.get("quotePrecision") or row.get("pricePrecision")
++                )
++                min_qty = float(row.get("minTradeVolume") or 0) or 0.0
++                # If minTradeVolume is provided and is bigger than the derived
++                # step (e.g. AVAX minTradeVolume=1 but basePrecision=0 -> step
++                # would be 1 too), keep whichever is stricter.
++                if min_qty and (not qty_step or min_qty > qty_step):
++                    qty_step = min_qty
+                 meta[sym] = {
+-                    "qty_step": float(row.get("basePrecision") or row.get("minTradeVolume") or 0) or 0.0,
+-                    "price_tick": float(row.get("quotePrecision") or row.get("pricePrecision") or 0) or 0.0,
+-                    "min_qty": float(row.get("minTradeVolume") or 0) or 0.0,
++                    "qty_step": qty_step,
++                    "price_tick": price_tick,
++                    "min_qty": min_qty,
+                 }
+             except (TypeError, ValueError):
+                 meta[sym] = {}
+@@ -210,25 +277,63 @@ class BitunixTradeClient:
+             return _round_step(qty, step)
+         return f"{qty}"
+ 
+-    def _fmt_price(self, bitunix_symbol: str, price: float) -> str:
++    def _fmt_price(self, bitunix_symbol: str, price: float, direction: str = "down") -> str:
++        """Round price to tick. `direction`:
++           - "down": floor to tick (safe for LONG SL, SHORT TP)
++           - "up":   ceil to tick  (safe for LONG TP, SHORT SL)
++        """
+         m = self._pairs_meta.get(bitunix_symbol) or {}
+         tick = m.get("price_tick") or 0.0
+         if tick > 0:
++            if direction == "up":
++                return _round_step_up(price, tick)
+             return _round_step(price, tick)
+         return f"{price}"
+ 
++    def price_tick(self, bitunix_symbol: str) -> float:
++        m = self._pairs_meta.get(bitunix_symbol) or {}
++        return float(m.get("price_tick") or 0.0)
++
++    async def get_mark_price(self, symbol: str) -> Optional[float]:
++        """Fetch current mark price (public endpoint, no auth). Returns None on
++        failure so the caller can decide to abort/adjust."""
++        b_symbol = self.to_bitunix_symbol(symbol)
++        url = f"{self.base}/api/v1/futures/market/tickers"
++        try:
++            async with aiohttp.ClientSession() as s:
++                async with s.get(url, params={"symbols": b_symbol},
++                                 timeout=aiohttp.ClientTimeout(total=10)) as r:
++                    payload = await r.json()
++        except Exception as e:
++            logger.error(f"get_mark_price({symbol}) failed: {e}")
++            return None
++        data = payload.get("data") if isinstance(payload, dict) else None
++        if not isinstance(data, list) or not data:
++            return None
++        try:
++            return float(data[0].get("markPrice") or data[0].get("lastPrice") or 0) or None
++        except (TypeError, ValueError):
++            return None
++
+     async def place_order(self, symbol, side, qty, order_type="MARKET", price=None,
+-                          tp_price=None, sl_price=None, reduce_only=False):
++                          tp_price=None, sl_price=None, reduce_only=False,
++                          position_side: str = "LONG"):
+         b_symbol = self.to_bitunix_symbol(symbol)
+         body = {"symbol": b_symbol, "qty": self._fmt_qty(b_symbol, qty), "side": side,
+                 "tradeSide": "OPEN", "orderType": order_type}
+         if order_type == "LIMIT" and price:
+-            body["price"] = self._fmt_price(b_symbol, price)
++            body["price"] = self._fmt_price(b_symbol, price, "down")
++        # For LONG (BUY): TP must be > mark, SL must be < mark
++        # For SHORT (SELL): TP must be < mark, SL must be > mark
++        # -> round in the SAFE direction so tick rounding never flips the side.
++        is_long = (position_side or "").upper() == "LONG" or side == "BUY"
++        tp_dir = "up" if is_long else "down"
++        sl_dir = "down" if is_long else "up"
+         if tp_price:
+-            body.update({"tpPrice": self._fmt_price(b_symbol, tp_price),
++            body.update({"tpPrice": self._fmt_price(b_symbol, tp_price, tp_dir),
+                          "tpStopType": "MARK_PRICE", "tpOrderType": "MARKET"})
+         if sl_price:
+-            body.update({"slPrice": self._fmt_price(b_symbol, sl_price),
++            body.update({"slPrice": self._fmt_price(b_symbol, sl_price, sl_dir),
+                          "slStopType": "MARK_PRICE", "slOrderType": "MARKET"})
+         if reduce_only:
+             body["reduceOnly"] = True
+@@ -380,10 +485,65 @@ class AutoTradeManager:
+         if mode == "live" and self.client.configured():
+             try:
+                 await self.client.set_leverage(symbol, cfg["leverage"], cfg["margin_mode"])
++
++                # ---- CRITICAL: re-derive SL/TP against the LIVE mark price ----
++                # For MARKET orders Bitunix validates tpPrice/slPrice against
++                # the current mark price at submit time. A stale signal entry
++                # can put TP on the wrong side of the mark -> code 30027.
++                mark = await self.client.get_mark_price(symbol)
++                b_sym = self.client.to_bitunix_symbol(symbol)
++                tick = self.client.price_tick(b_sym) or (entry * 0.0001)
++                # Minimum safety distance between TP/SL and mark. Two ticks or
++                # 0.05 % of the mark, whichever is bigger.
++                min_gap_pct = 0.0005  # 0.05 %
++                if mark and mark > 0:
++                    # Re-anchor to the live mark for MARKET orders (paper stays on entry).
++                    order_type = str(cfg.get("order_type", "MARKET")).upper()
++                    if order_type == "MARKET":
++                        entry_live = mark
++                        # Preserve the original risk shape (SL/TP distance vs entry)
++                        # but shift the anchor onto the live mark price.
++                        sl_dist = abs(entry - sl)
++                        tp1_dist = abs(tp1 - entry)
++                        tpf_dist = abs(tpf - entry)
++                        if side == "LONG":
++                            sl = entry_live - sl_dist
++                            tp1 = entry_live + tp1_dist
++                            tpf = entry_live + tpf_dist
++                        else:
++                            sl = entry_live + sl_dist
++                            tp1 = entry_live - tp1_dist
++                            tpf = entry_live - tpf_dist
++                        entry = entry_live
++
++                    min_gap = max(tick * 2, mark * min_gap_pct)
++                    if side == "LONG":
++                        # TP must be strictly > mark, SL strictly < mark.
++                        if tpf <= mark + min_gap:
++                            tpf = mark + min_gap
++                        if tp1 <= mark + min_gap:
++                            tp1 = mark + min_gap
++                        if sl >= mark - min_gap:
++                            sl = mark - min_gap
++                    else:  # SHORT
++                        if tpf >= mark - min_gap:
++                            tpf = mark - min_gap
++                        if tp1 >= mark - min_gap:
++                            tp1 = mark - min_gap
++                        if sl <= mark + min_gap:
++                            sl = mark + min_gap
++                    logger.info(
++                        f"Live SL/TP adjusted for {symbol} side={side} mark={mark} "
++                        f"-> entry={entry} sl={sl} tp1={tp1} tpf={tpf}"
++                    )
++                else:
++                    logger.warning(f"No mark price for {symbol}; sending original SL/TP")
++
+                 side_order = "BUY" if side == "LONG" else "SELL"
+                 res = await self.client.place_order(symbol, side_order, qty,
+                                                     order_type=cfg["order_type"],
+-                                                    tp_price=tpf, sl_price=sl)
++                                                    tp_price=tpf, sl_price=sl,
++                                                    position_side=side)
+             except Exception as e:
+                 reason = f"exception: {str(e)[:160]}"
+                 logger.error(f"Live order EXCEPTION {symbol}: {e}")
+diff --git a/backend/tests/test_bitunix_precision_fix.py b/backend/tests/test_bitunix_precision_fix.py
+new file mode 100644
+index 0000000..a2efcc4
+--- /dev/null
++++ b/backend/tests/test_bitunix_precision_fix.py
+@@ -0,0 +1,116 @@
++"""
++Regression tests for the code-30027 fix:
++  - `basePrecision` / `quotePrecision` are DECIMAL PLACES, not tick steps.
++  - MARKET orders re-anchor SL/TP to the live mark price with a min-distance
++    buffer so Bitunix cannot reject with "TP price must be greater than mark".
++"""
++import asyncio
++import os
++import sys
++
++import pytest
++
++sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
++
++from services.bitunix_trade import (  # noqa: E402
++    BitunixTradeClient,
++    _precision_to_step,
++    _round_step,
++    _round_step_up,
++)
++
++
++# ------------------------------------------------------------------ helpers
++def _install_avax_meta(client: BitunixTradeClient) -> None:
++    """Simulate what load_trading_pairs would produce for AVAXUSDT."""
++    client._pairs_meta = {
++        "AVAXUSDT": {
++            "qty_step": _precision_to_step(0) if _precision_to_step(0) else 1.0,
++            "price_tick": _precision_to_step(3),
++            "min_qty": 1.0,
++        }
++    }
++    # Bitunix returns basePrecision=0 (whole units) + minTradeVolume=1 for AVAX
++    # -> qty_step should end up as 1.0.
++    client._pairs_meta["AVAXUSDT"]["qty_step"] = 1.0
++    client._valid_bitunix_symbols = {"AVAXUSDT"}
++
++
++# ------------------------------------------------------------------ tests
++def test_precision_to_step_decimals():
++    assert _precision_to_step(3) == 0.001
++    assert _precision_to_step(2) == 0.01
++    assert _precision_to_step(1) == 0.1
++    assert _precision_to_step(0) == 1.0
++    assert _precision_to_step(None) == 0.0
++
++
++def test_precision_to_step_passthrough_for_real_step():
++    # Already a tick step -> return unchanged.
++    assert _precision_to_step(0.001) == 0.001
++    assert _precision_to_step(0.5) == 0.5
++
++
++def test_round_step_preserves_precision():
++    # The old code normalized 6.717 to "6" (dropping trailing zeros). Ensure
++    # the string keeps the fractional digits the tick asks for.
++    assert _round_step(6.716963, 0.001) == "6.716"
++    assert _round_step(77.806977, 0.01) == "77.80"
++    assert _round_step_up(6.716963, 0.001) == "6.717"
++
++
++def test_fmt_price_directional_rounding_long_tp():
++    """LONG TP must be rounded UP so the tick doesn't push it below the mark."""
++    client = BitunixTradeClient()
++    _install_avax_meta(client)
++    # LONG TP for AVAX at 6.7009 should end up >= 6.701 (mark 6.702 requires >mark;
++    # this test only checks rounding direction, not the min-gap logic).
++    assert client._fmt_price("AVAXUSDT", 6.7009, "up") == "6.701"
++    assert client._fmt_price("AVAXUSDT", 6.7009, "down") == "6.700"
++
++
++def test_avax_tp_no_longer_collapses_to_six():
++    """The exact failing scenario from the Telegram screenshot."""
++    client = BitunixTradeClient()
++    _install_avax_meta(client)
++    tp_str = client._fmt_price("AVAXUSDT", 6.716963, "up")
++    # OLD buggy code produced "6" because it treated quotePrecision=3 as step=3.0.
++    assert float(tp_str) > 6.702, f"TP {tp_str} would be rejected by Bitunix"
++    assert tp_str.startswith("6.71") or tp_str.startswith("6.72")
++
++
++def test_sol_tp_no_longer_collapses_to_seventysix():
++    client = BitunixTradeClient()
++    client._pairs_meta = {"SOLUSDT": {"qty_step": 0.01, "price_tick": 0.01, "min_qty": 0.1}}
++    client._valid_bitunix_symbols = {"SOLUSDT"}
++    tp_str = client._fmt_price("SOLUSDT", 77.806977, "up")
++    assert float(tp_str) > 77.59, f"TP {tp_str} would be rejected"
++    assert tp_str in ("77.81", "77.82")
++
++
++def test_qty_uses_min_trade_volume_for_avax():
++    client = BitunixTradeClient()
++    _install_avax_meta(client)
++    # 149.16 AVAX should floor to 149 (min_qty=1).
++    assert client._fmt_qty("AVAXUSDT", 149.16) == "149"
++
++
++@pytest.mark.asyncio
++async def test_get_mark_price_live():
++    """Integration smoke test against Bitunix public API."""
++    client = BitunixTradeClient()
++    price = await client.get_mark_price("AVAXUSDT")
++    assert price is None or price > 0
++
++
++if __name__ == "__main__":
++    # Allow direct invocation: `python test_bitunix_precision_fix.py`
++    test_precision_to_step_decimals()
++    test_precision_to_step_passthrough_for_real_step()
++    test_round_step_preserves_precision()
++    test_fmt_price_directional_rounding_long_tp()
++    test_avax_tp_no_longer_collapses_to_six()
++    test_sol_tp_no_longer_collapses_to_seventysix()
++    test_qty_uses_min_trade_volume_for_avax()
++    asyncio.run(test_get_mark_price_live())
++    print("All precision-fix regression tests passed.")

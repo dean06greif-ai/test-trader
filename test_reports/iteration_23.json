@@ -1,0 +1,22 @@
+{
+  "summary": "Fee-Wächter (Option 1) end-to-end verified. Backend defaults (fee_guard_enabled=true, fee_guard_mult=4.0) exposed via GET /api/ai/status. POST /api/ai/config admin update with {enabled:false, mult:99} correctly clamps mult to 30 and disables the guard. Restore to {true, 4} works. Python unit tests: test_fee_guard.py 6/6 PASS, test_phase4_collection_mode.py 7/7 PASS, test_ram_and_manager_guards.py 9/9 PASS (pytest). Frontend: AITradingPanel Setup section shows new controls 'Fee-Wächter' (ai-fee-guard-enabled-select) and 'Fee-Faktor (× Fees)' (ai-fee-guard-mult-select) right after 'KI-Limit Cooldown'; toggle to 'aus' persists after page reload; restore to 'an' + 4x works. Existing setup controls (ai-tune-conf-min-select, ai-collection-enabled-select, ai-tune-cooldown-max-select) still present with correct defaults. Defaults restored at end: fee_guard_enabled=true, fee_guard_mult=4, KI-Trader enabled=false (unchanged).",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": [
+    "/app/tests/test_fee_guard.py",
+    "/app/tests/test_phase4_collection_mode.py",
+    "/app/tests/test_ram_and_manager_guards.py"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "AITradingPanel.js at 1866 lines exceeds the 700-line guideline and should be split into smaller components (Setup panel, Chat panel, Team, Lab...).",
+    "Fee-guard help-tooltip in AITradingPanel.js line 1256 mentions 'Gilt für alle KI-Trades inkl. Sammel-Trades'; enforcement in bitunix_trade.on_signal writes a Governance chat entry ONLY for non-collection trades - the wording is fine but confirm intended UX (collection trades are still blocked silently)."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "100%", "frontend": "100%"},
+  "test_credentials": "Admin / Dean06Greif!/Admin via POST /api/auth/login",
+  "seed_data_creation": "None. Config toggled and restored to defaults (fee_guard_enabled=true, fee_guard_mult=4, KI-Trader enabled=false).",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Fee-Wächter (Option 1) is live and green in Dev. Backend endpoint for AI config read is GET /api/ai/status (config nested under j.config); write is POST /api/ai/config (admin bearer). UI: open KI Trader tab -> click edit-strategy-params-btn -> click ai-setup-toggle to reveal setup grid where the new selects live. Frontend admin login uses localStorage keys 'admin_token' + 'admin_token_ts'."
+}

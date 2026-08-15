@@ -1,0 +1,5 @@
+requests>=2.31
+aiohttp>=3.9
+numpy>=1.26
+pandas>=2.1
+psutil>=5.9

@@ -1,0 +1,265 @@
+fetched BTCUSDT: 86400 1m candles
+fetched ETHUSDT: 86400 1m candles
+fetched SOLUSDT: 86401 1m candles
+
+================ TIMEFRAME 15m ({'BTCUSDT': 5760, 'ETHUSDT': 5760, 'SOLUSDT': 5760}) ================
+-- BTCUSDT: Buy&Hold -0.6% über 60d --
+[donchian N=24 vol=0 tpf_crv=2.0 15m]
+  BTCUSDT train: trades= 119 win= 52.1% pnl=   -63.65 fees=  71.39 pf= 0.54 dd=77.0
+  BTCUSDT test : trades=  34 win= 50.0% pnl=   -21.81 fees=  20.39 pf= 0.36 dd=24.6
+[donchian N=24 vol=0 tpf_crv=3.0 15m]
+  BTCUSDT train: trades= 108 win= 48.1% pnl=   -69.35 fees=  64.80 pf= 0.50 dd=76.7
+  BTCUSDT test : trades=  33 win= 48.5% pnl=   -20.69 fees=  19.79 pf= 0.39 dd=24.1
+[donchian N=24 vol=1.3 tpf_crv=2.0 15m]
+  BTCUSDT train: trades= 104 win= 47.1% pnl=   -68.15 fees=  62.38 pf= 0.48 dd=77.7
+  BTCUSDT test : trades=  30 win= 46.7% pnl=   -21.52 fees=  17.99 pf= 0.34 dd=24.9
+[donchian N=24 vol=1.3 tpf_crv=3.0 15m]
+  BTCUSDT train: trades=  95 win= 42.1% pnl=   -72.48 fees=  56.98 pf= 0.46 dd=79.5
+  BTCUSDT test : trades=  29 win= 48.3% pnl=   -18.85 fees=  17.39 pf= 0.39 dd=22.2
+[donchian N=48 vol=0 tpf_crv=2.0 15m]
+  BTCUSDT train: trades=  90 win= 53.3% pnl=   -38.96 fees=  53.99 pf= 0.62 dd=51.9
+  BTCUSDT test : trades=  26 win= 53.8% pnl=   -13.17 fees=  15.59 pf= 0.45 dd=17.1
+[donchian N=48 vol=0 tpf_crv=3.0 15m]
+  BTCUSDT train: trades=  81 win= 48.1% pnl=   -45.39 fees=  48.59 pf= 0.56 dd=52.4
+  BTCUSDT test : trades=  25 win= 56.0% pnl=   -11.13 fees=  14.99 pf= 0.50 dd=15.1
+[donchian N=48 vol=1.3 tpf_crv=2.0 15m]
+  BTCUSDT train: trades=  81 win= 53.1% pnl=   -35.00 fees=  48.58 pf= 0.62 dd=49.8
+  BTCUSDT test : trades=  23 win= 47.8% pnl=   -15.34 fees=  13.79 pf= 0.38 dd=18.7
+[donchian N=48 vol=1.3 tpf_crv=3.0 15m]
+  BTCUSDT train: trades=  73 win= 47.9% pnl=   -37.41 fees=  43.78 pf= 0.60 dd=48.5
+  BTCUSDT test : trades=  22 win= 50.0% pnl=   -13.31 fees=  13.19 pf= 0.42 dd=16.7
+[donchian N=96 vol=0 tpf_crv=2.0 15m]
+  BTCUSDT train: trades=  78 win= 50.0% pnl=   -46.98 fees=  46.80 pf= 0.51 dd=58.5
+  BTCUSDT test : trades=  24 win= 50.0% pnl=   -13.82 fees=  14.39 pf= 0.42 dd=17.5
+[donchian N=96 vol=0 tpf_crv=3.0 15m]
+  BTCUSDT train: trades=  73 win= 45.2% pnl=   -54.43 fees=  43.80 pf= 0.46 dd=60.0
+  BTCUSDT test : trades=  23 win= 52.2% pnl=   -11.78 fees=  13.79 pf= 0.47 dd=15.4
+[donchian N=96 vol=1.3 tpf_crv=2.0 15m]
+  BTCUSDT train: trades=  71 win= 47.9% pnl=   -46.77 fees=  42.59 pf= 0.48 dd=58.3
+  BTCUSDT test : trades=  21 win= 42.9% pnl=   -16.00 fees=  12.59 pf= 0.35 dd=19.1
+[donchian N=96 vol=1.3 tpf_crv=3.0 15m]
+  BTCUSDT train: trades=  66 win= 42.4% pnl=   -50.51 fees=  39.59 pf= 0.47 dd=56.1
+  BTCUSDT test : trades=  20 win= 45.0% pnl=   -13.96 fees=  11.99 pf= 0.39 dd=17.0
+[donchian N=48 NO-TREND 15m]
+  BTCUSDT train: trades= 124 win= 50.8% pnl=   -60.85 fees=  74.38 pf= 0.57 dd=65.6
+  BTCUSDT test : trades=  38 win= 60.5% pnl=   -11.70 fees=  22.80 pf= 0.64 dd=15.5
+[rsi2 meanrev 15m]
+  BTCUSDT train: trades= 190 win= 55.8% pnl=   -66.00 fees= 114.01 pf= 0.67 dd=69.3
+  BTCUSDT test : trades=  64 win= 48.4% pnl=   -41.29 fees=  38.41 pf= 0.37 dd=42.6
+-- ETHUSDT: Buy&Hold +11.8% über 60d --
+[donchian N=24 vol=0 tpf_crv=2.0 15m]
+  ETHUSDT train: trades= 102 win= 49.0% pnl=   -35.38 fees=  61.24 pf= 0.78 dd=61.6
+  ETHUSDT test : trades=  45 win= 60.0% pnl=    -5.35 fees=  27.00 pf= 0.87 dd=18.6
+[donchian N=24 vol=0 tpf_crv=3.0 15m]
+  ETHUSDT train: trades=  93 win= 47.3% pnl=   -38.96 fees=  55.82 pf= 0.75 dd=72.5
+  ETHUSDT test : trades=  41 win= 56.1% pnl=   -13.40 fees=  24.59 pf= 0.67 dd=22.6
+[donchian N=24 vol=1.3 tpf_crv=2.0 15m]
+  ETHUSDT train: trades=  95 win= 50.5% pnl=   -28.08 fees=  57.03 pf= 0.81 dd=52.9
+  ETHUSDT test : trades=  42 win= 59.5% pnl=    -4.06 fees=  25.19 pf= 0.89 dd=17.0
+[donchian N=24 vol=1.3 tpf_crv=3.0 15m]
+  ETHUSDT train: trades=  88 win= 48.9% pnl=   -29.95 fees=  52.82 pf= 0.79 dd=65.8
+  ETHUSDT test : trades=  38 win= 55.3% pnl=   -12.11 fees=  22.79 pf= 0.69 dd=20.9
+[donchian N=48 vol=0 tpf_crv=2.0 15m]
+  ETHUSDT train: trades=  71 win= 57.7% pnl=    +4.45 fees=  42.62 pf= 1.04 dd=33.0
+  ETHUSDT test : trades=  32 win= 65.6% pnl=    +3.52 fees=  19.20 pf= 1.14 dd=7.1
+[donchian N=48 vol=0 tpf_crv=3.0 15m]
+  ETHUSDT train: trades=  66 win= 54.5% pnl=    +3.82 fees=  39.62 pf= 1.04 dd=45.9
+  ETHUSDT test : trades=  28 win= 60.7% pnl=    -3.62 fees=  16.80 pf= 0.85 dd=8.8
+[donchian N=48 vol=1.3 tpf_crv=2.0 15m]
+  ETHUSDT train: trades=  69 win= 59.4% pnl=   +10.29 fees=  41.42 pf= 1.11 dd=29.3
+  ETHUSDT test : trades=  30 win= 66.7% pnl=    +5.28 fees=  18.00 pf= 1.24 dd=6.0
+[donchian N=48 vol=1.3 tpf_crv=3.0 15m]
+  ETHUSDT train: trades=  64 win= 56.2% pnl=    +9.66 fees=  38.42 pf= 1.10 dd=42.2
+  ETHUSDT test : trades=  26 win= 61.5% pnl=    -1.86 fees=  15.60 pf= 0.92 dd=6.7
+[donchian N=96 vol=0 tpf_crv=2.0 15m]
+  ETHUSDT train: trades=  56 win= 58.9% pnl=    +2.76 fees=  33.62 pf= 1.03 dd=30.5
+  ETHUSDT test : trades=  28 win= 67.9% pnl=    +6.74 fees=  16.80 pf= 1.34 dd=6.0
+[donchian N=96 vol=0 tpf_crv=3.0 15m]
+  ETHUSDT train: trades=  52 win= 53.8% pnl=    -2.83 fees=  31.22 pf= 0.97 dd=38.3
+  ETHUSDT test : trades=  24 win= 62.5% pnl=    -0.40 fees=  14.40 pf= 0.98 dd=6.0
+[donchian N=96 vol=1.3 tpf_crv=2.0 15m]
+  ETHUSDT train: trades=  56 win= 58.9% pnl=    +2.76 fees=  33.62 pf= 1.03 dd=30.5
+  ETHUSDT test : trades=  27 win= 66.7% pnl=    +6.42 fees=  16.20 pf= 1.32 dd=6.0
+[donchian N=96 vol=1.3 tpf_crv=3.0 15m]
+  ETHUSDT train: trades=  52 win= 53.8% pnl=    -2.83 fees=  31.22 pf= 0.97 dd=38.3
+  ETHUSDT test : trades=  23 win= 60.9% pnl=    -0.72 fees=  13.80 pf= 0.96 dd=6.0
+[donchian N=48 NO-TREND 15m]
+  ETHUSDT train: trades= 116 win= 53.4% pnl=   -24.72 fees=  69.63 pf= 0.85 dd=41.3
+  ETHUSDT test : trades=  45 win= 60.0% pnl=    -3.77 fees=  26.99 pf= 0.91 dd=15.3
+[rsi2 meanrev 15m]
+  ETHUSDT train: trades= 174 win= 48.9% pnl=  -103.12 fees= 104.42 pf= 0.61 dd=109.4
+  ETHUSDT test : trades=  63 win= 55.6% pnl=   -21.47 fees=  37.81 pf= 0.68 dd=31.1
+-- SOLUSDT: Buy&Hold +12.2% über 60d --
+[donchian N=24 vol=0 tpf_crv=2.0 15m]
+  SOLUSDT train: trades= 115 win= 48.7% pnl=   -32.57 fees=  68.98 pf= 0.84 dd=51.1
+  SOLUSDT test : trades=  50 win= 52.0% pnl=   -18.72 fees=  29.99 pf= 0.67 dd=26.2
+[donchian N=24 vol=0 tpf_crv=3.0 15m]
+  SOLUSDT train: trades= 100 win= 53.0% pnl=    -8.65 fees=  59.98 pf= 0.94 dd=47.6
+  SOLUSDT test : trades=  46 win= 50.0% pnl=   -27.39 fees=  27.60 pf= 0.50 dd=30.6
+[donchian N=24 vol=1.3 tpf_crv=2.0 15m]
+  SOLUSDT train: trades=  99 win= 48.5% pnl=   -27.25 fees=  59.38 pf= 0.84 dd=45.2
+  SOLUSDT test : trades=  47 win= 48.9% pnl=   -24.66 fees=  28.20 pf= 0.57 dd=28.3
+[donchian N=24 vol=1.3 tpf_crv=3.0 15m]
+  SOLUSDT train: trades=  86 win= 52.3% pnl=   -10.88 fees=  51.58 pf= 0.92 dd=45.6
+  SOLUSDT test : trades=  43 win= 46.5% pnl=   -29.54 fees=  25.80 pf= 0.46 dd=32.7
+[donchian N=48 vol=0 tpf_crv=2.0 15m]
+  SOLUSDT train: trades=  85 win= 50.6% pnl=   -12.65 fees=  50.99 pf= 0.92 dd=34.0
+  SOLUSDT test : trades=  39 win= 56.4% pnl=    -6.15 fees=  23.39 pf= 0.85 dd=16.7
+[donchian N=48 vol=0 tpf_crv=3.0 15m]
+  SOLUSDT train: trades=  76 win= 52.6% pnl=    -1.64 fees=  45.59 pf= 0.99 dd=39.3
+  SOLUSDT test : trades=  35 win= 54.3% pnl=   -16.69 fees=  21.00 pf= 0.57 dd=20.6
+[donchian N=48 vol=1.3 tpf_crv=2.0 15m]
+  SOLUSDT train: trades=  75 win= 52.0% pnl=    -1.35 fees=  44.99 pf= 0.99 dd=28.6
+  SOLUSDT test : trades=  36 win= 52.8% pnl=   -12.09 fees=  21.59 pf= 0.70 dd=17.7
+[donchian N=48 vol=1.3 tpf_crv=3.0 15m]
+  SOLUSDT train: trades=  67 win= 53.7% pnl=    +3.47 fees=  40.19 pf= 1.03 dd=36.3
+  SOLUSDT test : trades=  32 win= 50.0% pnl=   -18.84 fees=  19.20 pf= 0.51 dd=22.7
+[donchian N=96 vol=0 tpf_crv=2.0 15m]
+  SOLUSDT train: trades=  67 win= 53.7% pnl=    -3.54 fees=  40.19 pf= 0.97 dd=28.1
+  SOLUSDT test : trades=  33 win= 57.6% pnl=    -1.04 fees=  19.79 pf= 0.97 dd=14.6
+[donchian N=96 vol=0 tpf_crv=3.0 15m]
+  SOLUSDT train: trades=  60 win= 55.0% pnl=    -2.86 fees=  35.99 pf= 0.97 dd=31.1
+  SOLUSDT test : trades=  29 win= 55.2% pnl=   -10.05 fees=  17.39 pf= 0.67 dd=13.9
+[donchian N=96 vol=1.3 tpf_crv=2.0 15m]
+  SOLUSDT train: trades=  62 win= 53.2% pnl=    -0.67 fees=  37.20 pf= 0.99 dd=30.8
+  SOLUSDT test : trades=  30 win= 56.7% pnl=    -3.48 fees=  17.99 pf= 0.88 dd=14.4
+[donchian N=96 vol=1.3 tpf_crv=3.0 15m]
+  SOLUSDT train: trades=  56 win= 53.6% pnl=    -6.19 fees=  33.59 pf= 0.93 dd=39.0
+  SOLUSDT test : trades=  26 win= 53.8% pnl=    -8.69 fees=  15.60 pf= 0.68 dd=12.6
+[donchian N=48 NO-TREND 15m]
+  SOLUSDT train: trades= 119 win= 50.4% pnl=   -36.69 fees=  71.40 pf= 0.82 dd=46.0
+  SOLUSDT test : trades=  53 win= 54.7% pnl=   -18.70 fees=  31.79 pf= 0.68 dd=27.5
+[rsi2 meanrev 15m]
+  SOLUSDT train: trades= 181 win= 54.1% pnl=   -47.97 fees= 108.62 pf= 0.82 dd=72.1
+  SOLUSDT test : trades=  84 win= 51.2% pnl=   -44.33 fees=  50.41 pf= 0.54 dd=50.4
+
+================ TIMEFRAME 5m ({'BTCUSDT': 17280, 'ETHUSDT': 17280, 'SOLUSDT': 17280}) ================
+-- BTCUSDT: Buy&Hold -0.8% über 60d --
+[donchian N=24 vol=0 tpf_crv=2.0 5m]
+  BTCUSDT train: trades= 264 win= 48.5% pnl=  -147.97 fees= 158.40 pf= 0.44 dd=149.9
+  BTCUSDT test : trades=  59 win= 50.8% pnl=   -36.19 fees=  35.40 pf= 0.34 dd=37.4
+[donchian N=24 vol=0 tpf_crv=3.0 5m]
+  BTCUSDT train: trades= 240 win= 48.8% pnl=  -138.55 fees= 144.00 pf= 0.43 dd=141.7
+  BTCUSDT test : trades=  55 win= 47.3% pnl=   -38.25 fees=  33.00 pf= 0.30 dd=39.4
+[donchian N=24 vol=1.3 tpf_crv=2.0 5m]
+  BTCUSDT train: trades= 213 win= 49.3% pnl=  -109.29 fees= 127.80 pf= 0.48 dd=109.3
+  BTCUSDT test : trades=  51 win= 45.1% pnl=   -39.33 fees=  30.59 pf= 0.25 dd=41.0
+[donchian N=24 vol=1.3 tpf_crv=3.0 5m]
+  BTCUSDT train: trades= 197 win= 48.2% pnl=  -117.31 fees= 118.21 pf= 0.42 dd=117.3
+  BTCUSDT test : trades=  50 win= 42.0% pnl=   -40.88 fees=  30.00 pf= 0.24 dd=42.4
+[donchian N=48 vol=0 tpf_crv=2.0 5m]
+  BTCUSDT train: trades= 214 win= 46.7% pnl=  -129.80 fees= 128.40 pf= 0.42 dd=131.7
+  BTCUSDT test : trades=  48 win= 50.0% pnl=   -28.34 fees=  28.80 pf= 0.39 dd=32.7
+[donchian N=48 vol=0 tpf_crv=3.0 5m]
+  BTCUSDT train: trades= 199 win= 44.2% pnl=  -140.80 fees= 119.40 pf= 0.36 dd=141.4
+  BTCUSDT test : trades=  44 win= 47.7% pnl=   -30.81 fees=  26.40 pf= 0.31 dd=32.7
+[donchian N=48 vol=1.3 tpf_crv=2.0 5m]
+  BTCUSDT train: trades= 181 win= 49.2% pnl=   -93.31 fees= 108.60 pf= 0.48 dd=93.3
+  BTCUSDT test : trades=  42 win= 45.2% pnl=   -32.36 fees=  25.20 pf= 0.26 dd=34.0
+[donchian N=48 vol=1.3 tpf_crv=3.0 5m]
+  BTCUSDT train: trades= 170 win= 45.3% pnl=  -112.47 fees= 102.01 pf= 0.39 dd=112.5
+  BTCUSDT test : trades=  41 win= 41.5% pnl=   -34.20 fees=  24.60 pf= 0.25 dd=35.4
+[donchian N=96 vol=0 tpf_crv=2.0 5m]
+  BTCUSDT train: trades= 185 win= 45.9% pnl=  -118.68 fees= 110.99 pf= 0.40 dd=118.7
+  BTCUSDT test : trades=  41 win= 46.3% pnl=   -30.68 fees=  24.59 pf= 0.28 dd=33.7
+[donchian N=96 vol=0 tpf_crv=3.0 5m]
+  BTCUSDT train: trades= 174 win= 43.7% pnl=  -127.29 fees= 104.40 pf= 0.35 dd=127.3
+  BTCUSDT test : trades=  39 win= 43.6% pnl=   -32.70 fees=  23.39 pf= 0.23 dd=33.5
+[donchian N=96 vol=1.3 tpf_crv=2.0 5m]
+  BTCUSDT train: trades= 159 win= 49.1% pnl=   -84.88 fees=  95.39 pf= 0.47 dd=84.9
+  BTCUSDT test : trades=  36 win= 41.7% pnl=   -30.91 fees=  21.59 pf= 0.23 dd=34.0
+[donchian N=96 vol=1.3 tpf_crv=3.0 5m]
+  BTCUSDT train: trades= 150 win= 46.0% pnl=   -98.16 fees=  90.00 pf= 0.39 dd=98.2
+  BTCUSDT test : trades=  35 win= 37.1% pnl=   -33.37 fees=  21.00 pf= 0.20 dd=36.1
+[donchian N=48 NO-TREND 5m]
+  BTCUSDT train: trades= 272 win= 50.4% pnl=  -135.66 fees= 163.21 pf= 0.49 dd=135.7
+  BTCUSDT test : trades=  57 win= 47.4% pnl=   -41.00 fees=  34.20 pf= 0.27 dd=41.8
+[rsi2 meanrev 5m]
+  BTCUSDT train: trades= 457 win= 50.1% pnl=  -246.21 fees= 274.21 pf= 0.44 dd=252.3
+  BTCUSDT test : trades= 143 win= 50.3% pnl=   -80.89 fees=  85.81 pf= 0.39 dd=84.3
+-- ETHUSDT: Buy&Hold +11.6% über 60d --
+[donchian N=24 vol=0 tpf_crv=2.0 5m]
+  ETHUSDT train: trades= 307 win= 50.5% pnl=  -120.84 fees= 184.20 pf= 0.62 dd=128.3
+  ETHUSDT test : trades=  93 win= 47.3% pnl=   -57.98 fees=  55.80 pf= 0.40 dd=67.3
+[donchian N=24 vol=0 tpf_crv=3.0 5m]
+  ETHUSDT train: trades= 275 win= 49.5% pnl=  -131.42 fees= 165.00 pf= 0.54 dd=141.7
+  ETHUSDT test : trades=  86 win= 48.8% pnl=   -50.50 fees=  51.61 pf= 0.42 dd=63.2
+[donchian N=24 vol=1.3 tpf_crv=2.0 5m]
+  ETHUSDT train: trades= 266 win= 49.2% pnl=  -106.74 fees= 159.59 pf= 0.62 dd=112.0
+  ETHUSDT test : trades=  83 win= 47.0% pnl=   -49.93 fees=  49.80 pf= 0.42 dd=57.0
+[donchian N=24 vol=1.3 tpf_crv=3.0 5m]
+  ETHUSDT train: trades= 238 win= 48.3% pnl=  -114.75 fees= 142.79 pf= 0.55 dd=119.7
+  ETHUSDT test : trades=  76 win= 48.7% pnl=   -41.48 fees=  45.61 pf= 0.46 dd=50.7
+[donchian N=48 vol=0 tpf_crv=2.0 5m]
+  ETHUSDT train: trades= 227 win= 52.9% pnl=   -56.36 fees= 136.21 pf= 0.75 dd=72.8
+  ETHUSDT test : trades=  71 win= 43.7% pnl=   -49.88 fees=  42.60 pf= 0.37 dd=57.1
+[donchian N=48 vol=0 tpf_crv=3.0 5m]
+  ETHUSDT train: trades= 202 win= 52.5% pnl=   -69.96 fees= 121.21 pf= 0.65 dd=83.5
+  ETHUSDT test : trades=  66 win= 43.9% pnl=   -44.93 fees=  39.60 pf= 0.39 dd=55.0
+[donchian N=48 vol=1.3 tpf_crv=2.0 5m]
+  ETHUSDT train: trades= 213 win= 52.6% pnl=   -50.07 fees= 127.80 pf= 0.77 dd=68.4
+  ETHUSDT test : trades=  65 win= 43.1% pnl=   -44.89 fees=  39.00 pf= 0.38 dd=50.8
+[donchian N=48 vol=1.3 tpf_crv=3.0 5m]
+  ETHUSDT train: trades= 188 win= 52.1% pnl=   -63.22 fees= 112.80 pf= 0.67 dd=73.6
+  ETHUSDT test : trades=  60 win= 43.3% pnl=   -38.96 fees=  36.00 pf= 0.42 dd=47.7
+[donchian N=96 vol=0 tpf_crv=2.0 5m]
+  ETHUSDT train: trades= 176 win= 50.6% pnl=   -53.41 fees= 105.62 pf= 0.72 dd=65.5
+  ETHUSDT test : trades=  57 win= 43.9% pnl=   -41.29 fees=  34.20 pf= 0.36 dd=44.9
+[donchian N=96 vol=0 tpf_crv=3.0 5m]
+  ETHUSDT train: trades= 156 win= 51.3% pnl=   -66.07 fees=  93.61 pf= 0.60 dd=75.5
+  ETHUSDT test : trades=  53 win= 45.3% pnl=   -38.52 fees=  31.81 pf= 0.34 dd=42.7
+[donchian N=96 vol=1.3 tpf_crv=2.0 5m]
+  ETHUSDT train: trades= 167 win= 49.1% pnl=   -54.64 fees= 100.21 pf= 0.71 dd=64.8
+  ETHUSDT test : trades=  55 win= 45.5% pnl=   -35.60 fees=  33.00 pf= 0.40 dd=39.8
+[donchian N=96 vol=1.3 tpf_crv=3.0 5m]
+  ETHUSDT train: trades= 147 win= 49.7% pnl=   -68.55 fees=  88.20 pf= 0.58 dd=74.9
+  ETHUSDT test : trades=  51 win= 47.1% pnl=   -30.59 fees=  30.60 pf= 0.43 dd=36.7
+[donchian N=48 NO-TREND 5m]
+  ETHUSDT train: trades= 333 win= 53.5% pnl=   -83.34 fees= 199.80 pf= 0.74 dd=112.2
+  ETHUSDT test : trades= 105 win= 44.8% pnl=   -72.74 fees=  63.01 pf= 0.36 dd=79.9
+[rsi2 meanrev 5m]
+  ETHUSDT train: trades= 531 win= 51.4% pnl=  -281.24 fees= 318.63 pf= 0.47 dd=290.0
+  ETHUSDT test : trades= 179 win= 49.2% pnl=  -116.96 fees= 107.40 pf= 0.34 dd=118.5
+-- SOLUSDT: Buy&Hold +11.8% über 60d --
+[donchian N=24 vol=0 tpf_crv=2.0 5m]
+  SOLUSDT train: trades= 358 win= 47.8% pnl=  -191.42 fees= 214.79 pf= 0.55 dd=193.5
+  SOLUSDT test : trades= 115 win= 47.8% pnl=   -63.87 fees=  68.98 pf= 0.45 dd=65.5
+[donchian N=24 vol=0 tpf_crv=3.0 5m]
+  SOLUSDT train: trades= 315 win= 49.2% pnl=  -160.67 fees= 189.00 pf= 0.54 dd=165.7
+  SOLUSDT test : trades= 100 win= 51.0% pnl=   -50.41 fees=  59.98 pf= 0.46 dd=54.5
+[donchian N=24 vol=1.3 tpf_crv=2.0 5m]
+  SOLUSDT train: trades= 301 win= 47.8% pnl=  -150.92 fees= 180.59 pf= 0.57 dd=152.6
+  SOLUSDT test : trades=  99 win= 46.5% pnl=   -60.32 fees=  59.39 pf= 0.41 dd=61.6
+[donchian N=24 vol=1.3 tpf_crv=3.0 5m]
+  SOLUSDT train: trades= 269 win= 48.7% pnl=  -133.37 fees= 161.40 pf= 0.56 dd=136.9
+  SOLUSDT test : trades=  89 win= 47.2% pnl=   -53.24 fees=  53.39 pf= 0.41 dd=57.0
+[donchian N=48 vol=0 tpf_crv=2.0 5m]
+  SOLUSDT train: trades= 278 win= 48.6% pnl=  -126.77 fees= 166.79 pf= 0.62 dd=128.5
+  SOLUSDT test : trades=  87 win= 50.6% pnl=   -44.77 fees=  52.19 pf= 0.47 dd=46.4
+[donchian N=48 vol=0 tpf_crv=3.0 5m]
+  SOLUSDT train: trades= 243 win= 50.6% pnl=  -101.44 fees= 145.80 pf= 0.62 dd=104.7
+  SOLUSDT test : trades=  80 win= 51.2% pnl=   -38.89 fees=  47.99 pf= 0.49 dd=43.0
+[donchian N=48 vol=1.3 tpf_crv=2.0 5m]
+  SOLUSDT train: trades= 246 win= 49.2% pnl=  -103.25 fees= 147.60 pf= 0.64 dd=105.8
+  SOLUSDT test : trades=  82 win= 51.2% pnl=   -40.70 fees=  49.19 pf= 0.48 dd=42.0
+[donchian N=48 vol=1.3 tpf_crv=3.0 5m]
+  SOLUSDT train: trades= 218 win= 50.5% pnl=   -85.09 fees= 130.81 pf= 0.65 dd=87.8
+  SOLUSDT test : trades=  76 win= 51.3% pnl=   -36.44 fees=  45.59 pf= 0.49 dd=40.2
+[donchian N=96 vol=0 tpf_crv=2.0 5m]
+  SOLUSDT train: trades= 212 win= 48.1% pnl=   -96.03 fees= 127.18 pf= 0.64 dd=97.7
+  SOLUSDT test : trades=  70 win= 50.0% pnl=   -39.03 fees=  41.99 pf= 0.43 dd=41.3
+[donchian N=96 vol=0 tpf_crv=3.0 5m]
+  SOLUSDT train: trades= 183 win= 50.8% pnl=   -78.61 fees= 109.79 pf= 0.62 dd=86.6
+  SOLUSDT test : trades=  65 win= 50.8% pnl=   -36.04 fees=  38.99 pf= 0.42 dd=40.0
+[donchian N=96 vol=1.3 tpf_crv=2.0 5m]
+  SOLUSDT train: trades= 193 win= 46.6% pnl=   -90.89 fees= 115.78 pf= 0.63 dd=93.7
+  SOLUSDT test : trades=  67 win= 49.3% pnl=   -37.79 fees=  40.20 pf= 0.43 dd=38.2
+[donchian N=96 vol=1.3 tpf_crv=3.0 5m]
+  SOLUSDT train: trades= 168 win= 48.2% pnl=   -77.85 fees= 100.79 pf= 0.60 dd=79.5
+  SOLUSDT test : trades=  62 win= 50.0% pnl=   -34.80 fees=  37.20 pf= 0.42 dd=36.7
+[donchian N=48 NO-TREND 5m]
+  SOLUSDT train: trades= 366 win= 47.8% pnl=  -174.28 fees= 219.62 pf= 0.60 dd=187.3
+  SOLUSDT test : trades= 118 win= 50.0% pnl=   -61.47 fees=  70.80 pf= 0.46 dd=61.9
+[rsi2 meanrev 5m]
+  SOLUSDT train: trades= 525 win= 50.5% pnl=  -282.50 fees= 315.01 pf= 0.51 dd=287.9
+  SOLUSDT test : trades= 185 win= 50.8% pnl=  -106.36 fees= 111.01 pf= 0.39 dd=108.9

@@ -1,0 +1,89 @@
+.liq-overlay {
+  position: fixed; inset: 0; z-index: 1200;
+  background: rgba(6, 8, 12, 0.82);
+  backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center; padding: 18px;
+}
+.liq-modal {
+  width: min(1180px, 100%); max-height: 92vh; overflow: auto;
+  background: #0c1016; border: 1px solid #1e2632; border-radius: 14px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.6);
+  padding: 18px 20px 24px;
+}
+.liq-head { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+.liq-head h3 { margin: 0; font-size: 16px; letter-spacing: 0.4px; }
+.liq-head .liq-close { margin-left: auto; background: none; border: 1px solid #263041;
+  color: #8ba0bb; border-radius: 8px; width: 30px; height: 30px; cursor: pointer;
+  transition: background-color .18s ease, color .18s ease; }
+.liq-head .liq-close:hover { background: #172032; color: #e6eefc; }
+.liq-sub { color: #7c8ca3; font-size: 11.5px; margin: 2px 0 14px; }
+
+.liq-help {
+  border: 1px solid #22304a;
+  border-radius: 8px;
+  background: #0d1523;
+  margin: 0 0 14px;
+  font-size: 11.5px;
+}
+.liq-help summary {
+  cursor: pointer;
+  padding: 8px 12px;
+  color: #4d9cff;
+  font-weight: 600;
+  user-select: none;
+}
+.liq-help summary:hover { color: #7ab6ff; }
+.liq-help-body { padding: 0 14px 12px; color: #9aa9bf; line-height: 1.55; }
+.liq-help-body p { margin: 8px 0 4px; }
+.liq-help-body b { color: #cfd9e8; }
+.liq-help-body ul { margin: 2px 0 6px; padding-left: 18px; }
+.liq-help-body li { margin: 2px 0; }
+.liq-help-note {
+  border-top: 1px solid #22304a;
+  padding-top: 8px;
+  margin-top: 10px !important;
+  color: #c9a75a;
+}
+
+.liq-controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 14px; }
+.liq-controls select, .liq-controls button {
+  background: #121926; color: #dbe6f5; border: 1px solid #26303f;
+  border-radius: 8px; padding: 6px 10px; font-size: 12px; cursor: pointer;
+}
+.liq-controls button:hover { border-color: #3d78d8; }
+
+.liq-stats { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.liq-pill { background: #121926; border: 1px solid #222c3a; border-radius: 999px;
+  padding: 4px 11px; font-size: 11.5px; color: #a9bad2; }
+.liq-pill b { color: #eaf2ff; }
+.liq-pill.warn { border-color: #7a3030; color: #ffb1b1; }
+
+.liq-grid { display: grid; grid-template-columns: 1.15fr 1fr; gap: 16px; }
+@media (max-width: 900px) { .liq-grid { grid-template-columns: 1fr; } }
+
+.liq-card { background: #0f141c; border: 1px solid #1c2532; border-radius: 12px; padding: 12px 14px; }
+.liq-card-title { font-size: 11px; letter-spacing: 1px; color: #6f8298; margin-bottom: 10px; }
+
+.liq-row { display: grid; grid-template-columns: 92px 1fr 110px; align-items: center;
+  gap: 8px; padding: 2px 0; font-size: 11.5px; }
+.liq-row .liq-price { font-variant-numeric: tabular-nums; color: #cdd9ea; }
+.liq-bar-wrap { position: relative; background: #131a24; border-radius: 4px; height: 13px; overflow: hidden; }
+.liq-bar { display: block; height: 100%; border-radius: 4px; transition: background-color .35s ease; }
+.liq-heat-val { position: absolute; inset: 0; display: flex; align-items: center;
+  justify-content: flex-end; padding-right: 6px; font-size: 9.5px; color: #dbe6f5;
+  opacity: .75; font-variant-numeric: tabular-nums; }
+.liq-row .liq-tags { color: #6d7f95; font-size: 10px; text-align: right;
+  white-space: normal; overflow-wrap: break-word; line-height: 1.3; }
+.liq-row.is-price { background: rgba(61, 120, 216, 0.14); border-radius: 4px; }
+
+.liq-levels { display: flex; flex-direction: column; gap: 5px; }
+.liq-level { display: grid; grid-template-columns: 86px 1fr auto auto; gap: 8px;
+  align-items: center; font-size: 11.5px; padding: 4px 6px; border-radius: 6px;
+  background: #111823; transition: transform .15s ease, background-color .15s ease; }
+.liq-level:hover { background: #16202e; transform: translateX(2px); }
+.liq-level .liq-type { color: #8ea3bd; text-transform: uppercase; font-size: 10px; letter-spacing: .6px; }
+.liq-level .liq-strength { color: #eaf2ff; font-variant-numeric: tabular-nums; }
+.liq-level.above .liq-price { color: #ff8f8f; }
+.liq-level.below .liq-price { color: #7ee0a8; }
+.liq-empty { color: #6b7a8e; font-size: 12px; padding: 8px 0; }
+.liq-err { color: #ff9c9c; font-size: 12px; margin-bottom: 10px; }

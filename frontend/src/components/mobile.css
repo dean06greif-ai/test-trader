@@ -1,0 +1,393 @@
+/* ============================================================
+   MOBILE STYLES — Ergänzt bestehendes Layout, ändert nichts an
+   der Desktop-Darstellung. Ziel: gleiche Struktur wie Desktop,
+   nur logisch für schmale Bildschirme umgebrochen.
+   ============================================================ */
+
+/* -------- Breakpoint 1: Tablet (bis 968px) ---------- */
+@media (max-width: 968px) {
+  /* Layout kommt bereits in App.css auf 1 Spalte — hier fine-tuning */
+  .app-layout {
+    grid-template-rows: auto auto auto;
+    gap: 0;
+  }
+
+  /* CoinSidebar wird zu einer horizontal scrollenden Leiste */
+  .coin-sidebar {
+    border-right: none;
+    border-bottom: 1px solid #2A2D3A;
+    max-height: 42vh;
+    overflow-y: auto;
+  }
+
+  /* Header kompakter */
+  .header {
+    padding: 10px 12px;
+    gap: 12px;
+    min-height: 60px;
+  }
+  .header-title { font-size: 15px; }
+  .header-subtitle { font-size: 10px; }
+  .header-right {
+    gap: 6px;
+    row-gap: 6px;
+  }
+  .balance-widget,
+  .paper-overlay,
+  .live-overlay {
+    padding: 4px 8px;
+    min-height: 44px;
+    gap: 6px;
+  }
+  .bw-primary-value,
+  .paper-overlay .bw-primary-value,
+  .live-overlay .bw-primary-value {
+    font-size: 12px;
+  }
+  .bw-mode,
+  .paper-overlay-mode,
+  .live-overlay-mode {
+    font-size: 9px;
+    padding: 2px 5px;
+  }
+  .bw-sub-line { font-size: 9px; }
+  .bw-sub-label { font-size: 8px; }
+
+  /* Strategy Tabs: horizontal scrollen statt umbrechen */
+  .strategy-tabs-bar {
+    padding: 6px 4px;
+    max-height: none;
+    min-height: 44px;
+    align-items: center;
+  }
+  .strategy-tabs-scroll {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 0 76px 0 4px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .strategy-tab {
+    padding: 6px 10px;
+    font-size: 12px;
+    gap: 6px;
+  }
+  .strategy-tabs-actions {
+    top: 5px;
+    right: 8px;
+    gap: 4px;
+  }
+  .strategy-tab-action {
+    width: 30px;
+    height: 30px;
+  }
+
+  /* Chart: verlässliche Mindesthöhe auf mobil */
+  .main-content {
+    grid-template-rows: auto minmax(320px, 55vh) auto;
+  }
+  .main-content .chart-wrap {
+    min-height: 320px;
+  }
+  .chart-header {
+    padding: 10px 12px;
+  }
+  .chart-title > span:first-child {
+    font-size: 15px;
+  }
+  .chart-indicators {
+    gap: 10px;
+  }
+  .indicator-label {
+    font-size: 11px;
+  }
+
+  /* Right Panel (Analyse) */
+  .performance-analytics {
+    padding: 14px 12px;
+    gap: 18px;
+  }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .stat-card {
+    padding: 10px;
+    gap: 8px;
+  }
+  .stat-value { font-size: 16px; }
+  .stat-label { font-size: 10px; }
+  .view-switcher {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .view-btn { font-size: 11px; padding: 8px 6px; }
+
+  .top-coin-item {
+    padding: 10px;
+    gap: 8px;
+  }
+  .coin-rank { font-size: 14px; min-width: 20px; }
+  .coin-info .coin-name { font-size: 12px; }
+
+  /* Strategy Perf Rows – vom Layout etwas kompakter */
+  .strat-perf-row {
+    padding: 8px 10px !important;
+    font-size: 12px !important;
+  }
+  .strat-perf-name {
+    max-width: 45%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Signal Panel kompakter */
+  .signal-panel,
+  .signal-panel-container {
+    padding: 10px 12px !important;
+  }
+}
+
+/* -------- Breakpoint 2: Handy (bis 640px) ---------- */
+@media (max-width: 640px) {
+  /* Header: umbrechen, kompakt */
+  .header {
+    padding: 8px 10px;
+    gap: 8px;
+    row-gap: 6px;
+  }
+  .header-left { flex: 1 1 auto; }
+  .header-right {
+    width: 100%;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  .balance-widget-wrapper {
+    flex-wrap: wrap;
+    gap: 6px;
+    width: 100%;
+  }
+  .balance-widget,
+  .paper-overlay,
+  .live-overlay {
+    flex: 1 1 45%;
+    min-width: 0;
+    min-height: 42px;
+  }
+  .header-session {
+    align-items: flex-start;
+    width: 100%;
+  }
+  .session-status { font-size: 11px; }
+  .session-times { font-size: 10px; }
+
+  /* Chart-Bereich: minimal höher, damit Kerzen lesbar bleiben */
+  .main-content {
+    grid-template-rows: auto minmax(300px, 50vh) auto;
+  }
+  .main-content .chart-wrap {
+    min-height: 300px;
+  }
+
+  /* CoinSidebar auf mobil – etwas komprimieren, aber scrollbar */
+  .coin-sidebar {
+    max-height: 38vh;
+  }
+  .sidebar-header {
+    padding: 12px 14px;
+  }
+  .coin-item {
+    padding: 12px 14px;
+  }
+  .coin-stats {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+  }
+  .coin-stat { font-size: 10px; }
+
+  /* Strategy Tabs: noch kompakter */
+  .strategy-tab {
+    padding: 6px 8px;
+    font-size: 11px;
+    gap: 5px;
+  }
+  .strategy-tabs-scroll {
+    padding: 0 72px 0 4px;
+  }
+
+  /* Analyse-Panel */
+  .performance-analytics {
+    padding: 12px 10px;
+    gap: 14px;
+  }
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+  .stat-card { padding: 8px; }
+  .stat-value { font-size: 15px; }
+
+  /* Modals: fast fullscreen */
+  .modal-overlay,
+  .settings-panel-overlay,
+  .strategy-autotrade-overlay,
+  .alert-modal-overlay,
+  .capital-modal-overlay {
+    padding: 0 !important;
+    align-items: flex-end !important;
+  }
+  .modal-content,
+  .settings-panel,
+  .strategy-autotrade-modal,
+  .alert-modal-content,
+  .capital-modal {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    max-height: 92vh !important;
+    border-radius: 12px 12px 0 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Trade-Detail Cards: mehr Luft, umbrechen bei Overflow */
+  .tdc-head {
+    flex-wrap: wrap;
+    gap: 6px !important;
+  }
+  .tdc-main {
+    flex-wrap: wrap;
+    gap: 6px !important;
+  }
+  .tdc-strat-line {
+    font-size: 10px;
+    max-width: 100%;
+    /* Umbruch statt abgeschnittenem Text (wirkte wie „komischer Umbruch") */
+    white-space: normal;
+    overflow-wrap: break-word;
+  }
+  .tdc-coin { font-size: 12px; }
+
+  /* Time-Analyse Grids */
+  .time-strategy-select {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* PnL Filter Buttons Row */
+  .pnl-filter {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 4px !important;
+  }
+  .pnl-filter-btn {
+    font-size: 11px !important;
+    padding: 6px 4px !important;
+  }
+
+  /* Chart-Titelzeile: „1MIN · LIVE · 200 BARS" nicht mehr vertikal
+     umbrechen – Elemente umbrechen als Ganzes, Subtitle bleibt einzeilig */
+  .chart-title {
+    flex-wrap: wrap;
+    row-gap: 4px;
+  }
+  .chart-subtitle {
+    white-space: nowrap;
+    font-size: 10px;
+  }
+
+  /* Toast Position auf mobil zentraler */
+  [data-sonner-toaster] {
+    left: 8px !important;
+    right: 8px !important;
+    bottom: 8px !important;
+    width: auto !important;
+  }
+
+  /* ----- Optimizer / Regime Lab / Backtester / Liquidity ----------------
+     Bottom-Sheet statt schwebendem Panel; Dropdowns + Inputs volle Breite
+     (Selects waren abgeschnitten, Panels ragten über den Rand hinaus). */
+  .opt-overlay,
+  .bt-overlay,
+  .liq-overlay {
+    padding: 0 !important;
+    align-items: flex-end !important;
+  }
+  .opt-panel,
+  .bt-panel,
+  .liq-panel {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    max-height: 94vh !important;
+    border-radius: 12px 12px 0 0 !important;
+    padding: 14px 12px 24px !important;
+  }
+  .opt-header h2 { font-size: 13px; }
+  .opt-setup { gap: 8px !important; }
+  .opt-field {
+    flex: 1 1 46% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+  .opt-field select,
+  .opt-field input {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    font-size: 13px !important;
+    padding: 9px 10px !important;
+  }
+  .dyn-card-head select {
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+  /* ----- Texte: saubere Umbrüche statt abgeschnittener/komischer Zeilen -- */
+  .opt-mode-desc,
+  .opt-label,
+  .opt-field,
+  .control-card-desc,
+  .control-card-title,
+  .ai-panel-sub,
+  .alert-strategy,
+  .stat-label,
+  .session-times,
+  .sync-status-line {
+    overflow-wrap: break-word;
+    word-break: normal;
+    min-width: 0;
+  }
+
+  /* ----- Recharts-Diagramme (Regime Lab, Equity): Seite bleibt scrollbar - */
+  .recharts-wrapper,
+  .recharts-surface {
+    touch-action: pan-y !important;
+  }
+}
+
+/* -------- Breakpoint 3: Ganz schmal (bis 360px) ---------- */
+@media (max-width: 360px) {
+  .header-title { font-size: 13px; }
+  .header-subtitle { font-size: 9px; }
+  .balance-widget,
+  .paper-overlay,
+  .live-overlay {
+    padding: 4px 6px;
+  }
+  .bw-primary-value { font-size: 11px; }
+  .strategy-tab { padding: 5px 8px; font-size: 10.5px; }
+  .stats-grid { grid-template-columns: 1fr; }
+  .view-btn { font-size: 10px; padding: 7px 4px; gap: 4px; }
+}
+
+/* -------- Touch-Devices generell: Buttons mindestens 36px hoch --- */
+@media (hover: none) and (pointer: coarse) {
+  .strategy-tab-bell,
+  .strategy-tab-trade,
+  .notify-toggle,
+  .view-btn,
+  .pnl-filter-btn {
+    min-height: 36px;
+    min-width: 32px;
+  }
+  /* Sanfteres Scrollen */
+  * {
+    -webkit-tap-highlight-color: rgba(0, 255, 102, 0.1);
+  }
+}

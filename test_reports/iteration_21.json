@@ -1,0 +1,33 @@
+{
+  "summary": "Phase 6 (Gate v1 Auto-Retrain) end-to-end verified: 6/6 new backend API tests (settings persist + clamp + admin-guard + status.trigger/settings shape) + 11/11 pre-existing unit tests (test_phase5_gate_shadow + test_phase6_gate_retrain) green. Phase-5 regression endpoints healthy. Frontend: Admin login OK, KI-Trader -> Params -> KI-Labor -> Gate-Tab: gate-panel + gate-mode-badge (SHADOW), gate-model-meta (v2, 970 samples, AUC 0.552, Brier 0.2393 vs 0.2541 -> beats baseline), 5 gate-criteria-item-* rendered, gate-report-empty visible, gate-calibration shown (2 bins), gate-models-list with 2 versions. Threshold change 0.45->0.50 persisted after panel-reload and reset to 0.45. Auto-Retrain-Toggle off/on no error toast. gate-train-btn triggered training in ~5s: new v3 added to list, green success toast 'Gate v3 trainiert'. Regression: research/ml/gate/trades/memory/market AI-Lab tabs all render.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "AILabPanel (dev-instrumented only)", "issues": ["Console: React hydration warning '<span> cannot be a child of <option>' - originates from Emergent dev-time source-tagging that wraps text in <span>, NOT from application code. Harmless in production build. Informational only."]}
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_phase6_gate_settings_api.py",
+    "/app/tests/test_phase6_gate_retrain.py",
+    "/app/tests/test_phase5_gate_shadow.py",
+    "/app/test_reports/pytest/phase6_gate_settings.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "ml_gate.py update_settings correctly clamps retrain_min_new (5 -> 10) and persists via /api/ml/gate/settings.",
+    "GET /api/ml/gate/status now exposes both settings.{auto_retrain,retrain_hour_berlin,retrain_min_new} and trigger field as required.",
+    "GateShadowPanel.js: all documented data-testids present and functional; threshold + autoretrain toggle wired via settings endpoint with admin token.",
+    "AI-Lab tab key list: research/ml/gate/trades/memory/market - note task doc mentioned 'Trade-Steuerung' key which is actually 'trades' (not 'control') - no bug, just doc mismatch.",
+    "Training endpoint append-only: v1->v2->v3 preserved, list correctly displayed newest-first."
+  ],
+  "updated_files": ["/app/backend/tests/test_phase6_gate_settings_api.py"],
+  "success_rate": {"backend": "100% (17/17)", "frontend": "100% (all 8 flow steps)"},
+  "test_credentials": "Admin / Dean06Greif!/Admin (from /app/backend/.env)",
+  "seed_data_creation": "Added ml_gate_models v3 in dev-DB via train button (per task instruction NOT to delete). ml_gate_settings toggled and reset to defaults.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Phase 6 fully verified. Dev-DB now has ml_gate_models v1..v3 (do not delete). If future retest expects specific version, use latest+1. AI-Lab tab keys: research, ml, gate, trades, memory, market. Threshold-select options: [0.3,0.35,0.4,0.45,0.5,0.55,0.6]. retrain_min_new-select values are clamped >=10 server-side.",
+  "rca of the issue": "n/a - no bugs found."
+}

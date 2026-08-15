@@ -1,0 +1,38 @@
+BTCUSDT: 8760
+ETHUSDT: 8760
+SOLUSDT: 8760
+BNBUSDT: 8760
+XRPUSDT: 8760
+DOGEUSDT: 8760
+ADAUSDT: 8760
+LINKUSDT: 8760
+[FINAL don48 adx20 er0.4 (ref)]
+  F1:  +830.6 (n=123) | F2:  +795.1 (n=126) | F3:  +639.8 (n=105) | F4:  -451.9 (n=112)
+  posFolds=3/4 posSyms=6/8 total= +1813.6 trades=466
+  perSym={'BTCUSDT': 137.1, 'ETHUSDT': 326.7, 'SOLUSDT': -0.5, 'BNBUSDT': 53.0, 'XRPUSDT': 330.1, 'DOGEUSDT': 579.7, 'ADAUSDT': 511.5, 'LINKUSDT': -123.9}
+[don48 adx20 er0.5]
+  F1:  +580.1 (n=94) | F2:  +981.0 (n=100) | F3:  +507.3 (n=78) | F4:  -238.8 (n=78)
+  posFolds=3/4 posSyms=6/8 total= +1829.7 trades=350
+  perSym={'BTCUSDT': -4.8, 'ETHUSDT': 295.8, 'SOLUSDT': 71.1, 'BNBUSDT': 104.9, 'XRPUSDT': 540.7, 'DOGEUSDT': 719.8, 'ADAUSDT': 353.6, 'LINKUSDT': -251.2}
+[don48 adx25 er0.4]
+  F1:  +864.4 (n=109) | F2:  +786.1 (n=110) | F3:  +524.3 (n=100) | F4:  -219.9 (n=92)
+  posFolds=3/4 posSyms=7/8 total= +1954.9 trades=411
+  perSym={'BTCUSDT': 125.8, 'ETHUSDT': 448.5, 'SOLUSDT': 2.8, 'BNBUSDT': 137.9, 'XRPUSDT': 331.8, 'DOGEUSDT': 497.8, 'ADAUSDT': 444.2, 'LINKUSDT': -34.0}
+[don48 adx20 er0.4 trail1.5]
+  F1:  +750.8 (n=128) | F2:  +903.1 (n=132) | F3:  +711.9 (n=109) | F4:  -386.5 (n=115)
+  posFolds=3/4 posSyms=7/8 total= +1979.3 trades=484
+  perSym={'BTCUSDT': 254.6, 'ETHUSDT': 397.2, 'SOLUSDT': 87.1, 'BNBUSDT': 42.9, 'XRPUSDT': 275.8, 'DOGEUSDT': 566.2, 'ADAUSDT': 452.8, 'LINKUSDT': -97.3}
+
+===== OUT-OF-UNIVERSE (nie getestete Coins) =====
+AVAXUSDT: 8760
+DOTUSDT: 8760
+LTCUSDT: 8760
+NEARUSDT: 8760
+[OOU don48 adx20 er0.4]
+  F1:  -128.1 (n=59) | F2:  -441.4 (n=66) | F3:  -347.1 (n=41) | F4:  -438.6 (n=54)
+  posFolds=0/4 posSyms=1/4 total= -1355.2 trades=220
+  perSym={'AVAXUSDT': -527.9, 'DOTUSDT': 52.7, 'LTCUSDT': -698.1, 'NEARUSDT': -181.9}
+[OOU don48 adx20 er0.4 trail1.5]
+  F1:  -133.9 (n=60) | F2:  -590.0 (n=72) | F3:  -140.2 (n=49) | F4:  -492.9 (n=54)
+  posFolds=0/4 posSyms=0/4 total= -1357.1 trades=235
+  perSym={'AVAXUSDT': -159.1, 'DOTUSDT': -171.8, 'LTCUSDT': -706.6, 'NEARUSDT': -319.7}

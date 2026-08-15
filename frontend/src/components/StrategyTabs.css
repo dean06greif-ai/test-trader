@@ -1,0 +1,147 @@
+.strategy-tabs-bar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  background: #0E0E0E;
+  border-bottom: 1px solid #2A2D3A;
+  padding: 6px 8px;
+  min-height: 48px;
+  /* Harter Cap: Bar kann den Chart (grid 1fr) nie mehr auf 0 drücken */
+  max-height: min(22vh, 160px);
+  overflow: hidden;      /* Sicherheitsnetz gegen Overflow nach unten */
+  flex-shrink: 0;
+  gap: 8px;
+  /* Anker für die absolut positionierten Action-Buttons (⚙ / +) */
+  position: relative;
+}
+
+.strategy-tabs-scroll {
+  display: flex;
+  align-items: center;
+  align-content: flex-start; /* gewrappte Zeilen oben andocken */
+  flex-wrap: wrap;
+  gap: 6px;
+  overflow-y: auto;          /* überzählige Chips intern scrollen */
+  overflow-x: hidden;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  max-height: 100%;          /* respektiert den Cap der Bar */
+  align-self: stretch;
+  /* Platz für die rechts fixierten Action-Buttons, damit keine Chips
+     darunter rutschen – die Scrollleiste sitzt ganz rechts neben dem Plus */
+  padding: 0 88px 0 0;
+  scrollbar-width: thin;
+  scrollbar-color: #2A2D3A transparent;
+}
+
+/* Desktop: Strategie-Leiste darf voll umbrechen – Chips werden nicht mehr
+   vom Chart überdeckt/abgeschnitten (Chart behält seine Mindesthöhe via grid) */
+@media (min-width: 1024px) {
+  .strategy-tabs-bar {
+    max-height: none;
+    overflow: visible;
+  }
+  .strategy-tabs-bar .strategy-tabs-scroll {
+    overflow-y: visible;
+    max-height: none;
+  }
+}
+
+.strategy-tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border: 1px solid #2A2D3A;
+  border-radius: 8px;
+  background: #151515;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color 0.15s, background 0.15s, transform 0.1s;
+  color: #A1A4B0;
+  font-size: 13px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+.strategy-tab:hover { border-color: #3A3D4A; transform: translateY(-1px); }
+.strategy-tab-active {
+  background: #00FF6614;
+  border-color: #00FF66;
+  color: #FFFFFF;
+}
+.strategy-tab-name { font-family: 'Manrope', sans-serif; }
+.strategy-tab-custom {
+  font-size: 9px; font-weight: 800; background: #00A8FF; color: #001018;
+  border-radius: 4px; padding: 1px 4px;
+}
+
+/* Bell Icon - Signal Notifications */
+.strategy-tab-bell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 2px;
+  border-radius: 4px;
+  transition: color 0.15s, background 0.15s;
+}
+.strategy-tab-bell.on { color: #00FF66; }
+.strategy-tab-bell.off { color: #5C6070; }
+.strategy-tab-bell:hover { background: #ffffff10; }
+
+/* Lightning Icon - Auto-Trade Status */
+.strategy-tab-trade {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 2px;
+  border-radius: 4px;
+  position: relative;
+  transition: color 0.15s, background 0.15s;
+  color: #5C6070;
+}
+.strategy-tab-trade.active { color: #00A8FF; }
+.strategy-tab-trade.active.live { color: #FF3366; }
+.strategy-tab-trade:hover { background: #ffffff10; }
+
+/* Trade Status Badge (L/P) */
+.strategy-trade-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  font-size: 8px;
+  font-weight: 900;
+  padding: 1px 3px;
+  border-radius: 3px;
+  line-height: 1;
+  background: #00A8FF;
+  color: #001018;
+}
+.strategy-tab-trade.live .strategy-trade-badge {
+  background: #FF3366;
+  color: #fff;
+}
+
+.strategy-tabs-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+  /* Rechts in der Bar fixiert; die Scrollleiste der Chips liegt direkt
+     rechts daneben am Rand – dort passt sie optisch am besten hin. */
+  position: absolute;
+  top: 6px;
+  right: 16px;
+}
+.strategy-tab-action {
+  display: flex; align-items: center; justify-content: center;
+  width: 34px; height: 34px; border: 1px solid #2A2D3A; border-radius: 8px;
+  background: #151515; color: #A1A4B0; cursor: pointer; transition: all 0.15s;
+}
+.strategy-tab-action:hover { border-color: #00FF66; color: #00FF66; }
+.strategy-tab-action.add:hover { border-color: #00A8FF; color: #00A8FF; }

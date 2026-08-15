@@ -1,0 +1,41 @@
+data ready
+[don48 adx20 (ref)]
+  F1:  +607.4 (n=157) | F2:  +301.9 (n=161) | F3: +1105.1 (n=124) | F4:  -757.8 (n=146)
+  posFolds=3/4 posSyms=5/8 total= +1256.6 trades=588
+  perSym={'BTCUSDT': 178.5, 'ETHUSDT': 236.1, 'SOLUSDT': -201.8, 'BNBUSDT': -6.8, 'XRPUSDT': 404.1, 'DOGEUSDT': 382.0, 'ADAUSDT': 466.6, 'LINKUSDT': -202.2}
+[don48 adx20 er0.3]
+  F1:  +824.7 (n=139) | F2:  +371.5 (n=148) | F3:  +998.0 (n=118) | F4:  -720.1 (n=139)
+  posFolds=3/4 posSyms=5/8 total= +1474.1 trades=544
+  perSym={'BTCUSDT': 161.4, 'ETHUSDT': 257.2, 'SOLUSDT': -126.0, 'BNBUSDT': -36.1, 'XRPUSDT': 358.1, 'DOGEUSDT': 480.0, 'ADAUSDT': 546.0, 'LINKUSDT': -166.4}
+[don48 adx20 er0.4]
+  F1:  +830.6 (n=123) | F2:  +795.1 (n=126) | F3:  +639.8 (n=105) | F4:  -451.9 (n=112)
+  posFolds=3/4 posSyms=6/8 total= +1813.6 trades=466
+  perSym={'BTCUSDT': 137.1, 'ETHUSDT': 326.7, 'SOLUSDT': -0.5, 'BNBUSDT': 53.0, 'XRPUSDT': 330.1, 'DOGEUSDT': 579.7, 'ADAUSDT': 511.5, 'LINKUSDT': -123.9}
+[don96 adx20]
+  F1:  +425.5 (n=140) | F2:  +226.8 (n=143) | F3: +1189.0 (n=110) | F4:  -720.3 (n=130)
+  posFolds=3/4 posSyms=4/8 total= +1121.0 trades=523
+  perSym={'BTCUSDT': -11.8, 'ETHUSDT': 245.2, 'SOLUSDT': -45.9, 'BNBUSDT': -15.4, 'XRPUSDT': 463.1, 'DOGEUSDT': 411.5, 'ADAUSDT': 218.0, 'LINKUSDT': -143.8}
+[don96 adx20 er0.3]
+  F1:  +677.5 (n=123) | F2:  +295.1 (n=133) | F3: +1249.8 (n=102) | F4:  -687.0 (n=121)
+  posFolds=3/4 posSyms=5/8 total= +1535.4 trades=479
+  perSym={'BTCUSDT': -36.4, 'ETHUSDT': 380.2, 'SOLUSDT': 91.0, 'BNBUSDT': -7.1, 'XRPUSDT': 417.1, 'DOGEUSDT': 507.4, 'ADAUSDT': 235.7, 'LINKUSDT': -52.5}
+[don48 adx20 tp1@1R/50%]
+  F1:  +808.0 (n=167) | F2:    -2.9 (n=175) | F3: +1106.9 (n=141) | F4:  -861.1 (n=162)
+  posFolds=2/4 posSyms=5/8 total= +1050.9 trades=645
+  perSym={'BTCUSDT': 24.1, 'ETHUSDT': 255.8, 'SOLUSDT': -167.5, 'BNBUSDT': -75.6, 'XRPUSDT': 310.6, 'DOGEUSDT': 405.2, 'ADAUSDT': 565.2, 'LINKUSDT': -266.9}
+[don48 adx20 be_crv0.7]
+  F1:  +544.6 (n=174) | F2:  +139.6 (n=187) | F3:  +803.1 (n=157) | F4:  -962.1 (n=170)
+  posFolds=3/4 posSyms=4/8 total=  +525.2 trades=688
+  perSym={'BTCUSDT': -53.9, 'ETHUSDT': 82.0, 'SOLUSDT': -122.6, 'BNBUSDT': -15.1, 'XRPUSDT': 111.2, 'DOGEUSDT': 238.9, 'ADAUSDT': 587.5, 'LINKUSDT': -302.9}
+[don48 adx20 trail1.5]
+  F1:  +676.3 (n=159) | F2:  +341.8 (n=169) | F3: +1148.1 (n=133) | F4:  -718.8 (n=153)
+  posFolds=3/4 posSyms=5/8 total= +1447.5 trades=614
+  perSym={'BTCUSDT': 371.3, 'ETHUSDT': 297.9, 'SOLUSDT': -138.6, 'BNBUSDT': -91.8, 'XRPUSDT': 318.0, 'DOGEUSDT': 361.4, 'ADAUSDT': 458.3, 'LINKUSDT': -129.1}
+[don48 adx20 er0.3 tp1@1R/50 becrv0.7]
+  F1:  +957.1 (n=150) | F2:  +332.0 (n=175) | F3:  +850.8 (n=149) | F4:  -876.1 (n=164)
+  posFolds=3/4 posSyms=6/8 total= +1263.7 trades=638
+  perSym={'BTCUSDT': -86.7, 'ETHUSDT': 117.5, 'SOLUSDT': 48.1, 'BNBUSDT': 132.3, 'XRPUSDT': 91.5, 'DOGEUSDT': 258.8, 'ADAUSDT': 730.7, 'LINKUSDT': -28.5}
+[don48 adx20 atr2.5 tpf4]
+  F1:  +535.6 (n=174) | F2:   -21.9 (n=184) | F3:  +820.5 (n=156) | F4:  -635.0 (n=162)
+  posFolds=2/4 posSyms=5/8 total=  +699.2 trades=676
+  perSym={'BTCUSDT': 115.5, 'ETHUSDT': -58.5, 'SOLUSDT': 66.5, 'BNBUSDT': -22.0, 'XRPUSDT': 219.8, 'DOGEUSDT': 269.5, 'ADAUSDT': 176.2, 'LINKUSDT': -67.7}
