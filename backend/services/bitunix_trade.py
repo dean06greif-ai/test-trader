@@ -2284,12 +2284,15 @@ class AutoTradeManager:
                                 f"{res.get('detail')}"])[-20:]}})
                 return {"error": "Teil-Close an der Börse fehlgeschlagen: "
                                  f"{res.get('detail')} – Trade unverändert."}
+        stage = 1 + sum(1 for ev in t.get("events", [])
+                        if "TEIL-EXIT" in str(ev) or "PARTIAL CLOSE" in str(ev))
+        stage_tag = "TP-Staffel" if (pnl - fee) > 0 else "Teil-Absicherung"
         upd = {
             "qty_remaining": left, "realized_pnl": realized,
             "fees_paid": round(float(t.get("fees_paid", 0.0)) + fee, 6),
             "events": (t.get("events", []) +
-                       [f"PARTIAL CLOSE {pct:.0f}% ({qty}) @ {price} "
-                        f"(PnL {round(pnl - fee, 4)})"]
+                       [f"TEIL-EXIT Stufe {stage} ({stage_tag}) {pct:.0f}% "
+                        f"({qty}) @ {price} (PnL {round(pnl - fee, 4)})"]
                        + ([dust_note] if dust_note else []))[-20:]}
         if left <= 0:
             upd.update({"status": "closed", "exit_price": price,

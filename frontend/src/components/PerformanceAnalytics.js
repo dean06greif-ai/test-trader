@@ -198,6 +198,15 @@ const TradeDetailCard = ({ t, stratName, getCoinName, onChanged, onShowChart }) 
             <div className="tdc-meta-item" title="Eingesetzte Margin in $ – das für diesen Trade gebundene Kapital."><span>Kapital</span><b className="mono">{t.max_capital ? `${t.max_capital} $` : '—'}</b></div>
             <div className="tdc-meta-item" title="Gehandelte Stückzahl des Coins: Positionswert (Kapital × Hebel) ÷ Entry-Preis."><span>Menge</span><b className="mono">{t.qty ?? '—'}</b></div>
             <div className="tdc-meta-item" title="Ob das erste Teilziel (TP1) erreicht wurde: dort wird ein Teil der Position verkauft und der SL Richtung Einstand gezogen – Gewinn sichern, Rest Richtung TP Full laufen lassen."><span>TP1 getroffen</span><b className="mono">{t.tp1_hit ? 'Ja' : 'Nein'}</b></div>
+            {(() => {
+              const n = (t.events || []).filter(ev => String(ev).includes('TEIL-EXIT') || String(ev).includes('PARTIAL CLOSE')).length;
+              if (!n) return null;
+              return (
+                <div className="tdc-meta-item" title="Gestaffelte Teil-Exits der KI (eigene TP-Leiter TP2/TP3 bzw. Teil-Absicherung statt hartem Voll-Exit) – Details je Stufe im Verlauf unten." data-testid={`trade-partial-exits-${t.id}`}>
+                  <span>Teil-Exits (KI-Staffel)</span><b className="mono">{n}×</b>
+                </div>
+              );
+            })()}
           </div>
 
           {(t.ai_reasoning || t.setup || t.decision_id || t.strategy_id === 'ai_trader') && (

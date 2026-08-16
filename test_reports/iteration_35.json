@@ -1,0 +1,64 @@
+{
+  "summary": "Iteration 35 – Test gestaffelte Teil-Exits (KI-Staffel). Verdikt: 3 von 4 Testpunkten grün per Code-Review + Frontend-Rendering; der E2E-Backend-Kernfluss (partial_close ×2 auf Website-manuellem Paper-Trade) ist durch einen Guard-Bug BLOCKIERT. Details: (1) Prompt-Verankerung GRÜN – 'GESTAFFELTE EXITS' Block in /app/backend/services/ai_trade_manager.py Zeile 69–77 (im TRADE_MANAGER_SYSTEM). (2) Backend-Code-Pfad für Stufen-Event GRÜN per Code-Review – /app/backend/services/bitunix_trade.py:2287-2295: stage = 1 + count('TEIL-EXIT'|'PARTIAL CLOSE') im events-Array, stage_tag = 'TP-Staffel' if (pnl-fee)>0 else 'Teil-Absicherung', Event-String exakt 'TEIL-EXIT Stufe N (TAG) X% (qty) @ preis (PnL y)'. (3) E2E-Fluss BLOCKIERT (Backend-Bug): POST /api/ai/trade/open mit source=manuell, mode=paper, BTCUSDT LONG 20USDT lev5 → 200 OK, Trade BTCUSDT-1786868395390 offen (qty=0.001587, manual_trade=True, strategy_id='external'). Anschließend POST /api/autotrade/trade/{id}/action {action:partial_close, value:30} → HTTP 502 mit detail 'Manuelle Bitunix-Position – wird von der KI nicht gemanagt (nur direkt bei Bitunix oder manuell auf der Website verwalten)'. Root Cause: services/ai_trade_manager.py Zeile 393-398 blockiert JEDEN Trade mit manual_trade=True ODER external_adopted=True ODER strategy_id='external' UNABHÄNGIG von source. Damit ist genau der User-Test-Fluss (Website-manueller Paper-Trade → Teil-Exit via /action-Endpoint) unmöglich. Zusätzlich: routers/autotrade.py Zeile 400 mappt 'blocked' fälschlich auf HTTP 502 (sollte 400/409 sein). (4) Frontend-Test GRÜN via historischem Trade POLUSDT-1786800952817 (2× 'PARTIAL CLOSE' Events): [data-testid='view-trades'] öffnet Trades-Tab; [data-testid='trade-card-toggle-POLUSDT-1786800952817'] Karte aufklappen ok; [data-testid='trade-partial-exits-POLUSDT-1786800952817'] zeigt 'TEIL-EXITS (KI-STAFFEL) 2×'; [data-testid='trade-timeline-POLUSDT-1786800952817'] enthält beide PARTIAL CLOSE-Zeilen. Regression: Vergleichs-Karte BTCUSDT-1786868212560 (nach expand) hat KEIN partial-exits-Feld. Toggle expand/collapse ok. Keine Konsolen/pageerror-Meldungen. Wichtige Einschränkung Frontend: Konnte den NEUEN String 'TEIL-EXIT Stufe N (TP-Staffel|Teil-Absicherung)' NICHT live prüfen, weil kein Trade mit neuem Format erzeugbar (Guard-Bug); Frontend-Filter erkennt aber sowohl 'TEIL-EXIT' als auch legacy 'PARTIAL CLOSE'. Aufräumen: beide offenen Paper-Test-Trades wurden per /api/autotrade/close/{id} sauber geschlossen (realized_pnl je -0.099892 USDT paper), 0 offene Trades verbleiben. Skills geladen: keine (kein LLM/AI-Feature getrieben; strikt lesend + minimal-invasive Paper-Trade-Öffnung ohne KI-Konfig-Änderung).",
+  "backend_issues": {
+    "critical": [
+      {
+        "endpoint": "POST /api/autotrade/trade/{trade_id}/action",
+        "issue": "Blockiert alle manual_trade=True Trades (auch Website-erstellte Paper-Trades) mit HTTP 502 – E2E-Feature 'gestaffelte Teil-Exits per Website-Aktion auf manuellem Paper-Trade' unmöglich. Root Cause: services/ai_trade_manager.py:393 checkt manual_trade OHNE Berücksichtigung von source='manual'. Guard war für 'external_adopted' Bitunix-Watchdog-Positionen gedacht, greift aber jetzt auf ALLE via /api/ai/trade/open source=manuell erstellten Trades.",
+        "priority": "CRITICAL"
+      },
+      {
+        "endpoint": "POST /api/autotrade/trade/{trade_id}/action",
+        "issue": "Mappt Business-Status 'blocked' auf HTTP 502 (Bad Gateway) statt 4xx (409/422). Verstößt gegen HTTP-Semantik und triggert Cloudflare-502-Retries.",
+        "priority": "HIGH"
+      }
+    ],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [
+      {
+        "flow": "Website-manueller Paper-Trade → 2× partial_close per /api/autotrade/trade/{id}/action",
+        "issue": "UI-Flow ist durch Backend-Guard blockiert; das Feature 'gestaffelte Teil-Exits' ist per Website-UI für manuelle Paper-Trades NICHT auslösbar (nur für KI-eröffnete Trades). Der neue 'TEIL-EXIT Stufe N (TP-Staffel|Teil-Absicherung)' Event-String konnte daher live nicht erzeugt werden.",
+        "affected_selectors": []
+      }
+    ],
+    "design_issues": []
+  },
+  "ai_features_verdict": [
+    "no-AI-features-driven – Auftrag verbietet LLM-Calls. Nur Prompt-Verankerungs-Check (grep) + manueller Paper-Trade (kein LLM-Call ausgelöst) + Frontend-Rendering. KI-Trade-Manager-Prompt (services/ai_trade_manager.py:69-77 'GESTAFFELTE EXITS') statisch verifiziert vorhanden."
+  ],
+  "test_report_links": [
+    "/app/backend/tests/test_partial_exit_e2e.py",
+    "/app/backend/tests/run_iter35_e2e.py",
+    "/app/backend/tests/run_iter35_continue.py",
+    "/app/test_reports/pytest/iter35_partial_exit.xml",
+    "/app/test_reports/iter35_e2e_result.json"
+  ],
+  "action_items": [
+    "FIX (kritisch): services/ai_trade_manager.py Zeile 393 anpassen – Guard nur für source='ki' greifen lassen ODER genauer differenzieren: `if trade.get('external_adopted') or (trade.get('strategy_id') == 'external' and not trade.get('manual_trade')): return blocked`. Alternativ: Guard komplett skippen wenn source='manual'/'manuell' (Website-User weiß was er tut).",
+    "FIX (hoch): routers/autotrade.py Zeile 400 – 'blocked'/'rejected' auf HTTP 409 (oder 422) mappen, nicht 502. Beispiel: `raise HTTPException(status_code=409 if res.get('status')=='blocked' else 502, detail=...)`.",
+    "Nach Fix: E2E-Test /app/backend/tests/run_iter35_e2e.py erneut laufen lassen (Login → open paper trade → 2× partial_close → verify Events 'TEIL-EXIT Stufe 1 (TP-Staffel|Teil-Absicherung)' + 'TEIL-EXIT Stufe 2 ...' → close → status=closed).",
+    "Frontend: Nach Fix verifizieren, dass NEUE 'TEIL-EXIT Stufe N (...)' Strings korrekt im VERLAUF-Abschnitt der Trade-Karte gerendert werden (aktuell nur legacy 'PARTIAL CLOSE'-Format live prüfbar)."
+  ],
+  "critical_code_review_comments": [
+    "services/ai_trade_manager.py:393-398 – Der Kommentar sagt 'Nutzer-Grundsatz: manuelle Trades nicht anfassen' – aber genau der Nutzer selbst will hier via Website partial_close aufrufen. Die Guard sollte zwischen 'externem Bitunix-Watchdog-Adopt' (external_adopted=True → blockieren) und 'Website-manueller Paper-Trade' (manual_trade=True, source='manual' → erlauben) unterscheiden. Aktuelle Implementierung ist zu breit gefasst.",
+    "routers/autotrade.py:397-400 – Mapping status='blocked' → HTTP 502 ist falsch: 502 signalisiert Gateway-Fehler, hier ist es aber ein Business-Guard. Cloudflare klassifiziert 502 als Retry-fähig, was zusätzliche Backend-Last erzeugt. Empfehlung: 409 Conflict (blocked/rejected) vs. 502 (nur wenn wirklich Downstream-Fehler).",
+    "services/ai_trade_manager.py:539-673 open_trade – Der Trade erhält bei source!='ki' `signal['manual_trade']=True` und wird später über die Signal-Pipeline auf strategy_id='external' umbenannt (im Screenshot 'Manuell (Website)'-Label). Damit greift der Guard bei jedem eigenen Website-Trade – Feature-Design und Guard-Design widersprechen sich.",
+    "services/bitunix_trade.py:2287-2296 – Die Stufen-Zählung `stage = 1 + sum(...)` ist korrekt und robust gegen sowohl 'TEIL-EXIT' als auch legacy 'PARTIAL CLOSE'-Events. Event-Log wird auf 20 Einträge beschnitten (…[-20:]) – bei extremer Staffelung (>19 Stufen + andere Events) könnten frühere Stufen aus dem Log fallen; für realistische Nutzung (2–4 Stufen) unproblematisch.",
+    "frontend PerformanceAnalytics.js:202 – Filter `String(ev).includes('TEIL-EXIT') || String(ev).includes('PARTIAL CLOSE')` erkennt beide Formate; Meta-Feld erscheint nur wenn n>0, Regression sauber. data-testid='trade-partial-exits-{id}' konsistent."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_partial_exit_e2e.py (neu, pytest E2E-Suite)",
+    "/app/backend/tests/run_iter35_e2e.py (neu, standalone E2E-Script mit 5xx-Retry)",
+    "/app/backend/tests/run_iter35_continue.py (neu, Continue-Script bei mid-run Cloudflare-502-Störungen)"
+  ],
+  "success_rate": {"backend": "50% (Prompt-Verankerung + Code-Pfad Review grün; E2E-Aktion Endpoint blockiert)", "frontend": "100% (Meta-Feld-Rendering, Regression, Toggle verifiziert)"},
+  "test_credentials": "Admin/Dean06Greif!/Admin – Login (POST /api/auth/login) OK, Bearer-Token gültig.",
+  "seed_data_creation": "2 Paper-Trades während Tests eröffnet (BTCUSDT-1786868212560 + BTCUSDT-1786868395390, beide mode=paper, manual_trade=True). Beide anschließend sauber via /api/autotrade/close/{id} geschlossen (je realized_pnl=-0.099892 USDT paper). 0 offene Trades in DB verbleiben.",
+  "retest_needed": true,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Nach Fix des Guard-Bugs in services/ai_trade_manager.py:393 (source='manual' erlauben) und Fix des HTTP-Codes in routers/autotrade.py:400 (409 statt 502): /app/backend/tests/run_iter35_e2e.py direkt ausführen (BASE_URL_OVERRIDE=http://localhost:8001 REACT_APP_BACKEND_URL=... python tests/run_iter35_e2e.py). Erwartet: alle 6 Schritte grün, Events enthalten neuen String 'TEIL-EXIT Stufe 1 (TP-Staffel|Teil-Absicherung) 30% (...) @ ... (PnL ...)' und 'TEIL-EXIT Stufe 2 (...)'. STRIKT nur mode=paper.",
+  "rca of the issue": "Bug: Der neue Feature-Endpoint POST /api/autotrade/trade/{trade_id}/action gibt für einen frisch eröffneten, per Website-User erstellten manuellen Paper-Trade HTTP 502 mit 'Manuelle Bitunix-Position – wird von der KI nicht gemanagt' zurück, obwohl der Endpoint explizit für 'Manuelle Aktion auf einem offenen Trade' (siehe Docstring routers/autotrade.py:374) gedacht ist. Root Cause 1: services/ai_trade_manager.py:393 `if trade.get('manual_trade') or trade.get('external_adopted') or trade.get('strategy_id') == 'external': return blocked` – diese Guard war ursprünglich als KI-Sicherheitsnetz gegen ungewolltes Anfassen von Bitunix-Watchdog-Positionen gedacht (Kommentar Zeile 389-392 erwähnt QQQ als Beispiel für Bitunix-Positions-Adopt). Sie prüft aber NICHT source: bei source='manual' (via Router) sollte der User seinen eigenen Website-Trade managen dürfen. Root Cause 2: routers/autotrade.py:399-400 `if res.get('status') in ('error','rejected','blocked'): raise HTTPException(status_code=502, ...)` bündelt Business-Guard und Downstream-Fehler auf 502. Reproduktion: 1) POST /api/auth/login → token. 2) POST /api/ai/trade/open {symbol:BTCUSDT, side:LONG, mode:paper, source:manuell, margin_usdt:20, leverage:5, sl_pct:1, tp1_pct:1.5, tpf_pct:3, horizon:scalp} → 200, Trade id. 3) POST /api/autotrade/trade/{id}/action {action:partial_close, value:30, reason:test} → **HTTP 502** 'Manuelle Bitunix-Position ...'. Mitigation (Vorschlag Main Agent): Guard-Bedingung erweitern zu `if source == 'ki' and (trade.get('external_adopted') or trade.get('strategy_id') == 'external')` – blockiert nur KI-Reviews auf externe Bitunix-Watchdog-Positionen. Manuelle Website-Aktion (source='manual') bleibt erlaubt. Zusätzlich Router HTTP-Code auf 409 (blocked) korrigieren."
+}
