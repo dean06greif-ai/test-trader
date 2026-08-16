@@ -17,6 +17,10 @@ export const MODEL_OPTIONS = [
   // OpenRouter (OPENROUTER_API_KEY + Backup) – Free-Katalog live verifiziert
   { provider: 'openrouter', model: 'nvidia/nemotron-3.5-lightning:free', label: 'OpenRouter · Nemotron 3.5 Lightning (kostenlos, neuestes Flaggschiff, 1M Kontext)' },
   { provider: 'openrouter', model: 'deepseek/deepseek-v4-flash', label: 'OpenRouter · DeepSeek V4 Flash (~0,06$/M – bestes Preis/Leistung, bezahlt)' },
+  { provider: 'openrouter', model: 'deepseek/deepseek-v4-pro-0813', label: 'OpenRouter · DeepSeek V4 Pro (~0,43$/M – Top-Reasoning, bezahlt)' },
+  { provider: 'openrouter', model: 'z-ai/glm-5.2', label: 'OpenRouter · GLM 5.2 (~0,46$/M – stark & präzise, bezahlt)' },
+  { provider: 'openrouter', model: 'qwen/qwen3.7-flash', label: 'OpenRouter · Qwen 3.7 Flash (~0,03$/M – ultra-günstig, bezahlt)' },
+  { provider: 'openrouter', model: 'x-ai/grok-4.20', label: 'OpenRouter · Grok 4.20 (~1,25$/M – Premium, 2M Kontext, bezahlt)' },
   { provider: 'openrouter', model: 'nvidia/nemotron-3-ultra-550b-a55b:free', label: 'OpenRouter · Nemotron-3 Ultra 550B (kostenlos, beste Qualität)' },
   { provider: 'openrouter', model: 'nvidia/nemotron-3-super-120b-a12b:free', label: 'OpenRouter · Nemotron-3 Super 120B (kostenlos, stark)' },
   { provider: 'openrouter', model: 'google/gemma-4-31b-it:free', label: 'OpenRouter · Gemma 4 31B (kostenlos)' },

@@ -1,0 +1,45 @@
+{
+  "summary": "Iteration 34 – Retest der 3 Nachbesserungen aus dem User-Feedback + neue paid Modelle. VERDIKT: ALLE 6 TESTPUNKTE GRÜN. (a) Backend Bugfix %-Anzeige: GET /api/autotrade/trades?limit=200 -> 148 geschlossene Trades, DOTUSDT-1786789369480 (realized_pnl=10.176492, leverage=40, entry=0.783, qty=5057.47, qty_remaining=0) hat computed.pnl_pct_margin=10.28 (nicht 0.26, nicht None). KEIN geschlossener Trade mit entry/qty/leverage hat pnl_pct_margin=null (0/148 fehlen). Weitere DOT-Beispiele: +54.23USDT/lev66.67 -> 54.77%, -46.23USDT/lev60.61 -> -46.69%, -23.25USDT/lev86.96 -> -23.48% – alle plausibel margin-basiert. (b) Frontend Trade-Karte DOT: [data-testid='trade-card-DOTUSDT-1786789369480'] zeigt .tdc-pnl='+10.18' und [data-testid='trade-pnl-pct-DOTUSDT-1786789369480']='(+10.28%)' – Bug behoben, kein 0.26% mehr. (c) Superscript-Abstand: 22 sichtbare Karten mit [data-testid^='trade-collection-badge-'] gemessen -> supGap (coin.right -> sup.left) durchgängig 1px (<= 3px), <sup class='tdc-sup'> sitzt oben am Namen (margin-top:1px, line-height:1, align-items:flex-start). (d) Zeile-1-Alignment: alle 30 gerenderten Karten haben LONG/SHORT-Badge und .tdc-pnl auf exakt derselben y-Achse (Center-Diff = 0px, deutlich < 6px), Caret auf gleicher Höhe. .tdc-main height = 27px konstant (< 30px, einzeilig). (e) Sidebar-Test 1280x800: KEIN Wrap (0/30 Karten mit mainHeight > 30px), Alignment weiterhin 0px Diff. (f) Regression Toggle: [data-testid='trade-card-toggle-BTCUSDT-1786827287594'] klick -> [data-testid='trade-card-body-...'] erscheint; erneuter Klick -> Body wieder entfernt. Keine offenen Trades in DB (opens=0), daher upnl_pct_margin nicht live prüfbar; Code-Pfad in core/utils.py Zeile 124 ist identisch (qty_rem>0 -> margin_qty=qty_rem, unverändert für offene Trades). Backend-Modelle: GET /api/ai/status -> 200 OK. pytest tests/test_iter_reward_guard_models.py tests/test_exchange_close_truth.py -q -> 25 passed in 1.03s. PAID_MODELS_NO_FALLBACK enthält alle 5 Modelle: deepseek/deepseek-v4-pro-0813, z-ai/glm-5.2, qwen/qwen3.7-flash, x-ai/grok-4.20, deepseek/deepseek-v4-flash. openrouter allowed_models=11. Skills geladen: keine (kein AI-Feature getrieben, strikt lesend). Keine LLM/Trade/Konfig-Calls ausgelöst.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "tests_executed": {
+    "backend": {
+      "GET /api/autotrade/trades?limit=200 -> DOT +10.18": "OK (pnl_pct_margin=10.28, war 0.26)",
+      "pnl_pct_margin null-count für geschlossene Trades mit entry/qty/lev": "0/148",
+      "GET /api/ai/status": "HTTP 200",
+      "pytest test_iter_reward_guard_models.py + test_exchange_close_truth.py": "25 passed",
+      "PAID_MODELS_NO_FALLBACK enthält 5 neue Modelle": "OK"
+    },
+    "frontend": {
+      "view-trades: Cards laden (60 [data-testid^=trade-card-])": "OK",
+      "DOT Card .tdc-pnl + tdc-pnl-pct": "+10.18 / (+10.28%)",
+      "supGap coin->sup (22 D-Karten)": "1px, alle OK",
+      "tdc-main height": "27px konstant (<30px, einzeilig)",
+      "badge/pnl/caret y-Diff Zeile 1": "0px, alle 30 OK",
+      "1280x800 kein Wrap": "0/30 Karten mit mainHeight>30",
+      "trade-card-toggle expand/collapse": "OK",
+      "pageerrors / console errors": "0"
+    }
+  },
+  "ai_features_verdict": [
+    "no-AI-features-driven - Auftrag verbietet LLM-Calls (bezahlte Modelle). Katalog-Metadaten (PAID_MODELS_NO_FALLBACK, ALLOWED_MODELS.openrouter) statisch verifiziert; keine Provider-Aufrufe getriggert."
+  ],
+  "test_report_links": [
+    "/app/backend/tests/test_iter_reward_guard_models.py",
+    "/app/backend/tests/test_exchange_close_truth.py"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "core/utils.py:124 – Fix `margin_qty = qty_rem if qty_rem else qty` ist minimal-invasiv und korrekt: für offene Trades bleibt qty_rem>0 (identisches Verhalten), für geschlossene wechselt der Fallback auf volle qty. Keine Regression auf upnl_pct_margin-Pfad, da Zeile 131 nur bei unrealized_pnl!=None (nur offen) läuft.",
+    "PerformanceAnalytics.css:474-484 – .tdc-coin-wrap gap:1px + .tdc-sup margin-top:1px erzeugen die gewünschte 'hochgestellt direkt am Namen'-Optik (gemessen: 1px Abstand). .tdc-main flex-wrap:nowrap greift auch bei 1280x800.",
+    "Nicht kritisch: services/ai_providers.py PAID_MODELS_NO_FALLBACK ist ein set() – Reihenfolge in Logs nicht deterministisch. Für Anzeige/Doku ggf. sortierte Kopie ausgeben."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "100%", "frontend": "100%"},
+  "test_credentials": "Nicht verwendet (alles lesend, kein Login nötig).",
+  "seed_data_creation": "Keine – strikt lesend. Kein POST/PUT/DELETE, keine LLM-Calls, keine Buttons 'Jetzt analysieren'/'Trade schließen'/'Chat leeren'.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Bug %-Anzeige (DOT +10,18 -> +10,28% statt +0,26%) verifiziert – Root Cause in core/utils.py (_enrich_trade qty_remaining=0 bei geschlossenen Trades) durch margin_qty-Fallback behoben. Wichtige Selektoren für zukünftige Regressionstests: [data-testid='trade-card-<id>'], [data-testid='trade-card-toggle-<id>'], [data-testid='trade-pnl-pct-<id>'], .tdc-main/.tdc-coin-wrap/.tdc-sup/.tdc-pnl-group. Aktuell 0 offene Trades in DB, daher upnl_pct_margin nur codebasiert bestätigt (Zeile 131 unverändert). Für 5 neue paid Modelle NIEMALS live abrufen – nur Katalog-Prüfung (PAID_MODELS_NO_FALLBACK).",
+  "rca of the issue": "Bug: In der Trade-Liste zeigten geschlossene Trades den Positions-% statt Margin-% (DOT +10,18$ bei 99$ Margin+Hebel 40 -> +0,26% statt +10,28%). Root Cause: `_enrich_trade` in core/utils.py verwendete `qty_remaining` als Margin-Basis; für geschlossene Trades ist qty_remaining=0, folglich margin=0 und pnl_pct_margin=None. Das Frontend fiel auf pnl_pct (Positions-basiert) zurück. Fix (Zeile 124): `margin_qty = qty_rem if qty_rem else qty` – für offene Trades unverändert (qty_rem>0), für geschlossene wird die volle qty genutzt. Verifikation: Backend liefert jetzt für alle 148 geschlossenen Trades pnl_pct_margin!=None, Frontend zeigt korrekten Margin-%-Wert direkt unter dem $-PnL."
+}

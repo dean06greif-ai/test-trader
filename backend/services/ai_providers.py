@@ -46,10 +46,13 @@ ALLOWED_MODELS = {
         "google/gemma-4-31b-it:free",
         "openai/gpt-oss-20b:free",
         "nvidia/nemotron-nano-9b-v2:free",
-        # Bezahlt, aber extrem günstig (~0,06 $/M In, 0,13 $/M Out, 1M Kontext):
-        # Top-Preis/Leistung als Analyst. Wird NIE als automatischer Fallback
-        # genutzt (nicht in FALLBACK_ORDER) – nur wenn explizit ausgewählt.
+        # Bezahlt, extrem günstig / stark (OpenRouter-Credits nötig, KEIN
+        # neuer Key). Alle in PAID_MODELS_NO_FALLBACK -> nie Auto-Fallback.
         "deepseek/deepseek-v4-flash",
+        "deepseek/deepseek-v4-pro-0813",
+        "z-ai/glm-5.2",
+        "qwen/qwen3.7-flash",
+        "x-ai/grok-4.20",
     ],
     "mistral": [
         "mistral-small-latest",
@@ -83,7 +86,8 @@ MODEL_MIGRATIONS = {
 # Bezahlte Modelle (PAID_MODELS_NO_FALLBACK) stehen bewusst NICHT in der
 # Fallback-Kette: sie werden nur genutzt, wenn explizit ausgewählt – ein
 # Rate-Limit darf nie unbemerkt auf ein kostenpflichtiges Modell ausweichen.
-PAID_MODELS_NO_FALLBACK = {"deepseek/deepseek-v4-flash"}
+PAID_MODELS_NO_FALLBACK = {"deepseek/deepseek-v4-flash", "deepseek/deepseek-v4-pro-0813",
+                           "z-ai/glm-5.2", "qwen/qwen3.7-flash", "x-ai/grok-4.20"}
 
 FALLBACK_ORDER = {
     "gemini": ["gemini-3.5-flash", "gemini-3.6-flash", "gemini-3.1-pro-preview",
@@ -128,6 +132,10 @@ MODEL_WEIGHTS = {
     "nvidia/nemotron-3-ultra-550b-a55b:free": 3,
     "nvidia/nemotron-3.5-lightning:free": 3,
     "deepseek/deepseek-v4-flash": 3,
+    "deepseek/deepseek-v4-pro-0813": 3,
+    "z-ai/glm-5.2": 3,
+    "qwen/qwen3.7-flash": 2,
+    "x-ai/grok-4.20": 3,
     "google/gemma-4-31b-it:free": 2,
     "openai/gpt-oss-20b:free": 1,
     "nvidia/nemotron-nano-9b-v2:free": 1,

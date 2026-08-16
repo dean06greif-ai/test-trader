@@ -118,8 +118,12 @@ def _enrich_trade(t: Dict, current_price: float = None, exchange: Dict = None) -
     # margin_used wird bei Margin-/Hebel-Anpassungen gepflegt; sonst Notional/Hebel.
     lev = float(t.get("leverage") or 1) or 1
     margin = float(t.get("margin_used") or 0)
-    if margin <= 0 and entry and qty_rem:
-        margin = (entry * qty_rem) / max(lev, 0.01)
+    # Geschlossene Trades: qty_remaining ist 0 -> volle qty als Margin-Basis,
+    # sonst wäre pnl_pct_margin None und die UI fiele auf Positions-% zurück
+    # (Bug-Report: DOT +10,18$ bei 99$ Margin zeigte +0,26% statt ~+10,3%).
+    margin_qty = qty_rem if qty_rem else qty
+    if margin <= 0 and entry and margin_qty:
+        margin = (entry * margin_qty) / max(lev, 0.01)
     pnl_pct_margin = None
     upnl_pct_margin = None
     if margin > 0:

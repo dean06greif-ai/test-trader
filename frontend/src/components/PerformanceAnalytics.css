@@ -430,10 +430,10 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  row-gap: 3px;
   width: 100%;
-  /* Bei schmaler Sidebar umbrechen statt Coin/PnL/Caret abzuschneiden (Bug-Report) */
-  flex-wrap: wrap;
+  /* Zeile 1 bleibt IMMER eine Zeile: PnL + Caret oben rechts, Coin ellipsiert */
+  flex-wrap: nowrap;
+  min-width: 0;
 }
 /* Ergebnis-Badge kompakt: OFFEN / G / V / BEP – direkt neben LONG/SHORT,
    damit der PnL-Wert rechts in die erste Zeile passt */
@@ -469,10 +469,15 @@
 }
 .tdc-sub:empty { display: none; }
 .tdc-sub .tdc-pnl-pct { margin-left: auto; padding-right: 19px; min-width: 52px; text-align: center; }
-/* Hochgestellte Mini-Kennzeichen am Asset: S = Swing (·R = Runner), D = Daten */
+/* Hochgestellte Mini-Kennzeichen DIREKT am Asset-Namen (wie ein Hochzeichen):
+   S = Swing (·R = Runner), D = Datensammel-Trade */
+.tdc-coin-wrap {
+  display: inline-flex; align-items: flex-start;
+  min-width: 0; flex: 0 1 auto; gap: 1px;
+}
 .tdc-sup {
   font-size: 8.5px; font-weight: 800; letter-spacing: 0.4px;
-  line-height: 1; align-self: flex-start; margin-left: -4px; margin-top: 1px;
+  line-height: 1; margin-top: 1px;
   flex-shrink: 0; cursor: default;
 }
 .tdc-sup.tag-swing { color: #7dd8ff; }
@@ -494,7 +499,7 @@
 .tdc-pnl { flex-shrink: 0; white-space: nowrap; margin-left: 0; }
 .tdc-main .tdc-result { margin-left: 0; }
 /* Coin-Name darf schrumpfen (Ellipsis), aber NIE komplett verschwinden (Bug-Report) */
-.tdc-coin { flex: 0 1 auto; min-width: 48px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tdc-coin { flex: 0 1 auto; min-width: 30px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 /* ---- 'Nur <Coin>'-Toggle neben OFFENE TRADES (filtert offene + geschlossene) ---- */
 .trade-filter-coin { flex-shrink: 0; margin-left: auto; background: #14161D; border: 1px solid #23262F; border-radius: 8px; padding: 3px 8px; color: #A1A4B0; font-size: 10px; font-weight: 700; letter-spacing: 0.02em; text-transform: none; cursor: pointer; transition: border-color 0.15s ease, color 0.15s ease; }
