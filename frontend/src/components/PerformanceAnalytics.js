@@ -112,14 +112,14 @@ const TradeDetailCard = ({ t, stratName, getCoinName, onChanged, onShowChart }) 
     <span className={`badge ${t.side === 'LONG' ? 'badge-long' : 'badge-short'}`}>{t.side}</span>
     <span className={`tdc-result ${resultMeta.cls}`}>{resultMeta.label}</span>
     <span className="mono text-secondary tdc-coin">{getCoinName(t.symbol)}</span>
-    <span className={`mono tdc-pnl ${pnl >= 0 ? 'text-long' : 'text-short'}`}>{pnl >= 0 ? '+' : ''}{pnl.toFixed(2)}</span>
-    <CaretDown size={13} className={`tdc-caret ${open ? 'rot' : ''}`} />
+    {t.horizon === 'swing' && <sup className="tdc-sup tag-swing" title={`Swing-Trade${t.runner ? ' · Runner' : ''}`} data-testid={`trade-swing-badge-${t.id}`}>S{t.runner ? '·R' : ''}</sup>}
+    {t.data_collection && <sup className="tdc-sup tag-daten" title="Datensammel-Modus: reiner Paper-Trade zum ML-Datensammeln (zählt nicht zur Live-Performance)" data-testid={`trade-collection-badge-${t.id}`}>D</sup>}
+    <span className="tdc-pnl-group">
+      <span className={`mono tdc-pnl ${pnl >= 0 ? 'text-long' : 'text-short'}`}>{pnl >= 0 ? '+' : ''}{pnl.toFixed(2)}</span>
+      <CaretDown size={13} className={`tdc-caret ${open ? 'rot' : ''}`} />
+    </span>
   </span>
   <span className="tdc-sub">
-    <span className="tdc-sub-badges">
-      {t.horizon === 'swing' && <span className="tdc-mini-tag tag-swing" title={`Swing-Trade${t.runner ? ' · Runner' : ''}`} data-testid={`trade-swing-badge-${t.id}`}>S{t.runner ? '·R' : ''}</span>}
-      {t.data_collection && <span className="tdc-mini-tag tag-daten" title="Datensammel-Modus: reiner Paper-Trade zum ML-Datensammeln (zählt nicht zur Live-Performance)" data-testid={`trade-collection-badge-${t.id}`}>D</span>}
-    </span>
     {pnlPct != null && (
       <span className={`mono tdc-pnl-pct ${pnlPct >= 0 ? 'text-long' : 'text-short'}`} data-testid={`trade-pnl-pct-${t.id}`}>
         ({pnlPct >= 0 ? '+' : ''}{pnlPct.toFixed(2)}%)

@@ -831,14 +831,37 @@ async def strategy_comparison(mode: str = "all", days: int = 0):
         e["_peak"] = max(e["_peak"], e["_equity"])
         e["max_drawdown"] = round(max(e["max_drawdown"], e["_peak"] - e["_equity"]), 4)
         sym = t.get("symbol") or "?"
-        s = e["by_symbol"].setdefault(sym, {"symbol": sym, "trades": 0, "wins": 0,
-                                            "losses": 0, "pnl": 0.0})
+        s = e["by_symbol"].setdefault(sym, {
+            "symbol": sym, "trades": 0, "wins": 0, "losses": 0, "breakevens": 0,
+            "pnl": 0.0, "fees": 0.0, "gross_win": 0.0, "gross_loss": 0.0,
+            "best_trade": 0.0, "worst_trade": 0.0,
+            "long_trades": 0, "short_trades": 0,
+            "paper_trades": 0, "live_trades": 0, "_durs": []})
         s["trades"] += 1
         if res == "win":
             s["wins"] += 1
         elif res == "loss":
             s["losses"] += 1
+        elif res == "breakeven":
+            s["breakevens"] += 1
         s["pnl"] = round(s["pnl"] + pnl, 4)
+        s["fees"] = round(s["fees"] + float(t.get("fees_paid") or 0), 4)
+        if pnl > 0:
+            s["gross_win"] += pnl
+        else:
+            s["gross_loss"] += abs(pnl)
+        s["best_trade"] = round(max(s["best_trade"], pnl), 4)
+        s["worst_trade"] = round(min(s["worst_trade"], pnl), 4)
+        if t.get("side") == "LONG":
+            s["long_trades"] += 1
+        else:
+            s["short_trades"] += 1
+        if t.get("mode") == "live":
+            s["live_trades"] += 1
+        else:
+            s["paper_trades"] += 1
+        if d is not None:
+            s["_durs"].append(d)
 
     # 'Manuell (Bitunix)' auch anzeigen, wenn (noch) nur offene manuelle
     # Positionen existieren (z.B. laufende, manuell eröffnete QQQ-Position)
@@ -874,6 +897,12 @@ async def strategy_comparison(mode: str = "all", days: int = 0):
         for s in e["by_symbol"].values():
             sd = s["wins"] + s["losses"]
             s["win_rate"] = round(s["wins"] / sd * 100, 1) if sd else 0.0
+            s["avg_pnl"] = round(s["pnl"] / s["trades"], 4) if s["trades"] else 0.0
+            sgl = s.pop("gross_loss")
+            sgw = s.pop("gross_win")
+            s["profit_factor"] = round(sgw / sgl, 2) if sgl > 0 else (round(sgw, 2) if sgw else 0.0)
+            sdurs = s.pop("_durs")
+            s["avg_duration_min"] = round(sum(sdurs) / len(sdurs), 1) if sdurs else 0.0
         e["by_symbol"] = sorted(e["by_symbol"].values(), key=lambda x: -x["pnl"])
         strat = strategy_registry.get(sid)
         if strat:

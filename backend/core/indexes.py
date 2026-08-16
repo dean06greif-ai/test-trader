@@ -41,6 +41,13 @@ async def ensure_indexes(db) -> int:
             await db[coll].create_index(keys, name=name, background=True)
             ok += 1
         except Exception as e:  # noqa: BLE001 – Start darf nie scheitern
-            logger.warning(f"index {coll}.{name} failed: {e}")
+            # Code 85 (IndexOptionsConflict): identischer Index existiert bereits
+            # unter anderem Namen (z.B. ts_-1 statt ai_chat_ts) – funktional
+            # gleichwertig, zählt als OK statt Warnung (Log-Rauschen auf Render).
+            if getattr(e, "code", None) == 85 or "IndexOptionsConflict" in str(e):
+                ok += 1
+                logger.info(f"index {coll}.{name}: existiert bereits unter anderem Namen – ok")
+            else:
+                logger.warning(f"index {coll}.{name} failed: {e}")
     logger.info(f"MongoDB-Indizes geprüft/angelegt: {ok}/{len(INDEX_SPECS)}")
     return ok

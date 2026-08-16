@@ -36,10 +36,23 @@
 
 .sc-detail-row td { background: #0A0A0A; }
 .sc-coins { display: flex; flex-wrap: wrap; gap: 8px; padding: 6px 0; align-items: center; }
-.sc-coin-chip { display: flex; gap: 8px; align-items: center; border: 1px solid #2A2D3A; border-radius: 8px; padding: 6px 10px; font-size: 11px; }
+.sc-coin-chip { display: flex; gap: 8px; align-items: center; border: 1px solid #2A2D3A; border-radius: 8px; padding: 6px 10px; font-size: 11px; background: transparent; color: #A1A4B0; font-family: inherit; cursor: pointer; transition: border-color 0.15s ease, background-color 0.15s ease; }
+.sc-coin-chip:hover { border-color: #3A3F52; }
+.sc-coin-chip.open { border-color: #00A8FF; background: rgba(0,168,255,0.07); }
 .sc-coin-chip b { color: #fff; }
 .sc-coin-chip .pos { color: #00FF66; }
 .sc-coin-chip .neg { color: #FF3366; }
+/* Coin-Insights: aufklappbare Detail-Statistik pro Strategie × Coin */
+.sc-coin-insights {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 8px 16px; margin: 4px 0 8px; padding: 10px 12px;
+  background: #0E1017; border: 1px solid #20222C; border-radius: 8px;
+}
+.sc-coin-insights > div { display: flex; flex-direction: column; gap: 2px; }
+.sc-coin-insights span { font-size: 9.5px; color: #6A6E7E; text-transform: uppercase; letter-spacing: 0.4px; }
+.sc-coin-insights b { font-size: 12px; color: #E4E6EE; font-weight: 700; }
+.sc-coin-insights .pos { color: #00FF66; }
+.sc-coin-insights .neg { color: #FF3366; }
 .sc-extremes { width: 100%; font-size: 11px; color: #A1A4B0; padding-top: 4px; }
 .sc-extremes .pos { color: #00FF66; }
 .sc-extremes .neg { color: #FF3366; }

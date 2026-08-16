@@ -12,6 +12,7 @@ export default function StrategyComparison({ onClose }) {
   const [mode, setMode] = useState('all');
   const [days, setDays] = useState(0);
   const [expanded, setExpanded] = useState(null);
+  const [coinExpanded, setCoinExpanded] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const load = useCallback(async () => {
@@ -89,7 +90,7 @@ export default function StrategyComparison({ onClose }) {
                       <td className="mono">{fmt(r.fees)}</td>
                       <td>{r.long_trades}/{r.short_trades}</td>
                       <td>
-                        <button className="sc-expand" onClick={() => setExpanded(expanded === r.strategy_id ? null : r.strategy_id)} data-testid={`comparison-expand-${r.strategy_id}`}>
+                        <button className="sc-expand" onClick={() => { setExpanded(expanded === r.strategy_id ? null : r.strategy_id); setCoinExpanded(null); }} data-testid={`comparison-expand-${r.strategy_id}`}>
                           {expanded === r.strategy_id ? <CaretUp size={14} /> : <CaretDown size={14} />}
                         </button>
                       </td>
@@ -98,20 +99,45 @@ export default function StrategyComparison({ onClose }) {
                       <tr className="sc-detail-row">
                         <td colSpan={12}>
                           <div className="sc-coins">
-                            {(r.by_symbol || []).map(s => (
-                              <div key={s.symbol} className="sc-coin-chip" data-testid={`comparison-coin-${r.strategy_id}-${s.symbol}`}>
-                                <b>{s.symbol.replace('USDT', '')}</b>
-                                <span>{s.trades} Trades</span>
-                                <span className={s.win_rate >= 50 ? 'pos' : 'neg'}>{fmt(s.win_rate, 0)}% WR</span>
-                                <span className={`mono ${s.pnl >= 0 ? 'pos' : 'neg'}`}>{fmt(s.pnl)} USDT</span>
+                            {(r.by_symbol || []).map(s => {
+                              const key = `${r.strategy_id}|${s.symbol}`;
+                              const open = coinExpanded === key;
+                              return (
+                                <button key={s.symbol} className={`sc-coin-chip ${open ? 'open' : ''}`}
+                                  onClick={() => setCoinExpanded(open ? null : key)}
+                                  title="Klicken für mehr Insights zu den Trades dieser Strategie auf diesem Coin"
+                                  data-testid={`comparison-coin-${r.strategy_id}-${s.symbol}`}>
+                                  <b>{s.symbol.replace('USDT', '')}</b>
+                                  <span>{s.trades} Trades</span>
+                                  <span className={s.win_rate >= 50 ? 'pos' : 'neg'}>{fmt(s.win_rate, 0)}% WR</span>
+                                  <span className={`mono ${s.pnl >= 0 ? 'pos' : 'neg'}`}>{fmt(s.pnl)} USDT</span>
+                                  {open ? <CaretUp size={11} /> : <CaretDown size={11} />}
+                                </button>
+                              );
+                            })}
+                          </div>
+                          {(() => {
+                            const s = (r.by_symbol || []).find(x => `${r.strategy_id}|${x.symbol}` === coinExpanded);
+                            if (!s) return null;
+                            return (
+                              <div className="sc-coin-insights" data-testid={`comparison-coin-insights-${r.strategy_id}-${s.symbol}`}>
+                                <div><span>W / V / BE</span><b>{s.wins} / {s.losses} / {s.breakevens ?? 0}</b></div>
+                                <div><span>Ø PnL</span><b className={`mono ${(s.avg_pnl ?? 0) >= 0 ? 'pos' : 'neg'}`}>{fmt(s.avg_pnl, 3)}</b></div>
+                                <div><span>Profit-Faktor</span><b className={(s.profit_factor ?? 0) >= 1 ? 'pos' : 'neg'}>{fmt(s.profit_factor)}</b></div>
+                                <div><span>Bester Trade</span><b className="mono pos">{fmt(s.best_trade)}</b></div>
+                                <div><span>Schlechtester</span><b className="mono neg">{fmt(s.worst_trade)}</b></div>
+                                <div><span>Ø Dauer</span><b>{fmt(s.avg_duration_min, 1)} min</b></div>
+                                <div><span>Long / Short</span><b>{s.long_trades ?? 0} / {s.short_trades ?? 0}</b></div>
+                                <div><span>Paper / Live</span><b>{s.paper_trades ?? 0} / {s.live_trades ?? 0}</b></div>
+                                <div><span>Gebühren</span><b className="mono">{fmt(s.fees)}</b></div>
                               </div>
-                            ))}
-                            <div className="sc-extremes">
+                            );
+                          })()}
+                          <div className="sc-extremes">
                               Bester Trade: <span className="pos mono">{fmt(r.best_trade)}</span> ·
                               Schlechtester: <span className="neg mono">{fmt(r.worst_trade)}</span> ·
                               Paper/Live: {r.paper_trades}/{r.live_trades}
                             </div>
-                          </div>
                         </td>
                       </tr>
                     )}

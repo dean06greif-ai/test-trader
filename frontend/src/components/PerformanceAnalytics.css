@@ -456,25 +456,32 @@
 }
 .tdc-strat-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .tdc-times { margin-left: auto; flex-shrink: 0; font-size: 9.5px; color: #6B7080; font-weight: 600; }
-/* Zweite Kopfzeile: S/D-Mini-Tags links (unter LONG/SHORT), %-PnL rechts
-   zentriert unter dem absoluten PnL-Wert (gleiche 52px-Spalte, Caret-Offset) */
+/* Zweite Kopfzeile: %-PnL direkt (ohne Abstand) zentriert unter dem $-PnL
+   (gleiche 52px-Spalte, padding-right = Caret 13px + Gap 6px) */
 .tdc-sub {
   display: flex;
   align-items: center;
   gap: 6px;
   width: 100%;
   min-height: 0;
+  margin-top: -2px;
+  line-height: 1;
 }
 .tdc-sub:empty { display: none; }
-.tdc-sub-badges { display: flex; gap: 5px; flex-wrap: wrap; min-width: 0; align-items: center; }
-.tdc-sub .tdc-pnl-pct { margin-left: auto; padding-right: 20px; min-width: 52px; text-align: center; }
-/* Mini-Tags ohne Rahmen: S = Swing (·R = Runner), D = Datensammel-Trade */
-.tdc-mini-tag {
-  font-size: 9px; font-weight: 800; letter-spacing: 0.5px;
-  line-height: 1; flex-shrink: 0; cursor: default;
+.tdc-sub .tdc-pnl-pct { margin-left: auto; padding-right: 19px; min-width: 52px; text-align: center; }
+/* Hochgestellte Mini-Kennzeichen am Asset: S = Swing (·R = Runner), D = Daten */
+.tdc-sup {
+  font-size: 8.5px; font-weight: 800; letter-spacing: 0.4px;
+  line-height: 1; align-self: flex-start; margin-left: -4px; margin-top: 1px;
+  flex-shrink: 0; cursor: default;
 }
-.tdc-mini-tag.tag-swing { color: #7dd8ff; }
-.tdc-mini-tag.tag-daten { color: #d8b4fe; }
+.tdc-sup.tag-swing { color: #7dd8ff; }
+.tdc-sup.tag-daten { color: #d8b4fe; }
+/* $-PnL + Caret als feste Gruppe rechts in Zeile 1 (Caret bricht nie um) */
+.tdc-pnl-group {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-left: auto; flex-shrink: 0; white-space: nowrap;
+}
 /* prozentualer PnL
    (flex-shrink:0 + nowrap: Wert darf nie abgeschnitten werden – Bug-Report) */
 .tdc-pnl-pct {
@@ -484,7 +491,7 @@
   flex-shrink: 0;
   white-space: nowrap;
 }
-.tdc-pnl { flex-shrink: 0; white-space: nowrap; margin-left: auto; }
+.tdc-pnl { flex-shrink: 0; white-space: nowrap; margin-left: 0; }
 .tdc-main .tdc-result { margin-left: 0; }
 /* Coin-Name darf schrumpfen (Ellipsis), aber NIE komplett verschwinden (Bug-Report) */
 .tdc-coin { flex: 0 1 auto; min-width: 48px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

@@ -1,0 +1,75 @@
+{
+  "summary": "Iteration 32 – Verifikationslauf für 4 Nachbesserungen (Trade-Karten-Feinschliff, Mobile-Layout, Strategie-Vergleich Coin-Insights, MongoDB-Index-Fix). VERDIKT: 6/7 Aufgaben GRÜN, 1 KRITISCHER BUG. Skills geladen: ai-testing-core (Hinweis: dieser Iteration touchiert KEIN AI-Feature, alle AI-Features sind not-in-scope-this-iteration; strikt lesend getestet, keine Orders, keine Configs). Preview-URL: https://crypto-ui-polish.preview.emergentagent.com. (1) Backend GET /api/analytics/strategy-comparison?mode=all&days=0 – PASS: HTTP 200, comparison=list[12], erste Strategie 'TrendFolge 360 Volatile Coins 16k PnL' by_symbol[0] enthält ALLE neuen Felder: breakevens=0, avg_pnl=41.308, profit_factor=41.31, best_trade=41.308, worst_trade=0.0, avg_duration_min=24.3, long_trades=0, short_trades=1, paper_trades=1, live_trades=0, fees=5.9716. (2) MongoDB-Index-Fix – PASS: `tail -300 /var/log/supervisor/backend.err.log`: die 2 letzten Startups zeigen INFO 'index ai_chat.ai_chat_ts: existiert bereits unter anderem Namen – ok' + 'index ai_chat.ai_chat_role_pinned_ts: existiert bereits unter anderem Namen – ok' + 'MongoDB-Indizes geprüft/angelegt: 18/18'. KEINE 'IndexOptionsConflict'-WARNING mehr im letzten Startup (die vorhandenen WARNINGs stammen aus älteren Restarts vor dem Fix). (3) Trade-Karten Desktop 1920x900 – PASS: 30 [data-testid^='trade-card-'] sichtbar, in allen 6 gemessenen: dy(tdc-pnl, tdc-caret)=2.5px (<5px Toleranz), tdc-pnl-pct steht in Zeile 2 direkt unter tdc-pnl (dy=-1.0…3.2px, alle <8px), horizontale Mitte pct etwa unter $ (+11.5px), .tdc-pnl-group vorhanden. (4) Trade-Karten schmale Sidebar 1366x800 – PASS: dy(pnl,caret)=2.5px in allen 5 gemessenen Karten – KEIN Caret-Zeilenumbruch (Regression aus Nutzer-Screenshot behoben). (5) S/D hochgestellt – PASS: [data-testid^='trade-collection-badge-']: 22 Instanzen, Element ist <SUP> mit class='tdc-sup tag-daten', Text='D'. Swing-Badge derzeit 0 (keine offenen Swing-Trades, erwartet). (6) Mobile 390x844 – PASS: tdc-main height=26.5px in allen 5 gemessenen Karten (EINE Zeile, kein Wrap), dy(pnl,caret)=2.125px, .tdc-coin text-overflow=ellipsis. Screenshot bestätigt sauberen Layoutfluss. (7) Regression Trade-Karte aufklappen – PASS: 30 [data-testid^='trade-card-toggle-'] vorhanden; erster Klick öffnet Detail-Bereich (.tdc-expanded/.tdc-body sichtbar), zweiter Klick schließt sauber. KEINE JS-Konsolen-Errors auf der Hauptseite (nur die initialen 'Failed to fetch'-Meldungen aus dem 3-fach-Retry-Navigation-Cold-Start, kein Runtime-Fehler nach dem Load). (8) Strategie-Vergleich UI Coin-Insights – **FAIL / KRITISCHER BUG**: Modal öffnet über [data-testid='compare-strategies-button'] → [data-testid='strategy-comparison-modal'] korrekt, 12 [data-testid^='comparison-expand-'] sichtbar. Klick auf einen expand-Button wirft in Konsole `Uncaught ReferenceError: setCoinExpanded is not defined` (siehe Screenshot iter32_coin_insights.png bzw. iter32_comp_modal.png), React-ErrorBoundary aktiviert die 'Etwas ist schiefgelaufen'-Overlay. Ursache: /app/frontend/src/components/StrategyComparison.js – die `useState`-Deklaration für `coinExpanded/setCoinExpanded` FEHLT. Nur `[expanded, setExpanded] = useState(null)` ist deklariert (Zeile 14), aber `setCoinExpanded` wird in Zeile 92 (expand-Button-onClick) sowie Zeilen 103/106/119 (Coin-Chip-Rendering + Insights-Box) referenziert. Damit funktioniert die gesamte NEUE Coin-Insights-Feature dieses Iterationsziels NICHT – jeder Klick auf ein expand-Icon crasht die Modal-Komponente.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "StrategyComparison.js",
+        "issue": "ReferenceError: setCoinExpanded is not defined – useState-Hook für coinExpanded fehlt. Klick auf JEDEN [data-testid^='comparison-expand-'] crasht die Komponente (React-ErrorBoundary zeigt 'Etwas ist schiefgelaufen'). Fix: In Zeile 14/15 ergänzen: `const [coinExpanded, setCoinExpanded] = useState(null);`",
+        "selector": "[data-testid^='comparison-expand-']",
+        "priority": "CRITICAL"
+      }
+    ],
+    "integration_issues": [
+      {
+        "flow": "Strategie-Vergleich > Coin-Insights",
+        "issue": "Coin-Chips [data-testid^='comparison-coin-'] und Insights-Box [data-testid^='comparison-coin-insights-'] können nicht erreicht werden, weil der Expand-Button den ganzen Modal-Baum crasht. Ganze neue Feature dieses Iterationsziels blockiert.",
+        "affected_selectors": ["[data-testid^='comparison-expand-']", "[data-testid^='comparison-coin-']", "[data-testid^='comparison-coin-insights-']"]
+      }
+    ],
+    "design_issues": []
+  },
+  "tests_executed": {
+    "backend_curl": {
+      "GET /api/analytics/strategy-comparison?mode=all&days=0": "200 OK, comparison=list[12], by_symbol[0] enthält alle neuen Felder (breakevens, avg_pnl, profit_factor, best_trade, worst_trade, avg_duration_min, long_trades, short_trades, paper_trades, live_trades, fees) – Werte: avg_pnl=41.308, profit_factor=41.31, avg_duration_min=24.3"
+    },
+    "logs_check": {
+      "backend.err.log Index-Fix": "Letzte 2 Startups: INFO 'existiert bereits unter anderem Namen – ok' + 'MongoDB-Indizes geprüft/angelegt: 18/18'; KEINE neuen IndexOptionsConflict-WARNINGs"
+    },
+    "frontend_playwright": {
+      "Desktop 1920x900 view-trades": "30 trade-card-*, dy(pnl,caret)=2.5px (alle 6), pct_below_dy=-1.0…3.2px, tdc-pnl-group vorhanden",
+      "Narrow sidebar 1366x800": "dy(pnl,caret)=2.5px (alle 5) – kein Regression",
+      "Mobile 390x844": "tdc-main height=26.5px, dy(pnl,caret)=2.125px, tdc-coin text-overflow=ellipsis",
+      "collection-badge SUP": "22 <SUP class='tdc-sup tag-daten'>D</SUP>",
+      "swing-badge": "0 (keine offenen Swings; erwartet)",
+      "Trade-Toggle expand/collapse": "OK (30 Toggles, Detail-Bereich öffnet)",
+      "Strategy-Comparison-Modal open": "OK, 12 expand-btns sichtbar",
+      "Strategy-Comparison-Modal expand click": "FAIL – ReferenceError: setCoinExpanded is not defined, React-ErrorBoundary springt an"
+    }
+  },
+  "ai_features_verdict": [
+    "primary AI feature (Bitunix live trading + KI-Chat) - not-in-scope-this-iteration - evidence: kein AI-Code in diesem Diff; nur UI/Layout (PerformanceAnalytics, StrategyComparison, mobile.css) + core/indexes.py + routers/analytics.py-Felderweiterung getroffen. Ausdrücklich strikt lesend getestet, keine Chat-Sends, keine Orders. - skill: ai-testing-core"
+  ],
+  "test_report_links": [
+    "/app/test_reports/iter32_home.png",
+    "/app/test_reports/iter32_card_expanded.png",
+    "/app/test_reports/iter32_1366.png",
+    "/app/test_reports/iter32_mobile.png",
+    "/app/test_reports/iter32_comp_modal.png",
+    "/app/test_reports/iter32_coin_insights.png"
+  ],
+  "action_items": [
+    "KRITISCH: /app/frontend/src/components/StrategyComparison.js – In der Komponente vor Zeile 15 ergänzen: `const [coinExpanded, setCoinExpanded] = useState(null);` – dadurch wird das Klicken auf [data-testid^='comparison-expand-'] wieder möglich UND die neue Coin-Insights-Box wird sichtbar. Danach re-Test der 3 Sub-Punkte: (a) chip-Klick öffnet [data-testid^='comparison-coin-insights-'], (b) Box enthält W/V/BE, Ø PnL, Profit-Faktor, Bester/Schlechtester, Ø Dauer, Long/Short, Paper/Live, Gebühren, (c) zweiter Klick auf denselben Chip schließt die Box."
+  ],
+  "critical_code_review_comments": [
+    "StrategyComparison.js: Fehlender useState-Hook für coinExpanded ist die Root-Cause der Modal-Crash-Regression. Der Code referenziert `coinExpanded` (Z.103,119) und `setCoinExpanded` (Z.92,106) ohne Deklaration – klassischer Vergessen-Fehler bei State-Split zwischen Row-Expand und Coin-Expand. 1-Zeilen-Fix.",
+    "routers/analytics.py: by_symbol-Felder-Erweiterung ist korrekt und vollständig (alle 11 neuen Felder in Response). Zahlen konsistent (profit_factor=41.31 = pnl/|-verluste|, avg_duration_min plausibel).",
+    "core/indexes.py: Code-85-ok-Handling greift wie erwartet (Log-Beweis: 'existiert bereits unter anderem Namen – ok' als INFO statt WARNING). Sauberes Startup: 18/18 statt vorher 16/18.",
+    "PerformanceAnalytics.js/.css: Caret-in-Zeile-1-Fix (tdc-pnl-group) + tdc-sup + %-Wert ohne Abstand (tdc-sub margin-top -2px) sind alle live und stabil auf 1920/1366/390.",
+    "mobile.css .tdc-main flex-wrap:nowrap !important im 640px-Query wirkt – tdc-main behält 26.5px Höhe auf 390px."
+  ],
+  "updated_files": [],
+  "success_rate": {
+    "backend": "100% (2/2: strategy-comparison-API + Index-Log)",
+    "frontend": "83% (5/6: Trade-Karten Desktop, 1366, Mobile, S/D-Badge, Trade-Expand PASS – Strategy-Comparison-Coin-Insights FAIL)"
+  },
+  "test_credentials": "Admin / Dean06Greif!/Admin (nicht verwendet – kein Login nötig für diese Testpunkte)",
+  "seed_data_creation": "Keine. Strikt lesend – keine Orders, keine Configs gespeichert, nichts gelöscht.",
+  "retest_needed": true,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Nach Fix von StrategyComparison.js (fehlender useState für coinExpanded) den kompletten Strategie-Vergleichs-Flow erneut testen: (1) [data-testid='compare-strategies-button'] klicken → modal öffnen, (2) [data-testid^='comparison-expand-'] mit Trades klicken (z.B. Row 'TrendFolge2' mit 59 Trades ist ein guter Kandidat), (3) [data-testid^='comparison-coin-<STRAT>|<SYMBOL>'] klicken, (4) [data-testid^='comparison-coin-insights-'] auf Sichtbarkeit + geforderte Felder prüfen (W/V/BE, Ø PnL, Profit-Faktor, Bester/Schlechtester Trade, Ø Dauer, Long/Short, Paper/Live, Gebühren), (5) erneuter Klick schließt Box. Die restlichen 6 Testpunkte (Backend-API, Index-Log, Desktop-1920, 1366-Sidebar, Mobile-390, S/D-Badge, Toggle-Expand) sind bereits verifiziert und stabil.",
+  "rca of the issue": "RCA: In /app/frontend/src/components/StrategyComparison.js (Zeilen 10–16) wurde der State-Split für die neue Coin-Insights-Funktion zwar in JSX (Z.92,103,106,119) umgesetzt, aber der `useState`-Aufruf für `coinExpanded/setCoinExpanded` wurde vergessen. Reproduktion: (1) Preview-URL laden, (2) Trophy/Vergleichs-Button oben rechts (Header-Bereich) → Modal öffnet, (3) einen expand-Chevron in der Tabelle klicken → sofort React-Runtime-Error 'setCoinExpanded is not defined'. Mitigation (1-Zeilen-Fix): Direkt nach `const [expanded, setExpanded] = useState(null);` (Zeile 14) ergänzen: `const [coinExpanded, setCoinExpanded] = useState(null);`. Damit ist die Referenz aufgelöst und die Feature funktioniert. Kein Backend-Fix nötig – die Daten sind bereits vollständig aus /api/analytics/strategy-comparison verfügbar."
+}

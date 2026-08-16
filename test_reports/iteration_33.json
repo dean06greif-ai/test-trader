@@ -1,0 +1,46 @@
+{
+  "summary": "Iteration 33 – Retest StrategyComparison Coin-Insights nach useState-Fix (Zeile 15: const [coinExpanded, setCoinExpanded] = useState(null);). VERDIKT: FIX VERIFIZIERT / ALLE 3 SUB-PUNKTE GRÜN. Skills geladen: keine (rein UI-Regressionstest ohne AI-Feature-Nutzung; strikt lesend). Preview: https://crypto-ui-polish.preview.emergentagent.com. Test 1 – Modal öffnen & Expand: [data-testid='compare-strategies-button'] klickt → [data-testid='strategy-comparison-modal'] öffnet, 12 [data-testid^='comparison-expand-'] sichtbar; Klick auf comparison-expand-custom_38808cce (TrendFolge 360, 1 Trade) → KEIN Crash, KEINE ErrorBoundary ('Etwas ist schiefgelaufen' NICHT im DOM), 1 Coin-Chip [data-testid='comparison-coin-custom_38808cce-ETHUSDT'] mit ETH · 1 Trades · 100% WR · 41.31 USDT sichtbar. Bei TrendFolge2 (59 Trades) sind 8 Coin-Chips sichtbar (AVAX, DOT, POL, ADA, SOL, ...). Test 2 – Chip-Klick öffnet Insights: [data-testid='comparison-coin-custom_38808cce-ETHUSDT'] klick → [data-testid='comparison-coin-insights-custom_38808cce-ETHUSDT'] mit ALLEN 9 Labels: 'W / V / BE' (1/0/0), 'Ø PNL' (41.308), 'PROFIT-FAKTOR' (41.31), 'BESTER TRADE' (41.31), 'SCHLECHTESTER' (0.00), 'Ø DAUER' (24.3 min), 'LONG / SHORT' (0/1), 'PAPER / LIVE' (1/0), 'GEBÜHREN' (5.97) – Labels sind per CSS text-transform:uppercase, Text-Content passt. Erneuter Klick auf denselben Chip → Insights-Box verschwindet (query_selector_all liefert 0). Bei TrendFolge2 zusätzlich verifiziert: Wechsel von Chip A zu Chip B tauscht die Insights-Box korrekt (AVAX → DOT: testid wechselt zu comparison-coin-insights-custom_23a30b65-DOTUSDT). Test 3 – Strategie-Zuklappen: erneutes Klicken auf [data-testid='comparison-expand-...'] entfernt sc-detail-row → 0 Chips im DOM. Test 4 – Console: 0 JS-Errors und 0 pageerrors während des kompletten Flows (initiale Load, Modal-Open, 2× Expand, 3× Chip-Klick, Collapse). Fazit: Der useState-Bugfix ist wirksam, die Coin-Insights-Feature funktioniert nun voll gemäß Spec.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "tests_executed": {
+    "playwright_flow": {
+      "compare-strategies-button click": "OK, Modal öffnet",
+      "comparison-expand-custom_38808cce click (1 Trade)": "OK, keine ErrorBoundary, 1 Chip erscheint",
+      "comparison-coin-custom_38808cce-ETHUSDT click": "OK, comparison-coin-insights-custom_38808cce-ETHUSDT sichtbar mit 9 geforderten Labels + Werten",
+      "comparison-coin-custom_38808cce-ETHUSDT 2. click": "OK, Insights-Box geschlossen (0 Insights im DOM)",
+      "collapse expand-Button": "OK, 0 Chips im DOM",
+      "TrendFolge2 (59 Trades) expand": "OK, 8 Coin-Chips (AVAX,DOT,POL,ADA,SOL,...) sichtbar",
+      "Chip-Wechsel A→B (AVAX→DOT)": "OK, insights testid wechselt korrekt zu DOTUSDT",
+      "console/pageerror count": "0"
+    }
+  },
+  "ai_features_verdict": [
+    "no-AI-features-touched - evidence: reiner UI-State-Fix in StrategyComparison.js; kein Provider-Call, kein LLM/TTS/STT/Image betroffen"
+  ],
+  "test_report_links": [
+    "/app/test_reports/iter33_insights.png"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "StrategyComparison.js Z.15: useState-Hook `coinExpanded/setCoinExpanded` jetzt vorhanden – Fix greift, keine Regression.",
+    "Hinweis (nicht kritisch): Die Insights-Labels sind per CSS uppercase (text-transform), was rein visuell den Spec-Wording-Text ändert (z.B. 'Ø PnL' → 'Ø PNL'). Falls Groß-/Kleinschreibung sichtbar erforderlich ist, in .sc-coin-insights .text-transform entfernen. Aktuell akzeptabel."
+  ],
+  "updated_files": [],
+  "success_rate": {
+    "backend": "n/a (nur frontend im Scope)",
+    "frontend": "100% (3/3 Sub-Punkte + 0 Konsolen-Errors)"
+  },
+  "test_credentials": "Admin / Dean06Greif!/Admin (nicht verwendet – kein Login nötig)",
+  "seed_data_creation": "Keine. Strikt lesend – keine Orders, keine Configs, keine Löschungen.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "StrategyComparison Coin-Insights-Feature (useState coinExpanded) läuft stabil. Getestete Selektoren: [data-testid='compare-strategies-button'], [data-testid='strategy-comparison-modal'], [data-testid^='comparison-expand-'], [data-testid^='comparison-coin-<strat>-<SYMBOL>'], [data-testid^='comparison-coin-insights-<strat>-<SYMBOL>']. Bei erneuten Regressionstests empfehle: custom_38808cce (1 Trade, 1 Chip) für Minimal-Path und custom_23a30b65 (59 Trades, 8 Chips) für Multi-Chip-Switch. Alle bereits-grünen Punkte aus Iteration 32 (Trade-Karten Desktop/Sidebar/Mobile, S/D-Sup-Badge, MongoDB-Index-Fix, Backend-Felder /api/analytics/strategy-comparison) laut Auftraggeber NICHT erneut testen.",
+  "rca of the issue": "Bug aus Iteration 32 (ReferenceError: setCoinExpanded is not defined) durch das Ergänzen von `const [coinExpanded, setCoinExpanded] = useState(null);` in Z.15 von /app/frontend/src/components/StrategyComparison.js behoben. Verifikation via Playwright zeigt: keine ErrorBoundary, alle Coin-Insight-Felder gerendert, Toggle-Verhalten (öffnen/schließen/wechseln) korrekt, 0 Konsolen-Errors."
+}

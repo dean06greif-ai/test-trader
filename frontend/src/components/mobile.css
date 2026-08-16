@@ -246,23 +246,28 @@
     margin: 0 !important;
   }
 
-  /* Trade-Detail Cards: mehr Luft, umbrechen bei Overflow */
+  /* Trade-Detail Cards: kompakt, Zeile 1 bleibt EINE Zeile
+     (Coin bekommt Ellipsis, $-PnL + Caret sind eine feste Gruppe rechts) */
   .tdc-head {
-    flex-wrap: wrap;
-    gap: 6px !important;
+    gap: 1px !important;
+    padding: 6px 8px 5px !important;
   }
   .tdc-main {
-    flex-wrap: wrap;
-    gap: 6px !important;
+    flex-wrap: nowrap !important;
+    gap: 5px !important;
+    min-width: 0;
   }
+  .tdc-coin { font-size: 11.5px; min-width: 34px; }
+  .tdc-result { padding: 1px 4px; font-size: 9px; }
+  .tdc-pnl { font-size: 11.5px; min-width: 46px; }
+  .tdc-sub .tdc-pnl-pct { min-width: 46px; }
   .tdc-strat-line {
     font-size: 10px;
     max-width: 100%;
-    /* Umbruch statt abgeschnittenem Text (wirkte wie „komischer Umbruch") */
-    white-space: normal;
-    overflow-wrap: break-word;
+    /* Umbruch statt abgeschnittenem Text: Zeiten rutschen unter den Namen */
+    flex-wrap: wrap;
   }
-  .tdc-coin { font-size: 12px; }
+  .tdc-strat-name { white-space: normal; overflow-wrap: break-word; }
 
   /* Time-Analyse Grids */
   .time-strategy-select {
